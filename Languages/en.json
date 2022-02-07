@@ -1,3 +1,8 @@
 {
-    
+  "login_page": "Login Page",
+  "home_page": "Home Page",
+  "site_visit_tickets":"Site Visit Tickets",
+  "delivery_tickets":"Delivery Tickets",
+  "pick_up_tickets":"Pick Up Tickets",
+  "exchange_tickets":"Exchange Tickets"
 }
