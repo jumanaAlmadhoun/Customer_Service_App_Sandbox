@@ -47,8 +47,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Customer Service App',
       theme: ThemeData(
+          canvasColor: BACK_GROUND_COLOR,
           primarySwatch: Colors.blue,
-          iconTheme: IconThemeData(color: ),
+          iconTheme: const IconThemeData(color: ICON_COLOR),
           appBarTheme: const AppBarTheme(
             backgroundColor: APP_BAR_COLOR,
             centerTitle: true,

@@ -34,6 +34,7 @@ flutter:
   assets:
     - Languages/en.json
     - Languages/ar.json
+    - Assets/Images/
 
   
   # fonts:

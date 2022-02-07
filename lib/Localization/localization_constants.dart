@@ -16,6 +16,10 @@ const String TIC_SITE_VISIT = 'site_visit_tickets';
 const String TIC_DELIVERY = 'delivery_tickets';
 const String TIC_EXCHANGE = 'exchange_tickets';
 const String TIC_PICK_UP = 'pick_up_tickets';
+const String CUSTOMER_MGMT = 'customer_mgmt';
+const String TODAY_TICKETS = 'today_task';
+const String SETTINGS = 'settings';
+const String TIC_ACCOUNTING = 'accounting_tickets';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
