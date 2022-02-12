@@ -17,6 +17,19 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.0.13
+  http:
+  provider:
+  flutter_spinkit: 
+  dropdownfield:
+  flutter_barcode_scanner:
+  giffy_dialog:
+  # cloud_firestore: 
+  flutter_local_notifications:
+  # permission_handler: 
+  firebase_database: 
+  firebase_storage: 
+  firebase_core:
+  url_launcher: ^6.0.12
 
 dev_dependencies:
   flutter_test:

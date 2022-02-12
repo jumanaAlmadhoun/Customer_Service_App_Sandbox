@@ -40,8 +40,11 @@ class CategoryItem extends StatelessWidget {
                   children: <Widget>[
                     const Spacer(),
                     Container(
-                      height: 100,
-                      child: Image.asset(image!),
+                      height: number == null ? 150 : 100,
+                      child: Image.asset(
+                        image!,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -54,7 +57,7 @@ class CategoryItem extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      '$number',
+                      '${number ?? ''}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18),

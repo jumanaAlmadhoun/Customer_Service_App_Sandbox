@@ -16,7 +16,14 @@ class _CreatorDrawerWidgetState extends State<CreatorDrawerWidget> {
     return Drawer(
       child: ListView(
         children: [
-          Image.asset(IMG_LOGO),
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset(
+              IMG_LOGO,
+              fit: BoxFit.contain,
+            ),
+          ),
           const Divider(
             height: 5,
             color: APP_BAR_COLOR,

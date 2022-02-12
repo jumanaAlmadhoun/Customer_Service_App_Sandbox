@@ -5,8 +5,12 @@ import 'package:customer_service_app/Routes/custom_router.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'Localization/localization_constants.dart';
+import 'Services/login_provider.dart';
+
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 void main() {
   runApp(const MyApp());
@@ -44,44 +48,48 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Customer Service App',
-      theme: ThemeData(
-          canvasColor: BACK_GROUND_COLOR,
-          primarySwatch: Colors.blue,
-          iconTheme: const IconThemeData(color: ICON_COLOR),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: APP_BAR_COLOR,
-            centerTitle: true,
-            titleTextStyle: TextStyle(
-                color: APP_BAR_TEXT_COLOR,
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
-          )),
-      locale: _locale,
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('ar', 'SA'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: LoginHandeler()),
       ],
-      localizationsDelegates: const [
-        DemoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      localeResolutionCallback: (
-        Locale? deviceLocale,
-        Iterable<Locale> supportedLocales,
-      ) {
-        for (var locale in supportedLocales) {
-          if (locale.languageCode == deviceLocale!.languageCode) {
-            return deviceLocale;
+      child: MaterialApp(
+        title: 'Customer Service App',
+        theme: ThemeData(
+            canvasColor: BACK_GROUND_COLOR,
+            iconTheme: const IconThemeData(color: ICON_COLOR),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: APP_BAR_COLOR,
+              centerTitle: true,
+              titleTextStyle: TextStyle(
+                  color: APP_BAR_TEXT_COLOR,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            )),
+        locale: _locale,
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ar', 'SA'),
+        ],
+        localizationsDelegates: const [
+          DemoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        localeResolutionCallback: (
+          Locale? deviceLocale,
+          Iterable<Locale> supportedLocales,
+        ) {
+          for (var locale in supportedLocales) {
+            if (locale.languageCode == deviceLocale!.languageCode) {
+              return deviceLocale;
+            }
           }
-        }
-        return supportedLocales.first;
-      },
-      initialRoute: creatorHomeRoute,
-      onGenerateRoute: CustomRouter.allRoutes,
+          return supportedLocales.first;
+        },
+        initialRoute: loginRoute,
+        onGenerateRoute: CustomRouter.allRoutes,
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
+import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/Widgets/creator_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,9 @@ class _CreatorHomePageState extends State<CreatorHomePage> {
           CategoryItem(
             title: getTranselted(context, TIC_SITE_VISIT)!,
             image: IMG_SITE_VISIT,
+            onTap: () {
+              Navigator.pushNamed(context, creatorSiteVisitRoute);
+            },
           ),
           CategoryItem(
             title: getTranselted(context, TIC_DELIVERY)!,

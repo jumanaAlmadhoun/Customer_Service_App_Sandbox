@@ -12,6 +12,7 @@ const String ENGLISH = 'en';
 const String ARABIC = 'ar';
 const String LANGUAGE_CODE = 'languageCode';
 const String HOME_PAGE_TITLE = 'home_page';
+const String LOGIN_TXT = 'login_page';
 const String TIC_SITE_VISIT = 'site_visit_tickets';
 const String TIC_DELIVERY = 'delivery_tickets';
 const String TIC_EXCHANGE = 'exchange_tickets';
@@ -20,6 +21,14 @@ const String CUSTOMER_MGMT = 'customer_mgmt';
 const String TODAY_TICKETS = 'today_task';
 const String SETTINGS = 'settings';
 const String TIC_ACCOUNTING = 'accounting_tickets';
+const String STA_OPEN = 'open_tickets';
+const String STA_WAITING = 'waiting_tickets';
+const String STA_QUEUE = 'queue_tickets';
+const String STA_ASSIGNED = 'assigned_tickets';
+const String STA_PENDING = 'pending_tickets';
+const String BRAND_SELECTION = 'brand_selection';
+const String PASSWORD_HINT = 'password';
+const String PHONE_HINT = 'phone_number';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

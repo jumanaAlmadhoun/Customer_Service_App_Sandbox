@@ -1,6 +1,6 @@
 {
-    "login_page": "Login Page",
-    "home_page": "Home Page",
+    "login_page": "Login",
+    "home_page": "Home",
     "site_visit_tickets": "Site Visit Tickets",
     "delivery_tickets": "Delivery Tickets",
     "pick_up_tickets": "Pick Up Tickets",
@@ -8,5 +8,13 @@
     "customer_mgmt": "Customer Management",
     "accounting_tickets": "Accounting Tickets",
     "today_task": "Today's Tickets",
-    "settings": "Settings"
+    "settings": "Settings",
+    "open_tickets":"Open Tickets" ,
+    "waiting_tickets":"Ready To Assigne Tickets" ,
+    "queue_tickets":"Queue Tickets" ,
+    "assigned_tickets":"Assigned Tickets" ,
+    "pending_tickets":"Pending Tickets",
+    "brand_selection": "Brand Selection",
+    "password": "Password",
+    "phone_number":"Phone Number"
 }
