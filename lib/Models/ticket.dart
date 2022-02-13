@@ -7,9 +7,11 @@ class Ticket with ChangeNotifier {
   String? lastEditBy;
   String? openDate;
   String? visitDate;
+  String? lastEditDate;
   String? mainCategory;
   String? subCategory;
-
+  String? city;
+  String? region;
   Map<String, dynamic>? creatorInfo;
   Map<String, dynamic>? techInfo;
 }

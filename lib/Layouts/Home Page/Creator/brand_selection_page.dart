@@ -17,26 +17,22 @@ class BrandSelectionPage extends StatelessWidget {
         childAspectRatio: .70,
         crossAxisSpacing: 0,
         mainAxisSpacing: 0,
-        children: [
-          const CategoryItem(
+        children: const [
+          CategoryItem(
             image: IMG_LOGO_SANREMO,
             title: 'Sanremo',
           ),
-          const CategoryItem(
+          CategoryItem(
             image: IMG_LOGO_PM,
             title: 'Perfect Moose',
           ),
-          const CategoryItem(
+          CategoryItem(
             image: IMG_LOGO_CEADO,
             title: 'Ceado',
           ),
-          const CategoryItem(
+          CategoryItem(
             image: IMG_LOGO_SIPRESSO,
             title: 'Sipresso',
-          ),
-          CategoryItem(
-            image: IMG_PENDING_TICKETS,
-            title: getTranselted(context, STA_PENDING)!,
           ),
         ],
       ),

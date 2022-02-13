@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "883503481041",
+    "firebase_url": "https://sanremov2-default-rtdb.firebaseio.com",
+    "project_id": "sanremov2",
+    "storage_bucket": "sanremov2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883503481041:android:ad0c50479739193c2185f0",
+        "android_client_info": {
+          "package_name": "com.example.customer_service_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW6gv3e_NuK_Z5RASQaT0koTpHQat5Oyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883503481041:android:7b1722f46d1c2c032185f0",
+        "android_client_info": {
+          "package_name": "com.example.sanremo_inv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW6gv3e_NuK_Z5RASQaT0koTpHQat5Oyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883503481041:android:fb9dae119dd1fbb72185f0",
+        "android_client_info": {
+          "package_name": "com.example.sanremo_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW6gv3e_NuK_Z5RASQaT0koTpHQat5Oyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

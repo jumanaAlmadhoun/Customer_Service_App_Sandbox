@@ -40,7 +40,7 @@ class CategoryItem extends StatelessWidget {
                   children: <Widget>[
                     const Spacer(),
                     Container(
-                      height: number == null ? 150 : 100,
+                      height: number == null ? 100 : 100,
                       child: Image.asset(
                         image!,
                         fit: BoxFit.contain,

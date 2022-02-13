@@ -8,4 +8,5 @@ class Customer with ChangeNotifier {
   String? mobile;
   double? balance;
   List<Ticket>? history;
+  Map<String, dynamic>? contacts;
 }

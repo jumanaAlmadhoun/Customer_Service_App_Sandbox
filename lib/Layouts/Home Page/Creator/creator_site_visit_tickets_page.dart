@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class CreatorSiteVisitPage extends StatefulWidget {
   const CreatorSiteVisitPage({Key? key}) : super(key: key);
@@ -34,6 +38,7 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage> {
             CategoryItem(
               image: IMG_OPEN_TICKETS,
               title: getTranselted(context, STA_OPEN)!,
+              onTap: () {},
             ),
             CategoryItem(
               image: IMG_WAITING_TICKETS,
