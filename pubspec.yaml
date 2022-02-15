@@ -30,6 +30,7 @@ dependencies:
   firebase_storage: 
   firebase_core:
   url_launcher: ^6.0.12
+  group_radio_button: ^1.2.0
 
 dev_dependencies:
   flutter_test:

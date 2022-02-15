@@ -5,3 +5,8 @@ const String DB_DELIVERY_TICKETS = 'DileveryTicketsCS';
 const String DB_PICKUP_TICKETS = 'PickupTicketsCS';
 const String DB_EXCHANGE_TICKETS = 'ExchangeTicketsCS';
 const String DB_ACCOUNTING_TICKETS = 'AccountingTicketsCS';
+const String DB_MACHINES = 'MachinesCS';
+const String DB_CUSTOMERS = 'Customers';
+const String DB_SANREMO_MACHINES = 'SanremoMachines';
+
+const String TEMP_SANREMO = 'SanremoCS';

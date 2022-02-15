@@ -1,9 +1,13 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:customer_service_app/Services/customer_provider.dart';
+import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/Widgets/creator_nav_bar.dart';
+import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreatorHomePage extends StatefulWidget {
   const CreatorHomePage({Key? key}) : super(key: key);
@@ -12,7 +16,22 @@ class CreatorHomePage extends StatefulWidget {
   _CreatorHomePageState createState() => _CreatorHomePageState();
 }
 
-class _CreatorHomePageState extends State<CreatorHomePage> {
+class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPush() async {
+    // TODO: implement didPush
+    super.didPush();
+    Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
+    Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,20 +70,6 @@ class _CreatorHomePageState extends State<CreatorHomePage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(getTranselted(context, HOME_PAGE_TITLE)!),
-      centerTitle: true,
     );
   }
 }

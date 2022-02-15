@@ -19,44 +19,45 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(getTranselted(context, TIC_SITE_VISIT)!),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, brandSelectionRoute);
-                },
-                icon: const Icon(Icons.add))
-          ],
-        ),
-        body: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: .70,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-          children: [
-            CategoryItem(
-              image: IMG_OPEN_TICKETS,
-              title: getTranselted(context, STA_OPEN)!,
-              onTap: () {},
-            ),
-            CategoryItem(
-              image: IMG_WAITING_TICKETS,
-              title: getTranselted(context, STA_WAITING)!,
-            ),
-            CategoryItem(
-              image: IMG_QUEUE_TICKETS,
-              title: getTranselted(context, STA_QUEUE)!,
-            ),
-            CategoryItem(
-              image: IMG_ASSIGNED_TICKETS,
-              title: getTranselted(context, STA_ASSIGNED)!,
-            ),
-            CategoryItem(
-              image: IMG_PENDING_TICKETS,
-              title: getTranselted(context, STA_PENDING)!,
-            ),
-          ],
-        ));
+      appBar: AppBar(
+        title: Text(getTranselted(context, TIC_SITE_VISIT)!),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, brandSelectionRoute);
+              },
+              icon: const Icon(Icons.add))
+        ],
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        childAspectRatio: .70,
+        crossAxisSpacing: 0,
+        mainAxisSpacing: 0,
+        children: [
+          CategoryItem(
+            image: IMG_OPEN_TICKETS,
+            title: getTranselted(context, STA_OPEN)!,
+            onTap: () async {},
+          ),
+          CategoryItem(
+            image: IMG_WAITING_TICKETS,
+            title: getTranselted(context, STA_WAITING)!,
+          ),
+          CategoryItem(
+            image: IMG_QUEUE_TICKETS,
+            title: getTranselted(context, STA_QUEUE)!,
+          ),
+          CategoryItem(
+            image: IMG_ASSIGNED_TICKETS,
+            title: getTranselted(context, STA_ASSIGNED)!,
+          ),
+          CategoryItem(
+            image: IMG_PENDING_TICKETS,
+            title: getTranselted(context, STA_PENDING)!,
+          ),
+        ],
+      ),
+    );
   }
 }

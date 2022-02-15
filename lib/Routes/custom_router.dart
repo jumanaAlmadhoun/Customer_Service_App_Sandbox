@@ -1,6 +1,7 @@
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/brand_selection_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_home_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_site_visit_tickets_page.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Creator/sanremo_new_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,8 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const BrandSelectionPage());
       case loginRoute:
         return MaterialPageRoute(builder: (_) => LoginScreen());
-      case creatorHomeRoute:
-        return MaterialPageRoute(builder: (_) => const CreatorHomePage());
+      case sanremoNewTicketRoute:
+        return MaterialPageRoute(builder: (_) => const SanremoNewTicketPage());
       case creatorHomeRoute:
         return MaterialPageRoute(builder: (_) => const CreatorHomePage());
     }

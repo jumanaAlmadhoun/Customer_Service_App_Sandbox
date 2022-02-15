@@ -15,7 +15,7 @@ class LoginHandeler with ChangeNotifier {
   static const String PHONE_NUMBER = 'phone';
   static const String ROLE = 'role';
   static const String CREATOR = 'creator';
-  static const String TECH = 'tech';
+  static const String TECH = 'sanremoTech';
   static const String ACCOUNTING = 'accounting';
   static const String LOGISTIC = 'logistics';
 
