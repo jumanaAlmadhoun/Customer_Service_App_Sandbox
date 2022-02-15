@@ -1,4 +1,7 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_home_page.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
@@ -6,7 +9,9 @@ import 'package:customer_service_app/Models/customer.dart';
 import 'package:customer_service_app/Models/machine.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
+import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
+import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
@@ -29,6 +34,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     with RouteAware {
   final formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  bool _isSubmitting = false;
   bool _didContact = false;
   bool _solveByPhone = false;
   bool _freeVisit = false;
@@ -58,7 +64,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     'Paid Visit'
   ];
   String _techName = 'N/A';
-  String _selectedCity = '';
+  TextEditingController _selectedCity = TextEditingController();
   String _selectedReg = '';
   List<String> techs = [];
   List<String>? machineModels;
@@ -66,8 +72,11 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   List<Machine>? allMachines;
   Customer? selectedCustomer;
   Machine? selectedMachines;
-  Map<String, dynamic>? jsonToSend;
+  Map<String, dynamic>? ticketHeader;
+  Map<String, dynamic>? ticketBody;
   String? _assignDirection = '';
+  String? sheetID;
+  String? status;
 
   @override
   void didChangeDependencies() {
@@ -118,6 +127,8 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                 padding: const EdgeInsets.all(15),
                 children: [
                   DropDownField(
+                    required: true,
+                    controller: selectedModel,
                     value: selectedModel!.text,
                     labelText: getTranselted(context, LBL_MACHINE_MODEL),
                     items: machineModels,
@@ -128,7 +139,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     },
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     inputFormatters: [UpperCaseFormatter()],
                     controller: machineNumber,
                     decoration: InputDecoration(
@@ -139,12 +150,13 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                       if (selectedMachines != null) {
                         fetchCustomerInfo(context, selectedMachines!);
                       } else {
+                        customerNumber!.text = '';
                         clearCustomerValues();
                       }
                     },
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: customerNumber,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
@@ -170,7 +182,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                         )
                       : Container(),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: customerName,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CUSTOMER_NAME)!),
@@ -178,7 +190,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: customerMobile,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -187,7 +199,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: extraNumber,
                     keyboardType: TextInputType.number,
                     maxLength: 10,
@@ -197,7 +209,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: cafeName,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CAFE_NAME)!),
@@ -205,7 +217,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: cafeLocation,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CAFE_LOCATION)!),
@@ -213,7 +225,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: problemDesc,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_PROBLEM_DESC)!),
@@ -221,7 +233,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: recommendation,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_RECOMMENDATION)!),
@@ -229,7 +241,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onChanged: (value) {},
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: visitDate,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
@@ -237,7 +249,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onTap: () => pickDate(context),
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: from,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_FROM)!),
@@ -245,7 +257,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onTap: () => pickTime(context, from!),
                   ),
                   TextFormField(
-                    validator: (value) => validateInput(value, context)!,
+                    validator: (value) => validateInput(value, context),
                     controller: to,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_TO)!),
@@ -271,14 +283,15 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     },
                   ),
                   DropDownField(
-                    value: _selectedCity,
+                    controller: _selectedCity,
+                    value: _selectedCity.text,
                     labelText: getTranselted(context, LBL_CITY),
                     items: cities.map((e) => e['name_ar'].toString()).toList(),
                     onValueChanged: (value) {
                       setState(() {
-                        _selectedCity = value;
-                        var city = cities.firstWhere(
-                            (element) => element['name_ar'] == _selectedCity);
+                        _selectedCity.text = value;
+                        var city = cities.firstWhere((element) =>
+                            element['name_ar'] == _selectedCity.text);
                         _selectedReg = city['reg_name_ar'];
                       });
                     },
@@ -293,8 +306,14 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     onValueChanged: (value) {
                       setState(() {
                         _techName = value;
+                        if (_techName != 'N/A') {
+                          _readyToAssign = false;
+                        } else {
+                          _assignDirection = '';
+                        }
                       });
                     },
+                    required: true,
                   ),
                   _techName != 'N/A'
                       ? RadioGroup<String>.builder(
@@ -302,6 +321,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                           groupValue: _assignDirection!,
                           onChanged: (value) => setState(() {
                             _assignDirection = value;
+                            print(_assignDirection);
                           }),
                           items: [
                             getTranselted(context, LBL_DIRECT_ASSIGN)!,
@@ -337,7 +357,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     value: _solveByPhone,
                     onChanged: (value) {
                       setState(() {
-                        _solveByPhone = value!;
+                        if (!_readyToAssign) {
+                          _solveByPhone = value!;
+                        }
                       });
                     },
                   ),
@@ -365,10 +387,10 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   ButtonWidget(
                     text: getTranselted(context, BTN_SUBMIT)!,
                     onTap: () {
-                      directReport(context);
-                      if (validateReport()) {
-                        directReport(context);
-                      }
+                      setState(() async {
+                        _isLoading = true;
+                        validateReport().then((value) => null);
+                      });
                     },
                   )
                 ],
@@ -428,8 +450,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     }
   }
 
-  void fetchCustomerInfo(BuildContext context, Machine machine) {
+  void fetchCustomerInfo(BuildContext context, Machine? machine) {
     try {
+      print(machine!.machineModel);
       selectedCustomer = allCustomers!.firstWhere((element) =>
           machine.customerNumber!.toUpperCase().trim() ==
           element.customerNumber!.toUpperCase().trim());
@@ -440,7 +463,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
           customerMobile!.text = selectedCustomer!.mobile!;
           customerBalance!.text = selectedCustomer!.balance.toString();
           customerNumber!.text = selectedCustomer!.customerNumber!;
-          selectedModel!.text = machine.machineModel!;
+          selectedModel!.text = machine.machineModel.toString();
         });
       }
     } catch (ex) {
@@ -460,19 +483,36 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     }
   }
 
-  bool validateReport() {
+  Future<String> validateReport() async {
+    String date = DateTime.now().toString().split(' ')[0];
     if (_techName != 'N/A') {
-      if (_assignDirection != null) {
+      if (_assignDirection != '') {
         if (formKey.currentState!.validate()) {
-          return true;
+          ticketHeader = getTicketHeader();
+          if (_assignDirection == getTranselted(context, LBL_DIRECT_ASSIGN)!) {
+            ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_ASSIGNED,
+                ifAbsent: () => Ticket.STA_ASSIGNED);
+            ticketHeader!.update(Ticket.ASSIGN_DATE, (value) => date,
+                ifAbsent: () => date);
+            return await Provider.of<TicketProvider>(context, listen: false)
+                .createNewSanremoTicket(ticketHeader,
+                    '$DB_URL$DB_ASSIGNED_TICKETS/$_techName.json');
+          } else {
+            ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_QUEUE,
+                ifAbsent: () => Ticket.STA_QUEUE);
+            return await Provider.of<TicketProvider>(context, listen: false)
+                .createNewSanremoTicket(
+                    ticketHeader, '$DB_URL$DB_QUEUE_TICKETS/$_techName.json');
+          }
         } else {
-          return false;
+          return Future.value('N/A');
         }
       } else {
-        return false;
+        return Future.value(ASSIGN_DIRECTION_ERR);
       }
+    } else {
+      return Future.value(ASSIGN_DIRECTION_ERR);
     }
-    return true;
   }
 
   void clearCustomerValues() {
@@ -481,33 +521,36 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
       cafeName!.text = '';
       customerMobile!.text = '';
       customerBalance!.text = '';
-      selectedModel!.text = '';
       selectedCustomer = null;
     });
   }
 
-  void directReport(BuildContext context) {
-    jsonToSend = getJson();
-    print(jsonToSend);
-  }
-
-  Map<String, dynamic>? getJson() {
+  Map<String, dynamic>? getTicketHeader() {
     return {
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),
       Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
-      Ticket.STATUS: cafeName!.text.trim(),
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CREATION_INFO: {
-        Machine.MACHINE_MODEL: selectedModel!.text.trim(),
-        Machine.CUSTOMER_NUMBER: customerNumber!.text.toString().trim(),
-      }
+      Ticket.CREATED_BY: userName,
+      Ticket.LAST_EDIT_BY: userName,
+      Ticket.VISIT_DATE: visitDate!.text,
+      Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
+      Ticket.SUB_CATEGORY: selectedCategory,
+      Ticket.CITY: _selectedCity.text.trim(),
+      Ticket.REGION: _selectedReg,
+      Ticket.TECH_NAME: _techName,
+      Ticket.DID_CONTACT: _didContact,
+      Ticket.MAIN_CATEGORY: Ticket.SITE_VISIT_CATEGORY,
+      Ticket.MACHINE_MODEL: selectedModel!.text.trim(),
+      Ticket.SERIAL_NUMBER: machineNumber!.text.trim(),
+      Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
+      Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
+      Ticket.PROBLEM_DESC: problemDesc!.text.trim(),
+      Ticket.RECOMMENDATION: recommendation!.text.trim(),
+      Ticket.VISIT_START_TIME: from!.text.trim(),
+      Ticket.VISIT_END_TIME: to!.text.trim(),
+      Ticket.FREE_PARTS: _freeParts,
+      Ticket.FREE_VISIT: _freeVisit,
     };
   }
 }

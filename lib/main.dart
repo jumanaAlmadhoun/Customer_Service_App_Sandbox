@@ -7,6 +7,7 @@ import 'package:customer_service_app/Routes/custom_router.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
+import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: Customer()),
         ChangeNotifierProvider.value(value: CustomerProvider()),
         ChangeNotifierProvider.value(value: UserProvider()),
+        ChangeNotifierProvider.value(value: TicketProvider()),
       ],
       child: MaterialApp(
         title: 'Customer Service App',
