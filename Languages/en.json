@@ -42,5 +42,6 @@
   "ready_to_assign": "Ready To Assign",
   "add_number": "Contact Number",
   "submit": "Submit",
-  "field_error":"This Field Is MANDATORY!!"
+  "field_error": "This Field Is MANDATORY!!",
+  "tickets_category": "Visit Category"
 }

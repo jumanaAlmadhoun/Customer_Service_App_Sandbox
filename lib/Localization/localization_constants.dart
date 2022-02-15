@@ -53,6 +53,7 @@ const String LBL_PUSH_QUEUE = 'push_queue';
 const String LBL_READY_ASSIGN = 'ready_to_assign';
 const String LBL_EXTRA_NUMBER = 'add_number';
 const String LBL_SOLVED_BY_PHONE = 'solved_by_phone';
+const String LBL_VISIT_CATEGORY = 'tickets_category';
 const String BTN_SUBMIT = 'submit';
 const String MSG_INPUT_VALIDATOR = 'field_error';
 

@@ -48,6 +48,7 @@ flutter:
   assets:
     - Languages/en.json
     - Languages/ar.json
+    - Repo/cities.json
     - Assets/Images/
 
   

@@ -1,8 +1,10 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_home_page.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/customer.dart';
 import 'package:customer_service_app/Models/machine.dart';
+import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
@@ -47,6 +49,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   TextEditingController? from = TextEditingController();
   TextEditingController? to = TextEditingController();
   TextEditingController? customerBalance = TextEditingController();
+  String selectedCategory = 'Unclassified';
   List<String> categorys = [
     'Unclassified',
     'Warranty Visit',
@@ -55,8 +58,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     'Paid Visit'
   ];
   String _techName = 'N/A';
+  String _selectedCity = '';
+  String _selectedReg = '';
   List<String> techs = [];
-
   List<String>? machineModels;
   List<Customer>? allCustomers;
   List<Machine>? allMachines;
@@ -251,6 +255,37 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   const SizedBox(
                     height: 10,
                   ),
+                  DropdownButton(
+                    hint: Text(getTranselted(context, LBL_VISIT_CATEGORY)!),
+                    items: categorys
+                        .map((e) => DropdownMenuItem(
+                              child: Text(e),
+                              value: e,
+                            ))
+                        .toList(),
+                    value: selectedCategory,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCategory = value.toString();
+                      });
+                    },
+                  ),
+                  DropDownField(
+                    value: _selectedCity,
+                    labelText: getTranselted(context, LBL_CITY),
+                    items: cities.map((e) => e['name_ar'].toString()).toList(),
+                    onValueChanged: (value) {
+                      setState(() {
+                        _selectedCity = value;
+                        var city = cities.firstWhere(
+                            (element) => element['name_ar'] == _selectedCity);
+                        _selectedReg = city['reg_name_ar'];
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   DropDownField(
                     value: _techName,
                     labelText: getTranselted(context, LBL_TECH_NAME),
@@ -330,6 +365,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   ButtonWidget(
                     text: getTranselted(context, BTN_SUBMIT)!,
                     onTap: () {
+                      directReport(context);
                       if (validateReport()) {
                         directReport(context);
                       }
@@ -452,9 +488,26 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
 
   void directReport(BuildContext context) {
     jsonToSend = getJson();
+    print(jsonToSend);
   }
 
   Map<String, dynamic>? getJson() {
-    return {};
+    return {
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
+      Ticket.CUSTOMER_NAME: customerName!.text.trim(),
+      Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
+      Ticket.STATUS: cafeName!.text.trim(),
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CREATION_INFO: {
+        Machine.MACHINE_MODEL: selectedModel!.text.trim(),
+        Machine.CUSTOMER_NUMBER: customerNumber!.text.toString().trim(),
+      }
+    };
   }
 }

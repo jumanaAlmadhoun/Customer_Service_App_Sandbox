@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -7,6 +9,7 @@ import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/Widgets/creator_nav_bar.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class CreatorHomePage extends StatefulWidget {
@@ -16,7 +19,14 @@ class CreatorHomePage extends StatefulWidget {
   _CreatorHomePageState createState() => _CreatorHomePageState();
 }
 
+List cities = [];
+
 class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
+  Future<void> readJson() async {
+    final String response = await rootBundle.loadString('Repo/cities.json');
+    cities = await json.decode(response) as List<dynamic>;
+  }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -28,6 +38,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
   void didPush() async {
     // TODO: implement didPush
     super.didPush();
+    readJson();
     Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
     Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
   }
