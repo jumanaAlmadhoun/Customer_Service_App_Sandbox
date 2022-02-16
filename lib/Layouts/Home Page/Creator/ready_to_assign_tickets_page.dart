@@ -10,14 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class OpenTickets extends StatefulWidget {
-  const OpenTickets({Key? key}) : super(key: key);
+class ReadyToAssignTickets extends StatefulWidget {
+  const ReadyToAssignTickets({Key? key}) : super(key: key);
 
   @override
-  _OpenTicketsState createState() => _OpenTicketsState();
+  _ReadyToAssignTicketsState createState() => _ReadyToAssignTicketsState();
 }
 
-class _OpenTicketsState extends State<OpenTickets> with RouteAware {
+class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
+    with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
@@ -35,7 +36,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
       _isLoading = true;
     });
     Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets(DB_OPEN_TICKETS)
+        .fetchTickets(DB_READY_TO_ASSIGN_TICKETS)
         .then((value) {
       setState(() {
         _isLoading = false;

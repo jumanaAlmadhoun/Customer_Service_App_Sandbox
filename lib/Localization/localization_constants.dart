@@ -65,6 +65,7 @@ const String LBL_DATE = 'date_lbl';
 const String LBL_CAFE = 'cafe_lbl';
 const String LBL_NAME = 'name_lbl';
 const String LBL_PHONE = 'phone_lbl';
+const String EDIT_SANREMO_TICKET = 'edit_sanremo_ticket';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

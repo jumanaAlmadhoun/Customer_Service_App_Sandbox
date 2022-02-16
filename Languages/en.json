@@ -52,5 +52,6 @@
   "date_lbl":"Date",
   "cafe_lbl":"Cafe",
   "name_lbl":"Name",
-  "phone_lbl":"Phone"
+  "phone_lbl":"Phone",
+  "edit_sanremo_ticket":"Edit Sanremo Ticket"
 }

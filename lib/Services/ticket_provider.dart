@@ -47,7 +47,9 @@ class TicketProvider with ChangeNotifier {
             techName: value[Ticket.TECH_NAME] ?? '',
             ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
             visitDate: value[Ticket.VISIT_DATE] ?? '',
-            firebaseID: key));
+            firebaseID: key,
+            fromTable: from));
+        print(from);
         _tickets = tickets;
         notifyListeners();
       });
@@ -89,5 +91,30 @@ class TicketProvider with ChangeNotifier {
 
   List<Ticket> get tickets {
     return [..._tickets];
+  }
+
+  Future<String> editSanremoTicket(
+      Map<String, dynamic> ticketHeader, Ticket? ticket, String toTable) async {
+    var json = jsonEncode(ticketHeader);
+
+    var response = await http
+        .get(Uri.parse('$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$json'));
+
+    print(response.body);
+    var data = jsonDecode(response.body);
+    if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+      if (toTable != ticket!.fromTable) {
+        await http.post(Uri.parse('$DB_URL$toTable.json'),
+            body: jsonEncode(ticketHeader));
+        await http.delete(
+            Uri.parse('$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json'));
+      } else {
+        await http.patch(
+            Uri.parse('$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json'),
+            body: jsonEncode(ticketHeader));
+      }
+      return Future.value(SC_SUCCESS_RESPONSE);
+    }
+    return Future.value(SC_FAILED_RESPONSE);
   }
 }

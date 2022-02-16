@@ -48,6 +48,9 @@ class LoginHandeler with ChangeNotifier {
       case CREATOR:
         Navigator.pushReplacementNamed(context, creatorHomeRoute);
         return Future.value('DONE');
+      case TECH:
+        Navigator.pushReplacementNamed(context, techHomeRoute);
+        return Future.value('DONE');
       default:
         return Future.value('ERROR');
     }

@@ -1,23 +1,24 @@
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
-import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
-import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
-import 'package:customer_service_app/main.dart';
+import 'package:customer_service_app/Widgets/tech_ticket_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class OpenTickets extends StatefulWidget {
-  const OpenTickets({Key? key}) : super(key: key);
+import '../../../main.dart';
+
+class TechOpenTicketPage extends StatefulWidget {
+  const TechOpenTicketPage({Key? key}) : super(key: key);
 
   @override
-  _OpenTicketsState createState() => _OpenTicketsState();
+  _TechOpenTicketPageState createState() => _TechOpenTicketPageState();
 }
 
-class _OpenTicketsState extends State<OpenTickets> with RouteAware {
+class _TechOpenTicketPageState extends State<TechOpenTicketPage>
+    with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
@@ -35,7 +36,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
       _isLoading = true;
     });
     Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets(DB_OPEN_TICKETS)
+        .fetchTickets('$DB_ASSIGNED_TICKETS/$userName')
         .then((value) {
       setState(() {
         _isLoading = false;
@@ -49,12 +50,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: _search
-            ? TextFormField(
-                decoration: InputDecoration(
-                    hintText: getTranselted(context, LBL_SEARCH)!),
-              )
-            : Text(getTranselted(context, STA_OPEN)!),
+        title: const Text('التذاكر المسندة'),
         actions: [
           IconButton(
             onPressed: () {
@@ -73,17 +69,14 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
           : ListView.builder(
               itemCount: _tickets.length,
               itemBuilder: (context, i) {
-                return OpenTicketWidget(
+                return TechTicketWidget(
                   cafeName: _tickets[i].cafeName,
                   city: _tickets[i].city,
                   customerMobile: _tickets[i].extraContactNumber,
                   customerName: _tickets[i].customerName,
                   date: _tickets[i].creationDate,
                   didContact: _tickets[i].didContact,
-                  onTap: () {
-                    Navigator.pushNamed(context, sanremoEditTicketRoute,
-                        arguments: _tickets[i]);
-                  },
+                  onTap: () {},
                 );
               },
             ),

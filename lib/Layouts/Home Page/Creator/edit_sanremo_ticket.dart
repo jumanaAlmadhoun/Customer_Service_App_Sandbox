@@ -25,8 +25,8 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
 
 class EditSanremoNewTicketPage extends StatefulWidget {
-  const EditSanremoNewTicketPage({Key? key}) : super(key: key);
-
+  EditSanremoNewTicketPage(this.argTicket, {Key? key}) : super(key: key);
+  Ticket? argTicket;
   @override
   _EditSanremoNewTicketPageState createState() =>
       _EditSanremoNewTicketPageState();
@@ -78,10 +78,10 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
   String? _assignDirection = '';
   String? sheetID;
   String? status;
+  Ticket? ticket;
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
@@ -108,6 +108,8 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       techs = Provider.of<UserProvider>(context, listen: false).techs;
       setState(() {
         _isLoading = false;
+        ticket = widget.argTicket;
+        print(ticket);
         getData();
       });
     });
@@ -117,7 +119,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTranselted(context, NEW_SANREMO_TICKET)!),
+        title: Text(getTranselted(context, EDIT_SANREMO_TICKET)!),
       ),
       body: _isLoading
           ? const SpinKitPianoWave(
@@ -539,14 +541,14 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
             ticketHeader!.update(Ticket.ASSIGN_DATE, (value) => date,
                 ifAbsent: () => date);
             return await Provider.of<TicketProvider>(context, listen: false)
-                .createNewSanremoTicket(ticketHeader,
-                    '$DB_URL$DB_ASSIGNED_TICKETS/$_techName.json');
+                .editSanremoTicket(
+                    ticketHeader!, ticket, '$DB_ASSIGNED_TICKETS/$_techName');
           } else {
             ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_QUEUE,
                 ifAbsent: () => Ticket.STA_QUEUE);
             return await Provider.of<TicketProvider>(context, listen: false)
-                .createNewSanremoTicket(
-                    ticketHeader, '$DB_URL$DB_QUEUE_TICKETS/$_techName.json');
+                .editSanremoTicket(
+                    ticketHeader!, ticket, '$DB_QUEUE_TICKETS/$_techName');
           }
         } else {
           return Future.value('N/A');
@@ -560,23 +562,22 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
             Ticket.STATUS, (value) => Ticket.STA_SOLVED_BY_PHONE,
             ifAbsent: () => Ticket.STA_SOLVED_BY_PHONE);
         return await Provider.of<TicketProvider>(context, listen: false)
-            .createNewSanremoTicket(
-                ticketHeader, '$DB_URL$DB_SOLVED_BY_PHONE_TICKETS.json');
+            .editSanremoTicket(
+                ticketHeader!, ticket, DB_SOLVED_BY_PHONE_TICKETS);
       }
       if (_readyToAssign) {
         ticketHeader!.update(
             Ticket.STATUS, (value) => Ticket.STA_READY_TO_ASSIGN,
             ifAbsent: () => Ticket.STA_READY_TO_ASSIGN);
         return await Provider.of<TicketProvider>(context, listen: false)
-            .createNewSanremoTicket(
-                ticketHeader, '$DB_URL$DB_READY_TO_ASSIGN_TICKETS.json');
+            .editSanremoTicket(
+                ticketHeader!, ticket, DB_READY_TO_ASSIGN_TICKETS);
       } else {
         if (ticketHeader != null) {
           ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_OPEN,
               ifAbsent: () => Ticket.STA_OPEN);
           return await Provider.of<TicketProvider>(context, listen: false)
-              .createNewSanremoTicket(
-                  ticketHeader, '$DB_URL$DB_OPEN_TICKETS.json');
+              .editSanremoTicket(ticketHeader!, ticket, DB_OPEN_TICKETS);
         } else {
           return Future.value('N/A');
         }
@@ -600,10 +601,10 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),
       Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
-      Ticket.CREATED_BY: userName,
+      Ticket.CREATED_BY: ticket!.createdBy,
+      Ticket.CREATION_DATE: ticket!.creationDate,
       Ticket.LAST_EDIT_BY: userName,
       Ticket.VISIT_DATE: visitDate!.text,
-      Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
       Ticket.SUB_CATEGORY: selectedCategory,
       Ticket.CITY: _selectedCity.text.trim(),
       Ticket.REGION: _selectedReg,
@@ -620,40 +621,54 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       Ticket.VISIT_END_TIME: to!.text.trim(),
       Ticket.FREE_PARTS: _freeParts,
       Ticket.FREE_VISIT: _freeVisit,
-      Ticket.SOLVED: _solveByPhone
+      Ticket.SOLVED: _solveByPhone,
+      Ticket.SHEET_ID: ticket!.sheetID,
+      Ticket.ROW_ADDRESS: ticket!.rowAddress,
+      Ticket.SHEET_URL: ticket!.sheetURL,
+      Ticket.TICKET_NUMBER: ticket!.ticketNumber
     };
   }
 
   Future<void> checkCustomerMachine() async {
     if (selectedCustomer != null) {
       if (selectedMachines == null) {
-        await Provider.of<MachinesProvider>(context).updateMachine(
-            selectedCustomer, machineNumber!.text, selectedModel!.text);
+        await Provider.of<MachinesProvider>(context, listen: false)
+            .updateMachine(
+                selectedCustomer, machineNumber!.text, selectedModel!.text);
       } else {
         if (selectedMachines!.customerNumber!.toUpperCase().trim() !=
             selectedCustomer!.customerNumber!.toUpperCase().trim()) {
-          await Provider.of<MachinesProvider>(context).updateMachine(
-              selectedCustomer, machineNumber!.text, selectedModel!.text);
+          await Provider.of<MachinesProvider>(context, listen: false)
+              .updateMachine(
+                  selectedCustomer, machineNumber!.text, selectedModel!.text);
         }
       }
     }
   }
 
   void getData() {
-// selectedModel!.text=ticket!.;
-// customerNumber !.text=ticket!.;
-// customerName!.text=ticket!.;
-// customerMobile!.text=ticket!.;
-// cafeName!.text=ticket!.;
-// cafeLocation!.text=ticket!.;
-// city!.text=ticket!.;
-// extraNumber!.text=ticket!.;
-// machineNumber!.text=ticket!.;
-// problemDesc!.text=ticket!.;
-// recommendation !.text=ticket!.;
-// visitDate!.text=ticket!.;
-// from!.text=ticket!.;
-// to!.text=ticket!.;
-// customerBalance !.text=ticket!.;
+    try {
+      selectedModel!.text = ticket!.machineModel!;
+      customerNumber!.text = ticket!.customerNumber!;
+      customerName!.text = ticket!.customerName!;
+      customerMobile!.text = ticket!.customerMobile!;
+      cafeName!.text = ticket!.cafeName!;
+      cafeLocation!.text = ticket!.cafeLocation!;
+      city!.text = ticket!.city!;
+      extraNumber!.text = ticket!.extraContactNumber!;
+      machineNumber!.text = ticket!.machineNumber!;
+      problemDesc!.text = ticket!.problemDesc!;
+      recommendation!.text = ticket!.recomendation!;
+      visitDate!.text = ticket!.visitDate!;
+      from!.text = ticket!.from!;
+      to!.text = ticket!.to!;
+      selectedCustomer = allCustomers!.firstWhere(
+          (element) => element.customerNumber == ticket!.customerNumber);
+      customerBalance!.text = selectedCustomer!.balance.toString();
+      selectedMachines = allMachines!.firstWhere(
+          (element) => element.machineNumber == ticket!.machineNumber!);
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

@@ -24,6 +24,7 @@ class Ticket with ChangeNotifier {
   static const String MACHINE_MODEL = 'appDescrption';
   static const String CUSTOMER_NUMBER = 'customerNumber';
   static const String SERIAL_NUMBER = 'serialNumber';
+  static const String FROM_TABLE = 'fromTable';
 
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
@@ -81,7 +82,8 @@ class Ticket with ChangeNotifier {
       this.ticketNumber,
       this.to,
       this.visitDate,
-      this.firebaseID});
+      this.firebaseID,
+      this.fromTable});
 
   String? machineModel;
   String? assignDate;
@@ -114,4 +116,5 @@ class Ticket with ChangeNotifier {
   String? to;
   String? visitDate;
   String? firebaseID;
+  String? fromTable;
 }

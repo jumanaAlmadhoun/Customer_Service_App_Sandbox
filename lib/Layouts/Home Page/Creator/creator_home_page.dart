@@ -8,6 +8,7 @@ import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/Widgets/creator_nav_bar.dart';
+import 'package:customer_service_app/Widgets/logout_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +52,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranselted(context, HOME_PAGE_TITLE)!),
+        actions: const [LogoutWidget()],
       ),
       drawer: const CreatorDrawerWidget(),
       body: GridView.count(
