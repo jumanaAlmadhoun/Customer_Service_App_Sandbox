@@ -24,18 +24,18 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
 
-class SanremoNewTicketPage extends StatefulWidget {
-  const SanremoNewTicketPage({Key? key}) : super(key: key);
+class EditSanremoNewTicketPage extends StatefulWidget {
+  const EditSanremoNewTicketPage({Key? key}) : super(key: key);
 
   @override
-  _SanremoNewTicketPageState createState() => _SanremoNewTicketPageState();
+  _EditSanremoNewTicketPageState createState() =>
+      _EditSanremoNewTicketPageState();
 }
 
-class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
+class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
     with RouteAware {
   final formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  bool _isSubmitting = false;
   bool _didContact = false;
   bool _solveByPhone = false;
   bool _freeVisit = false;
@@ -108,6 +108,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
       techs = Provider.of<UserProvider>(context, listen: false).techs;
       setState(() {
         _isLoading = false;
+        getData();
       });
     });
   }
@@ -636,5 +637,23 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
         }
       }
     }
+  }
+
+  void getData() {
+// selectedModel!.text=ticket!.;
+// customerNumber !.text=ticket!.;
+// customerName!.text=ticket!.;
+// customerMobile!.text=ticket!.;
+// cafeName!.text=ticket!.;
+// cafeLocation!.text=ticket!.;
+// city!.text=ticket!.;
+// extraNumber!.text=ticket!.;
+// machineNumber!.text=ticket!.;
+// problemDesc!.text=ticket!.;
+// recommendation !.text=ticket!.;
+// visitDate!.text=ticket!.;
+// from!.text=ticket!.;
+// to!.text=ticket!.;
+// customerBalance !.text=ticket!.;
   }
 }

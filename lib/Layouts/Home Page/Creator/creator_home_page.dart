@@ -5,11 +5,13 @@ import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
+import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/Widgets/creator_nav_bar.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class CreatorHomePage extends StatefulWidget {
@@ -41,6 +43,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
     readJson();
     Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
     Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
+    Provider.of<SummaryProvider>(context).fetchSummary();
   }
 
   @override
@@ -56,25 +59,45 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
         crossAxisSpacing: 0,
         mainAxisSpacing: 0,
         children: [
-          CategoryItem(
-            title: getTranselted(context, TIC_SITE_VISIT)!,
-            image: IMG_SITE_VISIT,
-            onTap: () {
-              Navigator.pushNamed(context, creatorSiteVisitRoute);
-            },
-          ),
-          CategoryItem(
-            title: getTranselted(context, TIC_DELIVERY)!,
-            image: IMG_DELIVERY,
-          ),
-          CategoryItem(
-            title: getTranselted(context, TIC_EXCHANGE)!,
-            image: IMG_EXCHANGE,
-          ),
-          CategoryItem(
-            title: getTranselted(context, TIC_PICK_UP)!,
-            image: IMG_PICKUP,
-          ),
+          siteVisitTickets == -1
+              ? const SpinKitDancingSquare(
+                  color: APP_BAR_COLOR,
+                )
+              : CategoryItem(
+                  title: getTranselted(context, TIC_SITE_VISIT)!,
+                  image: IMG_SITE_VISIT,
+                  number: siteVisitTickets,
+                  onTap: () {
+                    Navigator.pushNamed(context, creatorSiteVisitRoute);
+                  },
+                ),
+          deliveryTickets == -1
+              ? const SpinKitDancingSquare(
+                  color: APP_BAR_COLOR,
+                )
+              : CategoryItem(
+                  title: getTranselted(context, TIC_DELIVERY)!,
+                  image: IMG_DELIVERY,
+                  number: deliveryTickets,
+                ),
+          exchangeTickets == -1
+              ? const SpinKitDancingSquare(
+                  color: APP_BAR_COLOR,
+                )
+              : CategoryItem(
+                  title: getTranselted(context, TIC_EXCHANGE)!,
+                  image: IMG_EXCHANGE,
+                  number: exchangeTickets,
+                ),
+          pickupTickets == -1
+              ? const SpinKitDancingSquare(
+                  color: APP_BAR_COLOR,
+                )
+              : CategoryItem(
+                  title: getTranselted(context, TIC_PICK_UP)!,
+                  image: IMG_PICKUP,
+                  number: pickupTickets,
+                ),
           CategoryItem(
             title: getTranselted(context, TIC_ACCOUNTING)!,
             image: IMG_ACCOUNTING,

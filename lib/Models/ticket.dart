@@ -38,6 +38,7 @@ class Ticket with ChangeNotifier {
   static const String REPORT_URL = 'reportUrl';
   static const String CLOSE_DATE = 'closeDate';
   static const String ASSIGN_DATE = 'assignDate';
+  static const String SOLVED = 'solved';
 
   static const String SHEET_ID = 'sheetID';
   static const String SHEET_URL = 'sheetURL';
@@ -50,39 +51,67 @@ class Ticket with ChangeNotifier {
   static const String STA_ASSIGNED = 'Assigned';
 
   Ticket(
-      {this.city,
-      this.createdBy,
-      this.creatorInfo,
-      this.firebaseID,
-      this.lastEditBy,
-      this.lastEditDate,
-      this.mainCategory,
-      this.openDate,
-      this.region,
-      this.rowDataAddress,
-      this.subCategory,
-      this.techInfo,
-      this.visitDate,
+      {this.assignDate,
+      this.cafeLocation,
       this.cafeName,
+      this.city,
+      this.createdBy,
+      this.creationDate,
       this.customerMobile,
       this.customerName,
-      this.status});
+      this.customerNumber,
+      this.didContact,
+      this.extraContactNumber,
+      this.freeParts,
+      this.freeVisit,
+      this.from,
+      this.lastEditBy,
+      this.machineModel,
+      this.machineNumber,
+      this.mainCategory,
+      this.problemDesc,
+      this.recomendation,
+      this.region,
+      this.rowAddress,
+      this.sheetID,
+      this.sheetURL,
+      this.status,
+      this.subCategory,
+      this.techName,
+      this.ticketNumber,
+      this.to,
+      this.visitDate,
+      this.firebaseID});
 
-  String? firebaseID;
-  String? rowDataAddress;
-  String? createdBy;
-  String? lastEditBy;
-  String? openDate;
-  String? visitDate;
-  String? lastEditDate;
-  String? mainCategory;
-  String? subCategory;
-  String? city;
-  String? region;
-  String? customerName;
+  String? machineModel;
+  String? assignDate;
+  String? cafeLocation;
   String? cafeName;
+  String? city;
+  String? createdBy;
+  String? creationDate;
   String? customerMobile;
+  String? customerName;
+  String? customerNumber;
+  bool? didContact;
+  String? extraContactNumber;
+  bool? freeParts;
+  bool? freeVisit;
+  String? from;
+  String? lastEditBy;
+  String? mainCategory;
+  String? problemDesc;
+  String? recomendation;
+  String? region;
+  String? rowAddress;
+  String? machineNumber;
+  String? sheetID;
+  String? sheetURL;
   String? status;
-  Map<String, dynamic>? creatorInfo;
-  Map<String, dynamic>? techInfo;
+  String? subCategory;
+  String? techName;
+  String? ticketNumber;
+  String? to;
+  String? visitDate;
+  String? firebaseID;
 }

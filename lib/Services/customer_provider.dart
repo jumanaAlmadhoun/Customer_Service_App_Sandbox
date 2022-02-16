@@ -18,12 +18,12 @@ class CustomerProvider with ChangeNotifier {
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {
         customers.add(Customer(
-          balance: double.parse(value[Customer.BALANCE] ?? '0'),
-          companyName: value[Customer.COMPANY_NAME] ?? '',
-          customerName: value[Customer.CONTACT_NAME] ?? '',
-          customerNumber: value[Customer.CUSTOMER_NUMBER] ?? '',
-          mobile: value[Customer.MOBILE] ?? '',
-        ));
+            balance: double.parse(value[Customer.BALANCE] ?? '0'),
+            companyName: value[Customer.COMPANY_NAME] ?? '',
+            customerName: value[Customer.CONTACT_NAME] ?? '',
+            customerNumber: value[Customer.CUSTOMER_NUMBER] ?? '',
+            mobile: value[Customer.MOBILE] ?? '',
+            blocked: value[Customer.BLOCKED] ?? ''));
       });
       _customers = customers;
       notifyListeners();

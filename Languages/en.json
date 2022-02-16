@@ -43,5 +43,14 @@
   "add_number": "Contact Number",
   "submit": "Submit",
   "field_error": "This Field Is MANDATORY!!",
-  "tickets_category": "Visit Category"
+  "tickets_category": "Visit Category",
+  "error": "ERROR",
+  "unknowen_error": "An unexpected error occurred, please try again",
+  "assign_err":"Please select assign type",
+  "customer_blocked":"Customer is BLOCKED",
+  "search":"Search",
+  "date_lbl":"Date",
+  "cafe_lbl":"Cafe",
+  "name_lbl":"Name",
+  "phone_lbl":"Phone"
 }

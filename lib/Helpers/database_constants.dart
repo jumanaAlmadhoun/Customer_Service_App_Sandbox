@@ -1,6 +1,9 @@
 const String DB_URL = 'https://sanremov2-default-rtdb.firebaseio.com/';
 const String DB_USERS = 'CustomerServiceUsers';
 const String DB_OPEN_TICKETS = 'OpenTicketsCS';
+const String DB_READY_TO_ASSIGN_TICKETS = 'ReadyToAssignTicketsCS';
+const String DB_PENDING_TICKETS = 'PendingTicketsCS';
+const String DB_SOLVED_BY_PHONE_TICKETS = 'SolvedByPhoneTicketsCS';
 const String DB_ASSIGNED_TICKETS = 'AssignedTicketsCS';
 const String DB_QUEUE_TICKETS = 'QueueTicketsCS';
 const String DB_DELIVERY_TICKETS = 'DileveryTicketsCS';

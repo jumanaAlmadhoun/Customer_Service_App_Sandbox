@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 const Color APP_BAR_COLOR = Color(0xff261204);
 const Color APP_BAR_TEXT_COLOR = Color(0xffffffff);
 const Color ICON_COLOR = Color(0xff512100);
 const Color SHADOW_COLOR = Color(0xff000000);
 const Color BACK_GROUND_COLOR = Color(0xffffffff);
+const Color CONTACTED_COLOR = Color(0xffB5E3AF);
+const Color NOT_CONTACTED_COLOR = Color(0xffF88687);
 const String IMG_LOGO = 'Assets/Images/rfa_logo.png';
 const String IMG_LOGO_SANREMO = 'Assets/Images/sanremo.png';
 const String IMG_LOGO_PM = 'Assets/Images/pm.png';
@@ -21,3 +24,6 @@ const String IMG_WAITING_TICKETS = 'Assets/Images/waiting.png';
 const String IMG_QUEUE_TICKETS = 'Assets/Images/queue.png';
 const String IMG_ASSIGNED_TICKETS = 'Assets/Images/assigned.png';
 const String IMG_PENDING_TICKETS = 'Assets/Images/ready.png';
+
+const TextStyle TICKET_TEXT_STYLE =
+    TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);

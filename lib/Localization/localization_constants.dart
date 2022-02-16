@@ -56,6 +56,15 @@ const String LBL_SOLVED_BY_PHONE = 'solved_by_phone';
 const String LBL_VISIT_CATEGORY = 'tickets_category';
 const String BTN_SUBMIT = 'submit';
 const String MSG_INPUT_VALIDATOR = 'field_error';
+const String ERR_TITL = 'error';
+const String ERR_UNKWON_TXT = 'field_error';
+const String ERR_ASSIGN = 'assign_err';
+const String LBL_CUSTOMER_BLOCKED = 'customer_blocked';
+const String LBL_SEARCH = 'search';
+const String LBL_DATE = 'date_lbl';
+const String LBL_CAFE = 'cafe_lbl';
+const String LBL_NAME = 'name_lbl';
+const String LBL_PHONE = 'phone_lbl';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

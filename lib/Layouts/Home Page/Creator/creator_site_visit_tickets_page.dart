@@ -4,9 +4,12 @@ import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
+import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class CreatorSiteVisitPage extends StatefulWidget {
   const CreatorSiteVisitPage({Key? key}) : super(key: key);
@@ -15,7 +18,20 @@ class CreatorSiteVisitPage extends StatefulWidget {
   _CreatorSiteVisitPageState createState() => _CreatorSiteVisitPageState();
 }
 
-class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage> {
+class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
+    with RouteAware {
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    super.didPush();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,23 +54,30 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage> {
           CategoryItem(
             image: IMG_OPEN_TICKETS,
             title: getTranselted(context, STA_OPEN)!,
-            onTap: () async {},
+            number: openTickets,
+            onTap: () {
+              Navigator.pushNamed(context, creatorOpenTicketsRoute);
+            },
           ),
           CategoryItem(
             image: IMG_WAITING_TICKETS,
             title: getTranselted(context, STA_WAITING)!,
+            number: readyToAssignTickets,
           ),
           CategoryItem(
             image: IMG_QUEUE_TICKETS,
             title: getTranselted(context, STA_QUEUE)!,
+            number: queueTickets,
           ),
           CategoryItem(
             image: IMG_ASSIGNED_TICKETS,
             title: getTranselted(context, STA_ASSIGNED)!,
+            number: assignedTickets,
           ),
           CategoryItem(
             image: IMG_PENDING_TICKETS,
             title: getTranselted(context, STA_PENDING)!,
+            number: pendingTickets,
           ),
         ],
       ),

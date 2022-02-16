@@ -17,13 +17,15 @@ class Customer with ChangeNotifier {
       this.customerName,
       this.customerNumber,
       this.history,
-      this.mobile});
+      this.mobile,
+      this.blocked});
 
   String? customerNumber;
   String? customerName;
   String? companyName;
   String? mobile;
   double? balance;
+  String? blocked;
   List<Ticket>? history;
   // Map<String, dynamic>? contacts;
 }
