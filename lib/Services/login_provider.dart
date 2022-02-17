@@ -18,6 +18,7 @@ class LoginHandeler with ChangeNotifier {
   static const String TECH = 'sanremoTech';
   static const String ACCOUNTING = 'accounting';
   static const String LOGISTIC = 'logistics';
+  static const String ADMIN = 'admin';
 
   Future<void> loginUser(
       BuildContext context, String phone, String password) async {
@@ -50,6 +51,9 @@ class LoginHandeler with ChangeNotifier {
         return Future.value('DONE');
       case TECH:
         Navigator.pushReplacementNamed(context, techHomeRoute);
+        return Future.value('DONE');
+      case ADMIN:
+        Navigator.pushReplacementNamed(context, adminHomeRoute);
         return Future.value('DONE');
       default:
         return Future.value('ERROR');

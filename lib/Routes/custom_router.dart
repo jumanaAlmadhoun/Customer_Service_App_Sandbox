@@ -1,3 +1,5 @@
+import 'package:customer_service_app/Layouts/Home%20Page/Admin/admin_home_page.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Admin/rent_machine_dashboard.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/brand_selection_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_home_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_site_visit_tickets_page.dart';
@@ -34,6 +36,10 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const TechHomePage());
       case techOpenTicketRoute:
         return MaterialPageRoute(builder: (_) => const TechOpenTicketPage());
+      case adminHomeRoute:
+        return MaterialPageRoute(builder: (_) => const AdminHomePage());
+      case adminRentMachineRoute:
+        return MaterialPageRoute(builder: (_) => const RentMachineDashboard());
       case sanremoEditTicketRoute:
         return MaterialPageRoute(
             builder: (_) =>

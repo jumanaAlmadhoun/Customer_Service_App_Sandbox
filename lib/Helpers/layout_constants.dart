@@ -24,6 +24,7 @@ const String IMG_WAITING_TICKETS = 'Assets/Images/waiting.png';
 const String IMG_QUEUE_TICKETS = 'Assets/Images/queue.png';
 const String IMG_ASSIGNED_TICKETS = 'Assets/Images/assigned.png';
 const String IMG_PENDING_TICKETS = 'Assets/Images/ready.png';
+const String IMG_RENT_MACHINE = 'Assets/Images/machine.png';
 
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);
