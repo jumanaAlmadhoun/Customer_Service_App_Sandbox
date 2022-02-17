@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Localization/demo_localization.dart';
@@ -10,6 +11,7 @@ import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Services/rfa_machines_provider.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
+import 'package:customer_service_app/Services/tech_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +28,10 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-  static void setLocale(BuildContext context, Locale? locale) {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-    state!.setLocale(locale);
+  const MyApp({Key key}) : super(key: key);
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
   }
 
   @override
@@ -37,7 +39,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale? _locale;
+  Locale _locale;
 
   @override
   void didChangeDependencies() {
@@ -49,7 +51,7 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
   }
 
-  void setLocale(Locale? locale) {
+  void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
     });
@@ -69,6 +71,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: SummaryProvider()),
         ChangeNotifierProvider.value(value: RfaMachine()),
         ChangeNotifierProvider.value(value: RfaMachinesProvider()),
+        ChangeNotifierProvider.value(value: TechProvider()),
       ],
       child: MaterialApp(
         title: 'Customer Service App',
@@ -97,17 +100,17 @@ class _MyAppState extends State<MyApp> {
           GlobalCupertinoLocalizations.delegate
         ],
         localeResolutionCallback: (
-          Locale? deviceLocale,
+          Locale deviceLocale,
           Iterable<Locale> supportedLocales,
         ) {
           for (var locale in supportedLocales) {
-            if (locale.languageCode == deviceLocale!.languageCode) {
+            if (locale.languageCode == deviceLocale.languageCode) {
               return deviceLocale;
             }
           }
           return supportedLocales.first;
         },
-        initialRoute: loginRoute,
+        initialRoute: adminTechReportRoute,
         onGenerateRoute: CustomRouter.allRoutes,
       ),
     );

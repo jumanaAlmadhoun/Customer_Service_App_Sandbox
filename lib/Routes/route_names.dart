@@ -15,3 +15,4 @@ const String techOpenPickupRoute = 'techOpenPickupRoute';
 
 const String adminHomeRoute = 'adminHomeRoute';
 const String adminRentMachineRoute = 'adminRentMachineRoute';
+const String adminTechReportRoute = 'adminTechReportRoute';

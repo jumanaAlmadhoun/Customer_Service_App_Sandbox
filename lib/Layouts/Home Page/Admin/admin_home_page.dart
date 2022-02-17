@@ -54,6 +54,17 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
                     Navigator.pushNamed(context, adminRentMachineRoute);
                   },
                 ),
+          totalRfaMachines == -1
+              ? const SpinKitDancingSquare(
+                  color: APP_BAR_COLOR,
+                )
+              : CategoryItem(
+                  title: getTranselted(context, STA_TECHS_REPORT)!,
+                  image: IMG_TECH_REPORT,
+                  onTap: () {
+                    Navigator.pushNamed(context, adminTechReportRoute);
+                  },
+                ),
         ],
       ),
     );
