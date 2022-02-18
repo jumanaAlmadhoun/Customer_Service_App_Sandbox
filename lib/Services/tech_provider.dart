@@ -47,4 +47,28 @@ class TechProvider with ChangeNotifier {
   List<Tech> get techsReport {
     return [..._techs];
   }
+
+  int get totalClosedPerDay {
+    int totalClosed = 0;
+    try {
+      _techs.forEach((element) {
+        totalClosed += element.currDayClose!;
+      });
+      return totalClosed;
+    } catch (ex) {
+      return 0;
+    }
+  }
+
+  int get totalClosedPerMonth {
+    int totalClosed = 0;
+    try {
+      _techs.forEach((element) {
+        totalClosed += element.currMonthClosed!;
+      });
+      return totalClosed;
+    } catch (ex) {
+      return 0;
+    }
+  }
 }

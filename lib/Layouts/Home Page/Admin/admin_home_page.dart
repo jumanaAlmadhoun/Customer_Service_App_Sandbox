@@ -1,8 +1,10 @@
+import 'package:customer_service_app/Config/size_config.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/rfa_machines_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
+import 'package:customer_service_app/Widgets/logout_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -32,9 +34,11 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranselted(context, HOME_PAGE_TITLE)!),
+        actions: const [LogoutWidget()],
       ),
       body: GridView.count(
         crossAxisCount: 2,
@@ -61,6 +65,17 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
               : CategoryItem(
                   title: getTranselted(context, STA_TECHS_REPORT)!,
                   image: IMG_TECH_REPORT,
+                  onTap: () {
+                    Navigator.pushNamed(context, adminTechReportRoute);
+                  },
+                ),
+          totalRfaMachines == -1
+              ? const SpinKitDancingSquare(
+                  color: APP_BAR_COLOR,
+                )
+              : CategoryItem(
+                  title: getTranselted(context, STA_TECHS_REPORT)!,
+                  image: IMG_WORKSHO_REPORT,
                   onTap: () {
                     Navigator.pushNamed(context, adminTechReportRoute);
                   },

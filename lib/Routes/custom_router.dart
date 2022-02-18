@@ -8,8 +8,10 @@ import 'package:customer_service_app/Layouts/Home%20Page/Creator/edit_sanremo_ti
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/open_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/ready_to_Assign_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Creator/sanremo_new_ticket_page.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_fill_sitevisit_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_home_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_open_tickets.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_info_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -43,6 +45,12 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const RentMachineDashboard());
       case adminTechReportRoute:
         return MaterialPageRoute(builder: (_) => const TechReportPage());
+      case techTicketInfoRoute:
+        return MaterialPageRoute(
+            builder: (_) => TechTicketInfoPage(settings.arguments as Ticket));
+      case techFillSiteVisitRoute:
+        return MaterialPageRoute(
+            builder: (_) => TechFillTicketPage(settings.arguments as Ticket));
       case sanremoEditTicketRoute:
         return MaterialPageRoute(
             builder: (_) =>

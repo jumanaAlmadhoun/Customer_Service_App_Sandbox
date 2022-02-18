@@ -26,6 +26,7 @@ const String IMG_ASSIGNED_TICKETS = 'Assets/Images/assigned.png';
 const String IMG_PENDING_TICKETS = 'Assets/Images/ready.png';
 const String IMG_RENT_MACHINE = 'Assets/Images/machine.png';
 const String IMG_TECH_REPORT = 'Assets/Images/technician.png';
+const String IMG_WORKSHO_REPORT = 'Assets/Images/workshop.png';
 
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);

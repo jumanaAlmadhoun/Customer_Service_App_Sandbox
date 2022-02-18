@@ -15,5 +15,6 @@ const String DB_CUSTOMERS = 'Customers';
 const String DB_SANREMO_MACHINES = 'SanremoMachines';
 const String DB_RFA_MACHINES = 'RfaMachinesCS';
 const String DB_CLOSED_TICKETS = 'ClosedTickets';
+const String DB_SPARE_PARTS = 'SpareParts';
 
 const String TEMP_SANREMO = 'SanremoCS';

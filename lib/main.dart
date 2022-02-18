@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
           }
           return supportedLocales.first;
         },
-        initialRoute: adminTechReportRoute,
+        initialRoute: loginRoute,
         onGenerateRoute: CustomRouter.allRoutes,
       ),
     );

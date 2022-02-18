@@ -1,6 +1,7 @@
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
+import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/tech_ticket_widget.dart';
@@ -20,7 +21,6 @@ class TechOpenTicketPage extends StatefulWidget {
 class _TechOpenTicketPageState extends State<TechOpenTicketPage>
     with RouteAware {
   List<Ticket> _tickets = [];
-  List<Ticket> _showedTickets = [];
   bool _isLoading = false;
   bool _search = false;
   @override
@@ -41,7 +41,6 @@ class _TechOpenTicketPageState extends State<TechOpenTicketPage>
       setState(() {
         _isLoading = false;
         _tickets = Provider.of<TicketProvider>(context, listen: false).tickets;
-        _showedTickets = _tickets;
       });
     });
   }
@@ -76,7 +75,10 @@ class _TechOpenTicketPageState extends State<TechOpenTicketPage>
                   customerName: _tickets[i].customerName,
                   date: _tickets[i].creationDate,
                   didContact: _tickets[i].didContact,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, techTicketInfoRoute,
+                        arguments: _tickets[i]);
+                  },
                 );
               },
             ),
