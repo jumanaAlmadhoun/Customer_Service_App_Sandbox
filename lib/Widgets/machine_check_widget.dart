@@ -33,14 +33,16 @@ class _MachineChekWidgetState extends State<MachineChekWidget> {
                   RadioGroup<String>.builder(
                     direction: Axis.horizontal,
                     groupValue: widget.pass!,
-                    onChanged: (value) => setState(() {
-                      widget.pass = value;
-                      if (value == 'نجاح') {
-                        widget.isPass == true;
-                      } else {
-                        widget.isPass == false;
-                      }
-                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.pass = value;
+                        if (value == 'نجاح') {
+                          widget.isPass == true;
+                        } else {
+                          widget.isPass == false;
+                        }
+                      });
+                    },
                     items: const ['نجاح', 'فشل'].reversed.toList(),
                     itemBuilder: (item) => RadioButtonBuilder(
                       item,

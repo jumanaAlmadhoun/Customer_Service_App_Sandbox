@@ -9,15 +9,25 @@ class SparePartProvider with ChangeNotifier {
   List<SparePart> _parts = [];
 
   Future<void> fetchSpareParts() async {
-    _parts.clear();
-    var response = await http.get(Uri.parse('$DB_URL$DB_SPARE_PARTS.json'));
-    var data = jsonDecode(response.body) as Map<String, dynamic>;
-    List<SparePart> parts = [];
-    data.forEach((key, value) {
-      parts.add(SparePart(
-          desc: value[SparePart.DESC] ?? '',
-          price: value[SparePart.PRICE] ?? 0,
-          partNo: value[SparePart.PART_NO]));
-    });
+    try {
+      _parts.clear();
+      var response = await http.get(Uri.parse('$DB_URL$DB_SPARE_PARTS.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      List<SparePart> parts = [];
+      data.forEach((key, value) {
+        parts.add(SparePart(
+            desc: value[SparePart.DESC] ?? '',
+            price: double.parse(value[SparePart.PRICE].toString()),
+            partNo: value[SparePart.PART_NO]));
+      });
+      _parts = parts;
+      notifyListeners();
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  List<SparePart> get parts {
+    return [..._parts];
   }
 }

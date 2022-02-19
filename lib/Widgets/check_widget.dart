@@ -56,14 +56,16 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                   RadioGroup<String>.builder(
                     direction: Axis.horizontal,
                     groupValue: widget.passG1!,
-                    onChanged: (value) => setState(() {
-                      widget.passG1 = value;
-                      if (value == 'نجاح') {
-                        widget.isPassG1 == true;
-                      } else {
-                        widget.isPassG1 == false;
-                      }
-                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.passG1 = value;
+                        if (value == 'نجاح') {
+                          widget.isPassG1 == true;
+                        } else {
+                          widget.isPassG1 == false;
+                        }
+                      });
+                    },
                     items: const ['نجاح', 'فشل'].reversed.toList(),
                     itemBuilder: (item) => RadioButtonBuilder(
                       item,
@@ -90,14 +92,16 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                   RadioGroup<String>.builder(
                     direction: Axis.horizontal,
                     groupValue: widget.passG2!,
-                    onChanged: (value) => setState(() {
-                      widget.passG2 = value;
-                      if (value == 'نجاح') {
-                        widget.isPassG2 == true;
-                      } else {
-                        widget.isPassG2 == false;
-                      }
-                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.passG2 = value;
+                        if (value == 'نجاح') {
+                          widget.isPassG2 == true;
+                        } else {
+                          widget.isPassG2 == false;
+                        }
+                      });
+                    },
                     items: const ['نجاح', 'فشل'].reversed.toList(),
                     itemBuilder: (item) => RadioButtonBuilder(
                       item,
@@ -124,14 +128,16 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                   RadioGroup<String>.builder(
                     direction: Axis.horizontal,
                     groupValue: widget.passG3!,
-                    onChanged: (value) => setState(() {
-                      widget.passG3 = value;
-                      if (value == 'نجاح') {
-                        widget.isPassG3 == true;
-                      } else {
-                        widget.isPassG3 == false;
-                      }
-                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.passG3 = value;
+                        if (value == 'نجاح') {
+                          widget.isPassG3 == true;
+                        } else {
+                          widget.isPassG3 == false;
+                        }
+                      });
+                    },
                     items: const ['نجاح', 'فشل'].reversed.toList(),
                     itemBuilder: (item) => RadioButtonBuilder(
                       item,
@@ -158,14 +164,16 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                   RadioGroup<String>.builder(
                     direction: Axis.horizontal,
                     groupValue: widget.passG4!,
-                    onChanged: (value) => setState(() {
-                      widget.passG4 = value;
-                      if (value == 'نجاح') {
-                        widget.isPassG4 == true;
-                      } else {
-                        widget.isPassG4 == false;
-                      }
-                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.passG4 = value;
+                        if (value == 'نجاح') {
+                          widget.isPassG4 == true;
+                        } else {
+                          widget.isPassG4 == false;
+                        }
+                      });
+                    },
                     items: const ['نجاح', 'فشل'].reversed.toList(),
                     itemBuilder: (item) => RadioButtonBuilder(
                       item,

@@ -5,11 +5,13 @@ import 'package:customer_service_app/Localization/demo_localization.dart';
 import 'package:customer_service_app/Models/customer.dart';
 import 'package:customer_service_app/Models/machine.dart';
 import 'package:customer_service_app/Models/rfa_machine.dart';
+import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Routes/custom_router.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Services/rfa_machines_provider.dart';
+import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Services/tech_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
@@ -72,6 +74,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: RfaMachine()),
         ChangeNotifierProvider.value(value: RfaMachinesProvider()),
         ChangeNotifierProvider.value(value: TechProvider()),
+        ChangeNotifierProvider.value(value: SparePart()),
+        ChangeNotifierProvider.value(value: SparePartProvider()),
       ],
       child: MaterialApp(
         title: 'Customer Service App',
