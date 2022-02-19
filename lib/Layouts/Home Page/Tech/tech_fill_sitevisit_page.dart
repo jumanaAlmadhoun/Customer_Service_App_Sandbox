@@ -4,6 +4,7 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/check_widget.dart';
+import 'package:customer_service_app/Widgets/comment_widget.dart';
 import 'package:customer_service_app/Widgets/machine_check_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
@@ -166,6 +167,33 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         title: 'PH = (7.0-7.5)',
         keyJson: 'G7',
       ),
+      CommentWidget(
+        title: 'القاطع الكهربائي غير مطابق لتوصيات السلامة العامة والمعايير',
+      ),
+      CommentWidget(
+        title: 'لايوجد قاطع كهربائي',
+      ),
+      CommentWidget(title: 'لايوجد ارضي'),
+      CommentWidget(title: 'الارضي غير فعال'),
+      CommentWidget(title: 'توصيل ثنائي القطبية 110'),
+      CommentWidget(title: 'توصيل غير صحيح من قبل المستخدم'),
+      CommentWidget(title: 'مصدر الماء غير مطابق للمعايير و التوصيات'),
+      CommentWidget(title: 'تدفق مصدر الماء متغير/ضعيف مما يؤثر على المكينة'),
+      CommentWidget(title: 'نسبة قاعدية الماء غير مطابقة للمعايير'),
+      CommentWidget(title: 'نسبة المواد الصلبة المذابة غير مطابقة للمعايير'),
+      CommentWidget(title: 'تكلسات املاح مرئية داخل المكينة'),
+      CommentWidget(title: 'تم تنظيف عداد المياه'),
+      CommentWidget(title: 'تم تنظيف مجرى المياه'),
+      CommentWidget(title: 'تم تفريغ الغلاية عدة مرات لوجود املاح'),
+      CommentWidget(title: 'تم تنظيف المجموعة/المجموعات'),
+      CommentWidget(title: 'تم صيانة وحدة التبخير'),
+      CommentWidget(title: 'تم تحديث برنامج التشغيل'),
+      CommentWidget(title: 'تم فك وتنظيف وحدة الترطيب'),
+      CommentWidget(title: 'تم فك المجموعة وتنظيف المقنن'),
+      CommentWidget(title: 'يوجد فرق كميات لايمكن حله في الموقع'),
+      CommentWidget(title: 'يوجد تكلسات لايمكن تنظيفها في الموقع'),
+      CommentWidget(title: 'نوصي بنقل المكينة لمركز الصيانة'),
+      CommentWidget(title: 'نوصي بتعديل التوصيلات والملاحظات حسب توصيات الشركة')
     ];
   }
 }
