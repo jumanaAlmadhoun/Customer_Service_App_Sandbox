@@ -34,12 +34,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                   onChanged: (value) {
                     setState(() {
                       widget.isSelected = value!;
-                      print(widget.title);
                       if (widget.isSelected &&
                           widget.title!.trim() ==
-                              'نوصي بنقل المكينة لمركز الصيانة') {
-                        print('Move');
-                      }
+                              'نوصي بنقل المكينة لمركز الصيانة') {}
                     });
                   }),
             ],

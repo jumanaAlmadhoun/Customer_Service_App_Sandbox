@@ -37,9 +37,9 @@ class _MachineChekWidgetState extends State<MachineChekWidget> {
                       setState(() {
                         widget.pass = value;
                         if (value == 'نجاح') {
-                          widget.isPass == true;
+                          widget.isPass = true;
                         } else {
-                          widget.isPass == false;
+                          widget.isPass = false;
                         }
                       });
                     },

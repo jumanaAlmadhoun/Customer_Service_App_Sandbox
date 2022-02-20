@@ -14,6 +14,7 @@ const String techOpenDeilveryRoute = 'techOpenDeilveryRoute';
 const String techOpenPickupRoute = 'techOpenPickupRoute';
 const String techTicketInfoRoute = 'techTicketInfoRoute';
 const String techFillSiteVisitRoute = 'techFillSiteVisitRoute';
+const String techVisitSummaryRoute = 'techVisitSummaryRoute';
 
 const String adminHomeRoute = 'adminHomeRoute';
 const String adminRentMachineRoute = 'adminRentMachineRoute';

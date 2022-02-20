@@ -12,6 +12,7 @@ import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_fill_sitevisi
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_home_page.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_open_tickets.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_info_page.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_summary.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -51,6 +52,10 @@ class CustomRouter {
       case techFillSiteVisitRoute:
         return MaterialPageRoute(
             builder: (_) => TechFillTicketPage(settings.arguments as Ticket));
+      case techVisitSummaryRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                TechTicketSummary(settings.arguments as List<dynamic>));
       case sanremoEditTicketRoute:
         return MaterialPageRoute(
             builder: (_) =>

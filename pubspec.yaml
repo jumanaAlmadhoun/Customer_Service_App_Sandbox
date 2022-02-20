@@ -24,7 +24,7 @@ dependencies:
   flutter_barcode_scanner:
   cloud_firestore: 
   flutter_local_notifications:
-  permission_handler: 
+  # permission_handler: 
   firebase_database: 
   firebase_storage: 
   firebase_core:
