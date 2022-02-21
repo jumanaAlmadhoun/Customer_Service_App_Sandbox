@@ -114,7 +114,7 @@ class _MyAppState extends State<MyApp> {
           }
           return supportedLocales.first;
         },
-        initialRoute: loginRoute,
+        initialRoute: techFillSiteVisitRoute,
         onGenerateRoute: CustomRouter.allRoutes,
       ),
     );

@@ -15,6 +15,10 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
+import '../../../Helpers/database_constants.dart';
+import '../../../Services/login_provider.dart';
+import '../../../Services/ticket_provider.dart';
+
 class TechFillTicketPage extends StatefulWidget {
   TechFillTicketPage(this.ticket);
   final Ticket? ticket;
@@ -31,6 +35,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
   List<Widget> _machineCheckDesign = [];
   List<Widget> _spareParts = [];
   bool _isCash = false;
+  List<Ticket> _tickets = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -42,6 +47,14 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
     super.didPush();
     setState(() {
       _isLoading = true;
+    });
+    Provider.of<TicketProvider>(context, listen: false)
+        .fetchTickets('$DB_ASSIGNED_TICKETS/$userName')
+        .then((value) {
+      setState(() {
+        _isLoading = false;
+        _tickets = Provider.of<TicketProvider>(context, listen: false).tickets;
+      });
     });
     Provider.of<SparePartProvider>(context, listen: false)
         .fetchSpareParts()
@@ -55,6 +68,33 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
     initMachineCheckDesign();
   }
 
+  final formKey = GlobalKey<FormState>();
+  String? validateNote(value) {
+    if (value.isEmpty) {
+      return 'required';
+    } else {
+      return null;
+    }
+  }
+
+  String? validatePartNum(value) {
+    /*var isNull = _allParts.firstWhere(
+        (element) => element.partNo!.toUpperCase() == value!.toUpperCase());*/
+    if (value.isEmpty) {
+      return 'أدخل رقم القطعة الصحيح';
+    } else {
+      return null;
+    }
+  }
+
+  String? validatePartQuantity(value) {
+    if (value.isEmpty || value == 0.toString()) {
+      return 'أدخل الكمية الصحيحة';
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,38 +105,46 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
           ? const SpinKitChasingDots(
               color: APP_BAR_COLOR,
             )
-          : ListView(
-              shrinkWrap: true,
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: _machineCheckDesign.length,
-                  itemBuilder: (context, i) {
-                    return _machineCheckDesign[i];
-                  },
-                ),
-                ButtonWidget(
-                  text: 'إضافة قطع غيار',
-                  onTap: () {
-                    setState(() {
-                      _machineCheckDesign.add(SparePartWidget(
-                        allParts: _allParts,
-                      ));
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ButtonWidget(
-                  text: 'التالي',
-                  onTap: () {
-                    Navigator.pushNamed(context, techVisitSummaryRoute,
-                        arguments: [widget.ticket, _machineCheckDesign]);
-                  },
-                ),
-              ],
+          : Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.always,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: _machineCheckDesign.length,
+                    itemBuilder: (context, i) {
+                      return _machineCheckDesign[i];
+                    },
+                  ),
+                  ButtonWidget(
+                    text: 'إضافة قطع غيار',
+                    onTap: () {
+                      setState(() {
+                        _machineCheckDesign.add(SparePartWidget(
+                          allParts: _allParts,
+                          validatePartNum: validatePartNum,
+                          validatePartQuantity: validatePartQuantity,
+                        ));
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ButtonWidget(
+                    text: 'التالي',
+                    onTap: () {
+                      if (formKey.currentState!.validate()) {
+                        Navigator.pushNamed(context, techVisitSummaryRoute,
+                            arguments: [_machineCheckDesign]);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
     );
   }
@@ -106,46 +154,57 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       MachineChekWidget(
         title: 'قطع مكسورة أو مفقودة',
         keyJson: '1',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'نظافة المكينة العامة',
         keyJson: '2',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص وجود تهريبات في المكينة',
         keyJson: '3',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص العدادات',
         keyJson: '4',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص مصدر الماء',
         keyJson: '5',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص جودة تسخين الحليب',
         keyJson: '6',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص التوصيلات والسلامة العامة',
         keyJson: '7',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص ضغط المضخة الرئيسية (بار)',
         keyJson: '8',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص وحدة التحكم بالبخار',
         keyJson: '9',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص قوة البخار',
         keyJson: '10',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص سرعة الفتح والاغلاق للبخار',
         keyJson: '11',
+        validate: validateNote,
       ),
       GroupCheckWidget(
         title: 'ضغط رأس المجموعة',

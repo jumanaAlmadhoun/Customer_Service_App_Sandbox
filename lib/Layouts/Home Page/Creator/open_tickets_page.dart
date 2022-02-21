@@ -63,7 +63,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
               });
             },
             icon: const Icon(Icons.search),
-          )
+          ),
         ],
       ),
       body: _isLoading
@@ -81,7 +81,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                   date: _tickets[i].creationDate,
                   didContact: _tickets[i].didContact,
                   onTap: () {
-                    Navigator.pushNamed(context, sanremoEditTicketRoute,
+                    Navigator.pushNamed(context, techOpenTicketRoute,
                         arguments: _tickets[i]);
                   },
                 );

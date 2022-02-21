@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
 class SparePartWidget extends StatefulWidget {
-  SparePartWidget({this.allParts});
+  SparePartWidget(
+      {this.allParts, this.validatePartNum, this.validatePartQuantity});
   TextEditingController partNo = TextEditingController();
   TextEditingController qty = TextEditingController();
   List<SparePart>? allParts;
+  String? Function(String?)? validatePartNum;
+  String? Function(String?)? validatePartQuantity;
   double amount = 0;
   @override
   _SparePartWidgetState createState() => _SparePartWidgetState();
@@ -35,17 +38,7 @@ class _SparePartWidgetState extends State<SparePartWidget> {
                       label: Text('رقم القطعة'),
                     ),
                     controller: widget.partNo,
-                    validator: (value) {
-                      if (widget.allParts!.firstWhere((element) =>
-                                  element.partNo!.toUpperCase() ==
-                                  value!.toUpperCase()) ==
-                              null ||
-                          value!.isEmpty) {
-                        return 'رقم القطعة خطأ';
-                      } else {
-                        return null;
-                      }
-                    },
+                    validator: widget.validatePartNum,
                     suggestions: widget.allParts!
                         .map((e) => e.partNo.toString())
                         .toList()),
@@ -56,6 +49,7 @@ class _SparePartWidgetState extends State<SparePartWidget> {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: TextFormField(
+                  validator: widget.validatePartQuantity,
                   controller: widget.qty,
                   onChanged: (value) {
                     SparePart part = widget.allParts!.firstWhere((element) =>

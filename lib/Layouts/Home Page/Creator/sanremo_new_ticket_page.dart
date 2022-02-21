@@ -18,7 +18,7 @@ import 'package:customer_service_app/Util/formatters.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/main.dart';
-import 'package:dropdownfield/dropdownfield.dart';
+//import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:group_radio_button/group_radio_button.dart';
@@ -127,7 +127,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
               child: ListView(
                 padding: const EdgeInsets.all(15),
                 children: [
-                  DropDownField(
+                  /*DropDownField(
                     required: true,
                     controller: selectedModel,
                     value: selectedModel!.text,
@@ -138,7 +138,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                         selectedModel!.text = value;
                       });
                     },
-                  ),
+                  ),*/
                   TextFormField(
                     validator: (value) => validateInput(value, context),
                     inputFormatters: [UpperCaseFormatter()],
@@ -295,7 +295,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                       });
                     },
                   ),
-                  DropDownField(
+                  /* DropDownField(
                     controller: _selectedCity,
                     value: _selectedCity.text,
                     labelText: getTranselted(context, LBL_CITY),
@@ -312,7 +312,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   const SizedBox(
                     height: 10,
                   ),
-                  DropDownField(
+              DropDownField(
                     value: _techName,
                     labelText: getTranselted(context, LBL_TECH_NAME),
                     items: techs,
@@ -327,7 +327,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                       });
                     },
                     required: true,
-                  ),
+                  ),*/
                   _techName != 'N/A'
                       ? RadioGroup<String>.builder(
                           direction: Axis.horizontal,

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 
 class MachineChekWidget extends StatefulWidget {
-  MachineChekWidget({this.title, this.keyJson});
+  MachineChekWidget({this.title, this.keyJson, this.validate});
   TextEditingController? controller = TextEditingController();
   String? pass = '';
   bool? isPass = false;
   String? title;
   String? keyJson;
+  String? Function(String?)? validate;
   @override
   _MachineChekWidgetState createState() => _MachineChekWidgetState();
 }
@@ -60,6 +61,7 @@ class _MachineChekWidgetState extends State<MachineChekWidget> {
                   maxLines: 10,
                   keyboardType: TextInputType.multiline,
                   decoration: const InputDecoration(label: Text('ملاحظات')),
+                  validator: widget.validate,
                 ),
               ),
               const SizedBox(
