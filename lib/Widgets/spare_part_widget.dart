@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
 class SparePartWidget extends StatefulWidget {
-  SparePartWidget({this.allParts});
+  SparePartWidget({this.allParts, this.isfree = false});
   TextEditingController partNo = TextEditingController();
   TextEditingController qty = TextEditingController();
   List<SparePart>? allParts;
   double amount = 0;
+  bool? isfree;
   @override
   _SparePartWidgetState createState() => _SparePartWidgetState();
 }
@@ -62,9 +63,11 @@ class _SparePartWidgetState extends State<SparePartWidget> {
                         element.partNo!.toUpperCase() ==
                         widget.partNo.text.toUpperCase());
                     if (part != null && value.isNotEmpty) {
-                      setState(() {
-                        widget.amount = part.price! * double.parse(value);
-                      });
+                      if (widget.isfree == false) {
+                        setState(() {
+                          widget.amount = part.price! * double.parse(value);
+                        });
+                      }
                     }
                   },
                   decoration: const InputDecoration(label: Text('العدد')),

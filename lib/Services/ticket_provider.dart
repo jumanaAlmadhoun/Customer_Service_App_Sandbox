@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
+import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,38 +18,40 @@ class TicketProvider with ChangeNotifier {
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {
         tickets.add(Ticket(
-            machineModel: value[Ticket.MACHINE_MODEL] ?? '',
-            assignDate: value[Ticket.ASSIGN_DATE] ?? '',
-            cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
-            cafeName: value[Ticket.CAFE_NAME] ?? '',
-            city: value[Ticket.CITY] ?? '',
-            createdBy: value[Ticket.CREATED_BY] ?? '',
-            creationDate: value[Ticket.CREATION_DATE] ?? '',
-            customerMobile: value[Ticket.CUSTOMER_MOBILE] ?? '',
-            customerName: value[Ticket.CUSTOMER_NAME] ?? '',
-            customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
-            didContact: value[Ticket.DID_CONTACT] ?? false,
-            extraContactNumber: value[Ticket.CONTACT_NUMBER],
-            freeParts: value[Ticket.FREE_PARTS] ?? false,
-            freeVisit: value[Ticket.FREE_PARTS] ?? false,
-            from: value[Ticket.VISIT_START_TIME] ?? '',
-            to: value[Ticket.VISIT_END_TIME] ?? '',
-            lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
-            mainCategory: value[Ticket.MAIN_CATEGORY] ?? '',
-            problemDesc: value[Ticket.PROBLEM_DESC] ?? '',
-            recomendation: value[Ticket.RECOMMENDATION] ?? '',
-            region: value[Ticket.REGION] ?? '',
-            rowAddress: value[Ticket.ROW_ADDRESS] ?? '',
-            machineNumber: value[Ticket.SERIAL_NUMBER] ?? '',
-            sheetID: value[Ticket.SHEET_ID] ?? '',
-            sheetURL: value[Ticket.SHEET_URL] ?? '',
-            status: value[Ticket.STATUS] ?? '',
-            subCategory: value[Ticket.SUB_CATEGORY] ?? '',
-            techName: value[Ticket.TECH_NAME] ?? '',
-            ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
-            visitDate: value[Ticket.VISIT_DATE] ?? '',
-            firebaseID: key,
-            fromTable: from));
+          machineModel: value[Ticket.MACHINE_MODEL] ?? '',
+          assignDate: value[Ticket.ASSIGN_DATE] ?? '',
+          cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
+          cafeName: value[Ticket.CAFE_NAME] ?? '',
+          city: value[Ticket.CITY] ?? '',
+          createdBy: value[Ticket.CREATED_BY] ?? '',
+          creationDate: value[Ticket.CREATION_DATE] ?? '',
+          customerMobile: value[Ticket.CUSTOMER_MOBILE] ?? '',
+          customerName: value[Ticket.CUSTOMER_NAME] ?? '',
+          customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
+          didContact: value[Ticket.DID_CONTACT] ?? false,
+          extraContactNumber: value[Ticket.CONTACT_NUMBER],
+          freeParts: value[Ticket.FREE_PARTS] ?? false,
+          freeVisit: value[Ticket.FREE_PARTS] ?? false,
+          from: value[Ticket.VISIT_START_TIME] ?? '',
+          to: value[Ticket.VISIT_END_TIME] ?? '',
+          lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
+          mainCategory: value[Ticket.MAIN_CATEGORY] ?? '',
+          problemDesc: value[Ticket.PROBLEM_DESC] ?? '',
+          recomendation: value[Ticket.RECOMMENDATION] ?? '',
+          region: value[Ticket.REGION] ?? '',
+          rowAddress: value[Ticket.ROW_ADDRESS] ?? '',
+          machineNumber: value[Ticket.SERIAL_NUMBER] ?? '',
+          sheetID: value[Ticket.SHEET_ID] ?? '',
+          sheetURL: value[Ticket.SHEET_URL] ?? '',
+          status: value[Ticket.STATUS] ?? '',
+          subCategory: value[Ticket.SUB_CATEGORY] ?? '',
+          techName: value[Ticket.TECH_NAME] ?? '',
+          ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
+          visitDate: value[Ticket.VISIT_DATE] ?? '',
+          firebaseID: key,
+          fromTable: from,
+          laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
+        ));
         print(from);
         _tickets = tickets;
         notifyListeners();
@@ -116,5 +119,26 @@ class TicketProvider with ChangeNotifier {
       return Future.value(SC_SUCCESS_RESPONSE);
     }
     return Future.value(SC_FAILED_RESPONSE);
+  }
+
+  Future<String> techSubmitSiteVisit(
+      Map<String, dynamic> json, String? firebaseID) async {
+    try {
+      var response = await http.get(
+          Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      data.update(
+        Ticket.TECH_INFO,
+        (value) => json,
+        ifAbsent: () => json,
+      );
+      await http.patch(
+        Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'),
+        body: jsonEncode(json),
+      );
+    } catch (ex) {
+      print(ex);
+    }
+    return '';
   }
 }
