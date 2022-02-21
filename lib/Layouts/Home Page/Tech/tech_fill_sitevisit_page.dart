@@ -18,6 +18,7 @@ import 'package:searchfield/searchfield.dart';
 import '../../../Helpers/database_constants.dart';
 import '../../../Services/login_provider.dart';
 import '../../../Services/ticket_provider.dart';
+import '../../../Widgets/text_widget.dart';
 
 class TechFillTicketPage extends StatefulWidget {
   TechFillTicketPage(this.ticket);
@@ -48,14 +49,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
     setState(() {
       _isLoading = true;
     });
-    Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets('$DB_ASSIGNED_TICKETS/$userName')
-        .then((value) {
-      setState(() {
-        _isLoading = false;
-        _tickets = Provider.of<TicketProvider>(context, listen: false).tickets;
-      });
-    });
+
     Provider.of<SparePartProvider>(context, listen: false)
         .fetchSpareParts()
         .then((value) {
@@ -140,6 +134,14 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
                       if (formKey.currentState!.validate()) {
                         Navigator.pushNamed(context, techVisitSummaryRoute,
                             arguments: [_machineCheckDesign]);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const AlertDialog(
+                            title: Text('تنبيه '),
+                            content: Text('ادخل جميع البيانات'),
+                          ),
+                        );
                       }
                     },
                   ),
@@ -204,6 +206,16 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       MachineChekWidget(
         title: 'فحص سرعة الفتح والاغلاق للبخار',
         keyJson: '11',
+        validate: validateNote,
+      ),
+      TextWidget(
+        title: 'عدد الأكواب',
+        jsonKey: 'total_cups',
+        validate: validateNote,
+      ),
+      TextWidget(
+        title: 'إصدار برنامج التشغيل',
+        jsonKey: 'os',
         validate: validateNote,
       ),
       GroupCheckWidget(

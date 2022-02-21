@@ -35,8 +35,13 @@ class _CommentWidgetState extends State<CommentWidget> {
                     setState(() {
                       widget.isSelected = value!;
                       if (widget.isSelected &&
-                          widget.title!.trim() ==
-                              'نوصي بنقل المكينة لمركز الصيانة') {}
+                          widget.title!
+                              .trim()
+                              .contains('نوصي بنقل المكينة لمركز الصيانة')) {
+                        widget.moveToWorkshop = true;
+                      } else {
+                        widget.moveToWorkshop = false;
+                      }
                     });
                   }),
             ],

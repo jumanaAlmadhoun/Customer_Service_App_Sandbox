@@ -25,6 +25,7 @@ class Ticket with ChangeNotifier {
   static const String CUSTOMER_NUMBER = 'customerNumber';
   static const String SERIAL_NUMBER = 'serialNumber';
   static const String FROM_TABLE = 'fromTable';
+  static const String LABOR_CHRGES = 'laborCharges';
 
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
@@ -39,6 +40,7 @@ class Ticket with ChangeNotifier {
   static const String REPORT_URL = 'reportUrl';
   static const String CLOSE_DATE = 'closeDate';
   static const String ASSIGN_DATE = 'assignDate';
+  static const String TECH_CLOSE_DATE = 'techCloseDate';
   static const String SOLVED = 'solved';
 
   static const String SHEET_ID = 'sheetID';
@@ -83,7 +85,8 @@ class Ticket with ChangeNotifier {
       this.to,
       this.visitDate,
       this.firebaseID,
-      this.fromTable});
+      this.fromTable,
+      this.laborCharges});
 
   String? machineModel;
   String? assignDate;
@@ -117,4 +120,5 @@ class Ticket with ChangeNotifier {
   String? visitDate;
   String? firebaseID;
   String? fromTable;
+  double? laborCharges;
 }
