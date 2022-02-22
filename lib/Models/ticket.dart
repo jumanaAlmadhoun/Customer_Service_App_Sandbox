@@ -26,7 +26,7 @@ class Ticket with ChangeNotifier {
   static const String SERIAL_NUMBER = 'serialNumber';
   static const String FROM_TABLE = 'fromTable';
   static const String LABOR_CHRGES = 'laborCharges';
-
+  static const String CHARGES_PRICE = 'priceBefore';
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
   static const String RECOMMENDATION = 'recomendation';
@@ -52,6 +52,7 @@ class Ticket with ChangeNotifier {
   static const String STA_READY_TO_ASSIGN = 'Ready To Assign';
   static const String STA_SOLVED_BY_PHONE = 'Solved By Phone';
   static const String STA_ASSIGNED = 'Assigned';
+  static const String STA_PENDING = 'Pending';
 
   Ticket(
       {this.assignDate,

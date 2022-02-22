@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
+import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_summary.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,6 +82,19 @@ class TicketProvider with ChangeNotifier {
             ifAbsent: () => sheetURL);
         ticketHeader.update(Ticket.TICKET_NUMBER, (value) => ticketNumber,
             ifAbsent: () => ticketNumber);
+        var chargeResponse = await http.get(Uri.parse(
+            '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
+        var chargeData =
+            jsonDecode(chargeResponse.body) as Map<String, dynamic>;
+        print(chargeData);
+        if (chargeData != null) {
+          String charge = chargeData[Ticket.CHARGES_PRICE].toString();
+          ticketHeader.update(
+            Ticket.LABOR_CHRGES,
+            (value) => charge,
+            ifAbsent: () => charge,
+          );
+        }
         await http.post(Uri.parse(firebaseURL), body: jsonEncode(ticketHeader));
         return Future.value(SC_SUCCESS_RESPONSE);
       } else {
@@ -106,6 +120,17 @@ class TicketProvider with ChangeNotifier {
     print(response.body);
     var data = jsonDecode(response.body);
     if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+      var chargeResponse = await http.get(Uri.parse(
+          '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
+      var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
+      if (chargeData != null) {
+        String charge = chargeData[Ticket.CHARGES_PRICE].toString();
+        ticketHeader.update(
+          Ticket.LABOR_CHRGES,
+          (value) => charge,
+          ifAbsent: () => charge,
+        );
+      }
       if (toTable != ticket!.fromTable) {
         await http.post(Uri.parse('$DB_URL$toTable.json'),
             body: jsonEncode(ticketHeader));
@@ -121,24 +146,49 @@ class TicketProvider with ChangeNotifier {
     return Future.value(SC_FAILED_RESPONSE);
   }
 
-  Future<String> techSubmitSiteVisit(
-      Map<String, dynamic> json, String? firebaseID) async {
+  Future<String> techSubmitSiteVisit(Map<String, dynamic> json,
+      Map<String, dynamic> partJson, String? firebaseID) async {
     try {
       var response = await http.get(
           Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.update(
         Ticket.TECH_INFO,
-        (value) => json,
-        ifAbsent: () => json,
+        (value) => {
+          'infoJson': jsonEncode(json),
+          'partsJson': jsonEncode(partJson),
+        },
+        ifAbsent: () => {
+          'infoJson': jsonEncode(json),
+          'partsJson': jsonEncode(partJson),
+        },
       );
       await http.patch(
         Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'),
-        body: jsonEncode(json),
+        body: jsonEncode(data),
       );
+      var ticketJson = jsonEncode(data);
+      var infoJson = jsonEncode(json);
+      var partsJson = jsonEncode(partJson);
+      print(ticketJson);
+      print(infoJson);
+      print(partsJson);
+      response = await http.get(Uri.parse(
+          '$TECH_FILL_SCRIPT?url=$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+      data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        response = await http.get(Uri.parse(
+            '$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+        data = jsonDecode(response.body) as Map<String, dynamic>;
+        invoiceName = data['invName'];
+        invoiceUrl = data['invLink'];
+        reportName = data['name'];
+        reportUrl = data['URL'];
+        return Future.value(SC_SUCCESS_RESPONSE);
+      }
     } catch (ex) {
       print(ex);
     }
-    return '';
+    return Future.value(SC_FAILED_RESPONSE);
   }
 }

@@ -80,6 +80,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
                     setState(() {
                       _machineCheckDesign.add(SparePartWidget(
                         allParts: _allParts,
+                        isfree: widget.ticket!.freeParts,
                       ));
                     });
                   },

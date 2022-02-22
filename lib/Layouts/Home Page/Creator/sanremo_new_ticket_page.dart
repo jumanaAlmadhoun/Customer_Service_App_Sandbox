@@ -626,13 +626,15 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   Future<void> checkCustomerMachine() async {
     if (selectedCustomer != null) {
       if (selectedMachines == null) {
-        await Provider.of<MachinesProvider>(context).updateMachine(
-            selectedCustomer, machineNumber!.text, selectedModel!.text);
+        await Provider.of<MachinesProvider>(context, listen: false)
+            .updateMachine(
+                selectedCustomer, machineNumber!.text, selectedModel!.text);
       } else {
         if (selectedMachines!.customerNumber!.toUpperCase().trim() !=
             selectedCustomer!.customerNumber!.toUpperCase().trim()) {
-          await Provider.of<MachinesProvider>(context).updateMachine(
-              selectedCustomer, machineNumber!.text, selectedModel!.text);
+          await Provider.of<MachinesProvider>(context, listen: false)
+              .updateMachine(
+                  selectedCustomer, machineNumber!.text, selectedModel!.text);
         }
       }
     }

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_fill_sitevisit_page.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
@@ -15,6 +17,11 @@ import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
+
+String invoiceUrl = 'N/A';
+String reportUrl = 'N/A';
+String reportName = 'N/A';
+String invoiceName = 'N/A';
 
 class TechTicketSummary extends StatefulWidget {
   TechTicketSummary(this.args);
@@ -32,6 +39,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
   double totalAmount = 0;
   double partAmount = 0;
   bool _isCach = false;
+  bool _isLoading = false;
   SignatureController? signatureController;
   @override
   void didChangeDependencies() {
@@ -42,10 +50,16 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
 
   @override
   void didPush() {
+    invoiceUrl = 'N/A';
+    reportUrl = 'N/A';
+    reportName = 'N/A';
+    invoiceName = 'N/A';
     print('Summary');
     _ticket = widget.args![0] as Ticket;
     _report = widget.args![1] as List<Widget>;
-    laborCharges = _ticket!.laborCharges! * 1.15;
+    if (_ticket!.freeVisit! == false) {
+      laborCharges = _ticket!.laborCharges! * 1.15;
+    }
     signatureController = SignatureController(penColor: Colors.black);
     initDesign(_report);
     super.didPush();
@@ -165,9 +179,16 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
           ButtonWidget(
             text: 'إرسال',
             onTap: () async {
+              setState(() {
+                _isLoading = true;
+              });
               Uint8List? bytes = await signatureController!.toPngBytes();
               String encoded = base64Encode(bytes!);
               Map<String, dynamic> json = getJson();
+              Map<String, dynamic> partJson = getPartJson();
+              bool hasParts = partJson.length == 0 ? false : true;
+              print(partJson.length);
+              print(partJson);
               json.update(
                 'sig',
                 (value) => encoded,
@@ -177,8 +198,20 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                   ifAbsent: () => _isCach);
               json.update('total_amount', (value) => totalAmount,
                   ifAbsent: () => totalAmount);
-              Provider.of<TicketProvider>(context)
-                  .techSubmitSiteVisit(json, _ticket!.firebaseID);
+              json.update('has_parts', (value) => hasParts,
+                  ifAbsent: () => hasParts);
+              Provider.of<TicketProvider>(context, listen: false)
+                  .techSubmitSiteVisit(json, partJson, _ticket!.firebaseID)
+                  .then((value) {
+                if (value == SC_SUCCESS_RESPONSE) {
+                  CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.success,
+                      text: 'تم إغلاق التذكرة بنجاح',
+                      title: 'نجاح',
+                      onConfirmBtnTap: () {});
+                }
+              });
             },
           ),
           const SizedBox(
@@ -248,7 +281,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
           ],
         );
         map.update(
-          '${element.keyJson}_Measur',
+          '${element.keyJson}_Comment',
           (value) => [
             element.controllerG1!.text,
             element.controllerG2!.text,
@@ -262,6 +295,21 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             element.controllerG4!.text,
           ],
         );
+        map.update(
+          '${element.keyJson}_PassL',
+          (value) => [
+            element.passG1,
+            element.passG2,
+            element.passG3,
+            element.passG4,
+          ],
+          ifAbsent: () => [
+            element.passG1,
+            element.passG2,
+            element.passG3,
+            element.passG4,
+          ],
+        );
       } else if (element is CommentWidget) {
         if (element.isSelected) {
           map.update(
@@ -269,17 +317,22 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             (value) => element.title,
             ifAbsent: () => element.title,
           );
+          if (element.moveToWorkshop) {
+            map.update(
+              'workshop',
+              (value) => element.moveToWorkshop,
+              ifAbsent: () => element.moveToWorkshop,
+            );
+          }
           commentCounter++;
         }
       } else if (element is SparePartWidget) {
         if (element.partNo.text.isNotEmpty && element.qty.text.isNotEmpty) {
           String key = element.partNo.text;
           if (map.containsKey(key)) {
-            map.update(
-              '${key}_$partCounter',
-              (value) => element.qty.text,
-              ifAbsent: () => element.qty.text,
-            );
+            double qty = double.parse(map[key]);
+            qty += double.parse(element.qty.text);
+            map[key] = qty.toString();
             partCounter++;
           } else {
             map.update(
@@ -287,6 +340,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
               (value) => element.qty.text,
               ifAbsent: () => element.qty.text,
             );
+            partCounter++;
           }
         }
       } else if (element is TextWidget) {
@@ -295,6 +349,37 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
       }
     });
 
+    return map;
+  }
+
+  Map<String, dynamic> getPartJson() {
+    Map<String, dynamic> map = {};
+    int partCounter = 0;
+
+    _report!.forEach((element) {
+      if (element is SparePartWidget) {
+        if (element.partNo.text.isNotEmpty && element.qty.text.isNotEmpty) {
+          String key = element.partNo.text;
+          if (map.containsKey(key)) {
+            double qty = double.parse(map[key]);
+            qty += double.parse(element.qty.text);
+            map[key] = qty.toString();
+          } else {
+            map.update(
+              key,
+              (value) => element.qty.text,
+              ifAbsent: () => element.qty.text,
+            );
+            partCounter++;
+          }
+        }
+      }
+    });
+    map.update(
+      'partsCount',
+      (value) => partCounter,
+      ifAbsent: () => partCounter,
+    );
     return map;
   }
 }

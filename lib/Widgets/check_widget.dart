@@ -60,9 +60,10 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                       setState(() {
                         widget.passG1 = value;
                         if (value == 'نجاح') {
-                          widget.isPassG1 == true;
+                          print(value);
+                          widget.isPassG1 = true;
                         } else {
-                          widget.isPassG1 == false;
+                          widget.isPassG1 = false;
                         }
                       });
                     },
@@ -96,9 +97,11 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                       setState(() {
                         widget.passG2 = value;
                         if (value == 'نجاح') {
-                          widget.isPassG2 == true;
+                          print(widget.isPassG2);
+                          widget.isPassG2 = true;
+                          print(widget.isPassG2);
                         } else {
-                          widget.isPassG2 == false;
+                          widget.isPassG2 = false;
                         }
                       });
                     },
@@ -132,9 +135,9 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                       setState(() {
                         widget.passG3 = value;
                         if (value == 'نجاح') {
-                          widget.isPassG3 == true;
+                          widget.isPassG3 = true;
                         } else {
-                          widget.isPassG3 == false;
+                          widget.isPassG3 = false;
                         }
                       });
                     },
@@ -168,9 +171,9 @@ class _GroupCheckWidgetState extends State<GroupCheckWidget> {
                       setState(() {
                         widget.passG4 = value;
                         if (value == 'نجاح') {
-                          widget.isPassG4 == true;
+                          widget.isPassG4 = true;
                         } else {
-                          widget.isPassG4 == false;
+                          widget.isPassG4 = false;
                         }
                       });
                     },
