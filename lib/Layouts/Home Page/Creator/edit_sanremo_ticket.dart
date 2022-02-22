@@ -18,11 +18,11 @@ import 'package:customer_service_app/Util/formatters.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/main.dart';
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
+import 'package:searchfield/searchfield.dart';
 
 class EditSanremoNewTicketPage extends StatefulWidget {
   EditSanremoNewTicketPage(this.argTicket, {Key? key}) : super(key: key);
@@ -56,6 +56,8 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
   TextEditingController? from = TextEditingController();
   TextEditingController? to = TextEditingController();
   TextEditingController? customerBalance = TextEditingController();
+  TextEditingController? _techNameController = TextEditingController();
+
   String selectedCategory = 'Unclassified';
   List<String> categorys = [
     'Unclassified',
@@ -130,15 +132,13 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
               child: ListView(
                 padding: const EdgeInsets.all(15),
                 children: [
-                  DropDownField(
-                    required: true,
+                  SearchField(
                     controller: selectedModel,
-                    value: selectedModel!.text,
-                    labelText: getTranselted(context, LBL_MACHINE_MODEL),
-                    items: machineModels,
-                    onValueChanged: (value) {
+                    hint: getTranselted(context, LBL_MACHINE_MODEL),
+                    suggestions: machineModels!,
+                    onTap: (value) {
                       setState(() {
-                        selectedModel!.text = value;
+                        selectedModel!.text = value!;
                       });
                     },
                   ),
@@ -298,14 +298,14 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                       });
                     },
                   ),
-                  DropDownField(
+                  SearchField(
                     controller: _selectedCity,
-                    value: _selectedCity.text,
-                    labelText: getTranselted(context, LBL_CITY),
-                    items: cities.map((e) => e['name_ar'].toString()).toList(),
-                    onValueChanged: (value) {
+                    hint: getTranselted(context, LBL_CITY),
+                    suggestions:
+                        cities.map((e) => e['name_ar'].toString()).toList(),
+                    onTap: (value) {
                       setState(() {
-                        _selectedCity.text = value;
+                        _selectedCity.text = value!;
                         var city = cities.firstWhere((element) =>
                             element['name_ar'] == _selectedCity.text);
                         _selectedReg = city['reg_name_ar'];
@@ -315,13 +315,13 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                   const SizedBox(
                     height: 10,
                   ),
-                  DropDownField(
-                    value: _techName,
-                    labelText: getTranselted(context, LBL_TECH_NAME),
-                    items: techs,
-                    onValueChanged: (value) {
+                  SearchField(
+                    suggestions: techs,
+                    hint: getTranselted(context, LBL_TECH_NAME),
+                    controller: _techNameController,
+                    onTap: (value) {
                       setState(() {
-                        _techName = value;
+                        _techName = value!;
                         if (_techName != 'N/A') {
                           _readyToAssign = false;
                         } else {
@@ -329,7 +329,6 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                         }
                       });
                     },
-                    required: true,
                   ),
                   _techName != 'N/A'
                       ? RadioGroup<String>.builder(
@@ -608,7 +607,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       Ticket.SUB_CATEGORY: selectedCategory,
       Ticket.CITY: _selectedCity.text.trim(),
       Ticket.REGION: _selectedReg,
-      Ticket.TECH_NAME: _techName,
+      Ticket.TECH_NAME: _techNameController!.text,
       Ticket.DID_CONTACT: _didContact,
       Ticket.MAIN_CATEGORY: Ticket.SITE_VISIT_CATEGORY,
       Ticket.MACHINE_MODEL: selectedModel!.text.trim(),

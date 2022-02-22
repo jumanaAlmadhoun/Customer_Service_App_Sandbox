@@ -1,8 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_summary.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart' as path;
+
+import '../../../Widgets/button_widget.dart';
 
 class DownloadPage extends StatefulWidget {
   static const String id = 'download_page';
@@ -13,7 +21,7 @@ class DownloadPage extends StatefulWidget {
 
 class _DownloadPageState extends State<DownloadPage> {
   final Dio _dio = Dio();
-  String _progress;
+  String? _progress;
   double percentage = 0;
   bool _isLoading = false;
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -83,7 +91,7 @@ class _DownloadPageState extends State<DownloadPage> {
                       setState(() {
                         _isLoading = true;
                       });
-                      _download(pdfName, pdfFileLink);
+                      _download(reportName, reportUrl);
                     } catch (ex) {}
                   },
                 ),
@@ -91,7 +99,7 @@ class _DownloadPageState extends State<DownloadPage> {
               SizedBox(
                 height: 15,
               ),
-              invoiceLink != 'null'
+              invoiceUrl != 'N/A'
                   ? Center(
                       child: ButtonWidget(
                         text: 'تنزيل الفاتورة ',
@@ -100,7 +108,7 @@ class _DownloadPageState extends State<DownloadPage> {
                             setState(() {
                               _isLoading = true;
                             });
-                            _download(invName, invoiceLink);
+                            _download(invoiceName, invoiceUrl);
                           } catch (ex) {}
                         },
                       ),
@@ -115,15 +123,15 @@ class _DownloadPageState extends State<DownloadPage> {
     final dir = await _getDownloadDirectory();
     final isPermissionStatusGranted = await _requestPermissions();
     if (isPermissionStatusGranted) {
-      final savePath = path.join(dir.path, docName);
+      final savePath = path.getDownloadsDirectory().toString();
       await _startDownload(savePath, link);
     } else {
       // handle the scenario when user declines the permissions
     }
   }
 
-  Future<Directory> _getDownloadDirectory() async {
-    return await getExternalStorageDirectory();
+  Future<Directory?> _getDownloadDirectory() async {
+    return await path.getExternalStorageDirectory();
   }
 
   Future<bool> _requestPermissions() async {
@@ -165,8 +173,8 @@ class _DownloadPageState extends State<DownloadPage> {
     }
   }
 
-  Future<void> _onSelectNotification(String json) async {
-    final obj = jsonDecode(json);
+  Future<void> _onSelectNotification(String? json) async {
+    final obj = jsonDecode(json!);
 
     if (obj['isSuccess']) {
       OpenFile.open(obj['filePath']);

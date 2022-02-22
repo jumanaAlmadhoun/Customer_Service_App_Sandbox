@@ -82,6 +82,11 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
             title: getTranselted(context, STA_PENDING)!,
             number: pendingTickets,
           ),
+          CategoryItem(
+            image: IMG_WORKSHO_REPORT,
+            title: getTranselted(context, STA_WORKSHOP)!,
+            number: pendingTickets,
+          ),
         ],
       ),
     );

@@ -6,6 +6,7 @@ import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_fill_sitevisit_page.dart';
 import 'package:customer_service_app/Models/ticket.dart';
+import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/check_widget.dart';
@@ -209,7 +210,9 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                       type: CoolAlertType.success,
                       text: 'تم إغلاق التذكرة بنجاح',
                       title: 'نجاح',
-                      onConfirmBtnTap: () {});
+                      onConfirmBtnTap: () {
+                        Navigator.pushNamed(context, techDownloadRoute);
+                      });
                 }
               });
             },

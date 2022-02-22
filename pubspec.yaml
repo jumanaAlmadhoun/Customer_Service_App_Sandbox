@@ -20,11 +20,12 @@ dependencies:
   http:
   provider:
   flutter_spinkit: 
-  dropdownfield:
+  # dropdownfield:
   flutter_barcode_scanner:
   cloud_firestore: 
   flutter_local_notifications:
-  # permission_handler: ^9.2.0 
+  permission_handler: ^9.2.0 
+  path_provider: 
   firebase_database: 
   firebase_storage: 
   firebase_core:
@@ -34,6 +35,8 @@ dependencies:
   dropdown_search: ^2.0.1
   searchfield: ^0.5.6
   signature: ^5.0.0
+  dio:
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:
