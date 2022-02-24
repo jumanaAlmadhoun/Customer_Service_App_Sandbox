@@ -34,6 +34,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    print('shady');
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
@@ -47,6 +48,18 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
     Provider.of<SummaryProvider>(context).fetchSummary();
   }
 
+  @override
+  void didPopNext() {
+    // TODO: implement didPopNext
+    super.didPopNext();
+    print('object');
+    readJson();
+    Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
+    Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
+    Provider.of<SummaryProvider>(context).fetchSummary();
+  }
+
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +94,9 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                   title: getTranselted(context, TIC_DELIVERY)!,
                   image: IMG_DELIVERY,
                   number: deliveryTickets,
+                  onTap: () {
+                    Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
+                  },
                 ),
           exchangeTickets == -1
               ? const SpinKitDancingSquare(

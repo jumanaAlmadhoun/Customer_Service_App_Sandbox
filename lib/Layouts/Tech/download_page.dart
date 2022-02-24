@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_summary.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart' as path;
 
 import '../../../Widgets/button_widget.dart';
+import 'tech_ticket_summary.dart';
 
 class DownloadPage extends StatefulWidget {
   static const String id = 'download_page';

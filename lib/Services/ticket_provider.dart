@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_summary.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+
+import '../Layouts/Tech/tech_ticket_summary.dart';
 
 class TicketProvider with ChangeNotifier {
   List<Ticket> _tickets = [];

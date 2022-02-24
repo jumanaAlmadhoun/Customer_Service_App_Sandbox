@@ -1,30 +1,36 @@
-import 'package:customer_service_app/Layouts/Home%20Page/Admin/admin_home_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Admin/rent_machine_dashboard.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Admin/tech_report_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/brand_selection_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_home_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/creator_site_visit_tickets_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/edit_sanremo_ticket.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/open_tickets_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/ready_to_Assign_tickets_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Creator/sanremo_new_ticket_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/download_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_fill_sitevisit_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_home_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_open_tickets.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_info_page.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_ticket_summary.dart';
+import 'package:customer_service_app/Layouts/Creator/Delivery/delivery_type_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
+import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:flutter/material.dart';
+import '../Layouts/Admin/admin_home_page.dart';
+import '../Layouts/Admin/rent_machine_dashboard.dart';
+import '../Layouts/Admin/tech_report_page.dart';
+import '../Layouts/Creator/Delivery/delivery_tickets_page.dart';
+import '../Layouts/Creator/Site Visits/brand_selection_page.dart';
+import '../Layouts/Creator/Site Visits/creator_site_visit_tickets_page.dart';
+import '../Layouts/Creator/Site Visits/edit_sanremo_ticket.dart';
+import '../Layouts/Creator/Site Visits/open_tickets_page.dart';
+import '../Layouts/Creator/Site Visits/ready_to_assign_tickets_page.dart';
+import '../Layouts/Creator/Site Visits/sanremo_new_ticket_page.dart';
+import '../Layouts/Creator/creator_home_page.dart';
+import '../Layouts/Tech/download_page.dart';
+import '../Layouts/Tech/tech_fill_sitevisit_page.dart';
+import '../Layouts/Tech/tech_home_page.dart';
+import '../Layouts/Tech/tech_ticket_info_page.dart';
+import '../Layouts/Tech/tech_ticket_summary.dart';
 
 class CustomRouter {
   static Route<dynamic>? allRoutes(RouteSettings settings) {
     switch (settings.name) {
       case creatorHomeRoute:
         return MaterialPageRoute(builder: (_) => const CreatorHomePage());
+      case creatorDeliveryTicketsRoute:
+        return MaterialPageRoute(builder: (_) => const DeliveryTicketsPage());
+      case creatorDeliveryTypeSelection:
+        return MaterialPageRoute(builder: (_) => const DeliveryTypePage());
       case creatorSiteVisitRoute:
         return MaterialPageRoute(builder: (_) => const CreatorSiteVisitPage());
       case brandSelectionRoute:

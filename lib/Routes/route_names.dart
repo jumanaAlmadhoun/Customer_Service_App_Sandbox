@@ -7,6 +7,8 @@ const String sanremoEditTicketRoute = 'sanremoEditTicketRoute';
 const String creatorOpenTicketsRoute = 'creatorOpenTicketsRoute';
 const String creatorReadyToAssignTicketsRoute =
     'creatorReadyToAssignTicketsRoute';
+const String creatorDeliveryTicketsRoute = 'creatorDeliveryTicketsRoute';
+const String creatorDeliveryTypeSelection = 'creatorDeliveryTypeSelection';
 
 const String techHomeRoute = 'techHomeRoute';
 const String techOpenTicketRoute = 'techOpenTicketRoute';

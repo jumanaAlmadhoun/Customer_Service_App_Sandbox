@@ -69,6 +69,11 @@ const String EDIT_SANREMO_TICKET = 'edit_sanremo_ticket';
 const String STA_RENT_MACHINES = 'rent_machine';
 const String STA_TECHS_REPORT = 'tech_report';
 const String STA_WORKSHOP = 'workshop_ticket';
+const String LBL_DELIVERY_TYPE = 'delivery_type';
+const String LBL_MACHINES = 'machines';
+const String LBL_BEANS = 'beans';
+const String LBL_ITEM_NO = 'item_no';
+const String LBL_QTY = 'qty';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
-import 'package:customer_service_app/Layouts/Home%20Page/Tech/tech_fill_sitevisit_page.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
@@ -18,6 +17,9 @@ import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
+
+import '../../Widgets/text_widget.dart';
+import 'tech_fill_sitevisit_page.dart';
 
 String invoiceUrl = 'N/A';
 String reportUrl = 'N/A';

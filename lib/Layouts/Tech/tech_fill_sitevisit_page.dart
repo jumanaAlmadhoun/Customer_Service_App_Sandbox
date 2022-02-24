@@ -15,6 +15,8 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
+import '../../Widgets/text_widget.dart';
+
 class TechFillTicketPage extends StatefulWidget {
   TechFillTicketPage(this.ticket);
   final Ticket? ticket;
@@ -210,40 +212,5 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       CommentWidget(title: 'نوصي بنقل المكينة لمركز الصيانة'),
       CommentWidget(title: 'نوصي بتعديل التوصيلات والملاحظات حسب توصيات الشركة')
     ];
-  }
-}
-
-class TextWidget extends StatefulWidget {
-  TextWidget({this.jsonKey, this.title});
-  TextEditingController controller = TextEditingController();
-  String? jsonKey;
-  String? title;
-
-  @override
-  _TextWidgetState createState() => _TextWidgetState();
-}
-
-class _TextWidgetState extends State<TextWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: APP_BAR_COLOR),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: TextFormField(
-              decoration: InputDecoration(label: Text(widget.title!)),
-              controller: widget.controller,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -86,20 +86,22 @@ class SummaryProvider with ChangeNotifier {
       });
       get(Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS.json')).then((value) {
         var data = jsonDecode(value.body) as Map<String, dynamic>;
-        data.forEach((key, value) {
-          var innerData = value as Map<String, dynamic>;
-          assignedTickets += innerData.length;
-          if (techs.isNotEmpty) {
-            for (var i = 0; i < techs.length; i++) {
-              if (techs[i].name == key) {
-                techs[i].assignedTickets = parseTickets(innerData);
+        if (data != null) {
+          data.forEach((key, value) {
+            var innerData = value as Map<String, dynamic>;
+            assignedTickets += innerData.length;
+            if (techs.isNotEmpty) {
+              for (var i = 0; i < techs.length; i++) {
+                if (techs[i].name == key) {
+                  techs[i].assignedTickets = parseTickets(innerData);
+                }
               }
+            } else {
+              techs.add(
+                  Tech(name: key, assignedTickets: parseTickets(innerData)));
             }
-          } else {
-            techs
-                .add(Tech(name: key, assignedTickets: parseTickets(innerData)));
-          }
-        });
+          });
+        }
         notifyListeners();
       });
     } catch (ex) {
