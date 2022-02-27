@@ -8,6 +8,7 @@ class DeliveryItemWidget extends StatefulWidget {
   DeliveryItemWidget({this.allParts});
   TextEditingController partNo = TextEditingController();
   TextEditingController qty = TextEditingController();
+  TextEditingController desc = TextEditingController();
   List<SparePart>? allParts;
 
   @override
@@ -29,14 +30,36 @@ class _DeliveryItemWidgetState extends State<DeliveryItemWidget> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchField(
-                  maxSuggestionsInViewPort: 5,
-                  searchInputDecoration: InputDecoration(
-                    label: Text(getTranselted(context, LBL_ITEM_NO)!),
-                  ),
-                  controller: widget.partNo,
-                  suggestions: widget.allParts!
-                      .map((e) => e.partNo.toString())
-                      .toList()),
+                maxSuggestionsInViewPort: 5,
+                searchInputDecoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_ITEM_NO)!),
+                ),
+                controller: widget.partNo,
+                suggestions:
+                    widget.allParts!.map((e) => e.partNo.toString()).toList(),
+                onTap: (value) {
+                  SparePart part = widget.allParts!.firstWhere((element) =>
+                      element.partNo!.toUpperCase() == value!.toUpperCase());
+                  if (part != null) {
+                    setState(() {
+                      widget.desc.text = part.desc!;
+                    });
+                  } else {
+                    setState(() {
+                      widget.desc.text = '';
+                    });
+                  }
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                enabled: false,
+                controller: widget.desc,
+                decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_DESCRIPTION)!)),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -46,6 +69,11 @@ class _DeliveryItemWidgetState extends State<DeliveryItemWidget> {
                   SparePart part = widget.allParts!.firstWhere((element) =>
                       element.partNo!.toUpperCase() ==
                       widget.partNo.text.toUpperCase());
+                  if (part != null) {
+                    setState(() {
+                      widget.desc.text = part.desc!;
+                    });
+                  }
                 },
                 decoration: InputDecoration(
                     label: Text(getTranselted(context, LBL_QTY)!)),

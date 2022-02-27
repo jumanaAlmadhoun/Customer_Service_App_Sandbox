@@ -55,6 +55,7 @@ class Ticket with ChangeNotifier {
   static const String STA_PENDING = 'Pending';
   static const String DELIVERY_CATEGORY = 'Delivery';
   static const String PARTS_DELIVERY = 'Parts And Beans';
+  static const String DELIVERY_ITEMS = 'deliveredItems';
 
   Ticket(
       {this.assignDate,

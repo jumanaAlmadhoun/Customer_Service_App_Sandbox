@@ -9,6 +9,7 @@ const String creatorReadyToAssignTicketsRoute =
     'creatorReadyToAssignTicketsRoute';
 const String creatorDeliveryTicketsRoute = 'creatorDeliveryTicketsRoute';
 const String creatorDeliveryTypeSelection = 'creatorDeliveryTypeSelection';
+const String creatorPartsDeliveryRoute = 'creatorPartsDeliveryRoute';
 
 const String techHomeRoute = 'techHomeRoute';
 const String techOpenTicketRoute = 'techOpenTicketRoute';

@@ -1,4 +1,5 @@
 import 'package:customer_service_app/Localization/localization_constants.dart';
+import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Helpers/layout_constants.dart';
@@ -35,7 +36,7 @@ class _DeliveryTypePageState extends State<DeliveryTypePage> {
               image: IMG_BEANS,
               title: getTranselted(context, LBL_BEANS)!,
               onTap: () {
-                // Navigator.pushNamed(context, creatorReadyToAssignTicketsRoute);
+                Navigator.pushNamed(context, creatorPartsDeliveryRoute);
               },
             )
           ],

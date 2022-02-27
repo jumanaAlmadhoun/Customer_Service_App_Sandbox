@@ -61,5 +61,7 @@
   "machines": "Machines",
   "beans": "Parts And Beans",
   "item_no": "Item No.",
-  "qty": "QTY"
+  "qty": "QTY",
+  "desc":"Description",
+  "add_item":"Add Item"
 }

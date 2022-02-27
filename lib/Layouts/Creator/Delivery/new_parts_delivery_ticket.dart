@@ -1,3 +1,4 @@
+import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
 import 'package:customer_service_app/Layouts/Creator/creator_home_page.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
@@ -6,19 +7,25 @@ import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
+import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
+import 'package:customer_service_app/Widgets/button_widget.dart';
+import 'package:customer_service_app/Widgets/delivery_item_widget.dart';
+import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-class NewDeliveryTicket extends StatefulWidget {
-  const NewDeliveryTicket({Key? key}) : super(key: key);
+class NewPartsDeliveryTicket extends StatefulWidget {
+  const NewPartsDeliveryTicket({Key? key}) : super(key: key);
 
   @override
-  _NewDeliveryTicketState createState() => _NewDeliveryTicketState();
+  _NewPartsDeliveryTicketState createState() => _NewPartsDeliveryTicketState();
 }
 
-class _NewDeliveryTicketState extends State<NewDeliveryTicket> with RouteAware {
+class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
+    with RouteAware {
   List<Widget> items = [];
   List<SparePart> _allParts = [];
   bool _isLoading = false;
@@ -45,6 +52,13 @@ class _NewDeliveryTicketState extends State<NewDeliveryTicket> with RouteAware {
   Map<String, dynamic>? ticketHeader;
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
   void didPush() async {
     super.didPush();
     setState(() {
@@ -60,143 +74,190 @@ class _NewDeliveryTicketState extends State<NewDeliveryTicket> with RouteAware {
         _isLoading = false;
       });
     });
+    await Provider.of<SparePartProvider>(context, listen: false)
+        .fetchSpareParts()
+        .then((value) {
+      _allParts = Provider.of<SparePartProvider>(context, listen: false).parts;
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(getTranselted(context, TIC_DELIVERY)!)),
-      body: ListView(children: [
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: customerNumber,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
-          ),
-          onChanged: (value) {
-            selectedCustomer = findCustomer(value);
-            if (selectedCustomer != null) {
-              fetchCustomerByNumber(context, selectedCustomer!);
-            } else {
-              clearCustomerValues();
-            }
-          },
-        ),
-        selectedCustomer != null
-            ? TextFormField(
-                enabled: false,
-                controller: customerBalance,
-                decoration: InputDecoration(
-                  label: Text(
-                    selectedCustomer!.blocked == ''
-                        ? getTranselted(context, LBL_CUSTOMER_BALANCE)!
-                        : getTranselted(context, LBL_CUSTOMER_BALANCE)! +
-                            ' ' +
-                            getTranselted(context, LBL_CUSTOMER_BLOCKED)!,
-                    style: TextStyle(
-                        color: selectedCustomer!.balance! < 0
-                            ? Colors.green
-                            : Colors.red),
-                  ),
-                ),
-                onChanged: (value) {},
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _isLoading
+            ? const SpinKitChasingDots(
+                color: APP_BAR_COLOR,
               )
-            : Container(),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: customerName,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_CUSTOMER_NAME)!),
-          ),
-          onChanged: (value) {},
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: customerMobile,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_MOBILE)!),
-          ),
-          onChanged: (value) {},
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: extraNumber,
-          keyboardType: TextInputType.number,
-          maxLength: 10,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_EXTRA_NUMBER)!),
-          ),
-          onChanged: (value) {},
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: cafeName,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_CAFE_NAME)!),
-          ),
-          onChanged: (value) {},
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: cafeLocation,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_CAFE_LOCATION)!),
-          ),
-          onChanged: (value) {},
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: visitDate,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
-          ),
-          onTap: () => pickDate(context),
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: from,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_FROM)!),
-          ),
-          onTap: () => pickTime(context, from!),
-        ),
-        TextFormField(
-          validator: (value) => validateInput(value, context),
-          controller: to,
-          decoration: InputDecoration(
-            label: Text(getTranselted(context, LBL_TO)!),
-          ),
-          onTap: () => pickTime(context, to!),
-        ),
-        SearchField(
-          controller: _selectedCity,
-          hint: getTranselted(context, LBL_CITY),
-          suggestions: cities.map((e) => e['name_ar'].toString()).toList(),
-          onTap: (value) {
-            setState(() {
-              _selectedCity.text = value!;
-              var city = cities.firstWhere(
-                  (element) => element['name_ar'] == _selectedCity.text);
-              _selectedReg = city['reg_name_ar'];
-            });
-          },
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SearchField(
-          initialValue: _techName,
-          suggestions: techs,
-          hint: getTranselted(context, LBL_TECH_NAME),
-          controller: _techNameController,
-          onTap: (String? value) {
-            setState(() {
-              _techName = value!;
-            });
-          },
-        ),
-      ]),
+            : ListView(children: [
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: customerNumber,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
+                  ),
+                  onChanged: (value) {
+                    selectedCustomer = findCustomer(value);
+                    if (selectedCustomer != null) {
+                      fetchCustomerByNumber(context, selectedCustomer!);
+                    } else {
+                      clearCustomerValues();
+                    }
+                  },
+                ),
+                selectedCustomer != null
+                    ? TextFormField(
+                        enabled: false,
+                        controller: customerBalance,
+                        decoration: InputDecoration(
+                          label: Text(
+                            selectedCustomer!.blocked == ''
+                                ? getTranselted(context, LBL_CUSTOMER_BALANCE)!
+                                : getTranselted(
+                                        context, LBL_CUSTOMER_BALANCE)! +
+                                    ' ' +
+                                    getTranselted(
+                                        context, LBL_CUSTOMER_BLOCKED)!,
+                            style: TextStyle(
+                                color: selectedCustomer!.balance! < 0
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                        ),
+                        onChanged: (value) {},
+                      )
+                    : Container(),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: customerName,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_CUSTOMER_NAME)!),
+                  ),
+                  onChanged: (value) {},
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: customerMobile,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_MOBILE)!),
+                  ),
+                  onChanged: (value) {},
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: extraNumber,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_EXTRA_NUMBER)!),
+                  ),
+                  onChanged: (value) {},
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: cafeName,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_CAFE_NAME)!),
+                  ),
+                  onChanged: (value) {},
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: cafeLocation,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_CAFE_LOCATION)!),
+                  ),
+                  onChanged: (value) {},
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: visitDate,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
+                  ),
+                  onTap: () => pickDate(context),
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: from,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_FROM)!),
+                  ),
+                  onTap: () => pickTime(context, from!),
+                ),
+                TextFormField(
+                  validator: (value) => validateInput(value, context),
+                  controller: to,
+                  decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_TO)!),
+                  ),
+                  onTap: () => pickTime(context, to!),
+                ),
+                SearchField(
+                  controller: _selectedCity,
+                  hint: getTranselted(context, LBL_CITY),
+                  suggestions:
+                      cities.map((e) => e['name_ar'].toString()).toList(),
+                  onTap: (value) {
+                    setState(() {
+                      _selectedCity.text = value!;
+                      var city = cities.firstWhere((element) =>
+                          element['name_ar'] == _selectedCity.text);
+                      _selectedReg = city['reg_name_ar'];
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SearchField(
+                  suggestions: techs,
+                  hint: getTranselted(context, LBL_TECH_NAME),
+                  controller: _techNameController,
+                  onTap: (String? value) {
+                    setState(() {
+                      _techName = value!;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: items.length,
+                    itemBuilder: (context, i) {
+                      return items[i];
+                    }),
+                const SizedBox(
+                  height: 10,
+                ),
+                ButtonWidget(
+                  text: getTranselted(context, LBL_ADD_ITEM)!,
+                  onTap: () {
+                    setState(() {
+                      items.add(DeliveryItemWidget(
+                        allParts: _allParts,
+                      ));
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ButtonWidget(
+                  text: getTranselted(context, BTN_SUBMIT)!,
+                  onTap: () {},
+                ),
+              ]),
+      ),
     );
   }
 
@@ -234,6 +295,22 @@ class _NewDeliveryTicketState extends State<NewDeliveryTicket> with RouteAware {
   }
 
   Map<String, dynamic>? getTicketHeader() {
+    Map<String, dynamic> map = {};
+    items.forEach((element) {
+      if (element is DeliveryItemWidget) {
+        if (map.containsKey(element.partNo.text)) {
+          double qty = double.parse(map[element.partNo.text][1]);
+          qty += double.parse(element.qty.text);
+          map[element.partNo.text][1] = qty;
+        } else {
+          map.update(
+            element.partNo.text,
+            (value) => [element.desc.text, element.qty.text],
+            ifAbsent: () => [element.desc.text, element.qty.text],
+          );
+        }
+      }
+    });
     return {
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
@@ -252,6 +329,7 @@ class _NewDeliveryTicketState extends State<NewDeliveryTicket> with RouteAware {
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
       Ticket.VISIT_START_TIME: from!.text.trim(),
       Ticket.VISIT_END_TIME: to!.text.trim(),
+      Ticket.DELIVERY_ITEMS: map
     };
   }
 
