@@ -65,7 +65,8 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
     'Warranty Visit',
     'Rework Visit',
     'Installation',
-    'Paid Visit'
+    'Paid Visit',
+    'M10X'
   ];
   String _techName = 'N/A';
   TextEditingController _selectedCity = TextEditingController();
@@ -296,6 +297,14 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     onChanged: (value) {
                       setState(() {
                         selectedCategory = value.toString();
+                        if (selectedCategory.trim() == 'Installation' ||
+                            selectedCategory.trim() == 'M10X') {
+                          _freeParts = true;
+                          _freeVisit = true;
+                        } else {
+                          _freeParts = false;
+                          _freeVisit = false;
+                        }
                       });
                     },
                   ),

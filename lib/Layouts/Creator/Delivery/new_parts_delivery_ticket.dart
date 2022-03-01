@@ -1,3 +1,4 @@
+import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
 import 'package:customer_service_app/Layouts/Creator/creator_home_page.dart';
@@ -8,6 +9,7 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/spare_parts_provider.dart';
+import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/delivery_item_widget.dart';
@@ -50,7 +52,10 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
   List<Customer>? allCustomers;
   Customer? selectedCustomer;
   Map<String, dynamic>? ticketHeader;
-
+  String _selectedCategory = 'N/A';
+  List<String> category = ['N/A', 'Tech', 'Courier'];
+  List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
+  String _selectedStatus = 'In Dispatch Area';
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -70,9 +75,6 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
         .fetchTechs()
         .then((value) {
       techs = Provider.of<UserProvider>(context, listen: false).techs;
-      setState(() {
-        _isLoading = false;
-      });
     });
     await Provider.of<SparePartProvider>(context, listen: false)
         .fetchSpareParts()
@@ -216,16 +218,48 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
                 const SizedBox(
                   height: 10,
                 ),
-                SearchField(
-                  suggestions: techs,
-                  hint: getTranselted(context, LBL_TECH_NAME),
-                  controller: _techNameController,
-                  onTap: (String? value) {
+                DropdownButton(
+                  hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
+                  items: category
+                      .map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          ))
+                      .toList(),
+                  value: _selectedCategory,
+                  onChanged: (value) {
                     setState(() {
-                      _techName = value!;
+                      _selectedCategory = value.toString();
                     });
                   },
                 ),
+                DropdownButton(
+                  hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
+                  items: status
+                      .map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          ))
+                      .toList(),
+                  value: _selectedStatus ?? '',
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedStatus = value.toString();
+                    });
+                  },
+                ),
+                _selectedCategory == 'Tech'
+                    ? SearchField(
+                        suggestions: techs,
+                        hint: getTranselted(context, LBL_TECH_NAME),
+                        controller: _techNameController,
+                        onTap: (String? value) {
+                          setState(() {
+                            _techName = value!;
+                          });
+                        },
+                      )
+                    : Container(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -254,7 +288,12 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
                 ),
                 ButtonWidget(
                   text: getTranselted(context, BTN_SUBMIT)!,
-                  onTap: () {},
+                  onTap: () async {
+                    Map<String, dynamic> json = getTicketHeader()!;
+                    await Provider.of<TicketProvider>(context, listen: false)
+                        .submitNewDeliveryTicket(
+                            json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+                  },
                 ),
               ]),
       ),
@@ -325,6 +364,7 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
       Ticket.TECH_NAME: _techName,
       Ticket.MAIN_CATEGORY: Ticket.DELIVERY_CATEGORY,
       Ticket.SUB_CATEGORY: Ticket.PARTS_DELIVERY,
+      Ticket.DELIVERY_TYPE: _selectedCategory,
       Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
       Ticket.VISIT_START_TIME: from!.text.trim(),

@@ -63,5 +63,6 @@
   "item_no": "Item No.",
   "qty": "QTY",
   "desc":"Description",
-  "add_item":"Add Item"
+  "add_item":"Add Item",
+  "delivery_category":"Delivery Type"
 }

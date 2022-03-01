@@ -76,6 +76,7 @@ const String LBL_ITEM_NO = 'item_no';
 const String LBL_QTY = 'qty';
 const String LBL_DESCRIPTION = 'desc';
 const String LBL_ADD_ITEM = 'add_item';
+const String LBL_DELIVERY_CATEGORY = 'delivery_category';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

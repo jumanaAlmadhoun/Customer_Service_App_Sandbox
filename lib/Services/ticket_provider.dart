@@ -193,7 +193,9 @@ class TicketProvider with ChangeNotifier {
     return Future.value(SC_FAILED_RESPONSE);
   }
 
-  Future<String> postNewDeliveryTicket() async {
-    return '';
+  Future<void> submitNewDeliveryTicket(
+      Map<String, dynamic> json, String firebaseUrl) async {
+    var response =
+        await http.post(Uri.parse(firebaseUrl), body: jsonEncode(json));
   }
 }
