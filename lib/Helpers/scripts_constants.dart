@@ -14,3 +14,5 @@ const String EDIT_SANREMO_TICKET_SCRIPT =
     'https://script.google.com/macros/s/AKfycbyajzq0ZENAaH1c5Kij0kv9x_LO-5xC0obVB6OLakw6IZBV5dw1MV3FA5t_avW6ZnBR/exec';
 const String TECH_FILL_SCRIPT =
     'https://script.google.com/macros/s/AKfycbxpDA5YNfehUKnzlPF8TrMRJ71sPwGn9NRsMEFa6HjCPMjxvUMMMiQq1q2slgtMSy04/exec';
+const String OPEN_NEW_DELIVERY_TICKET =
+    'https://script.google.com/macros/s/AKfycbzU-FTGN_M4ZPFQSCCjpjS_ikDCd7CdBdX-4VEer-A-GlayQUEJt27o94BxqjI6i3Fw/exec';

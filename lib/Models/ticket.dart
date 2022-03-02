@@ -27,6 +27,7 @@ class Ticket with ChangeNotifier {
   static const String FROM_TABLE = 'fromTable';
   static const String LABOR_CHRGES = 'laborCharges';
   static const String CHARGES_PRICE = 'priceBefore';
+  static const String SO_NUMBER = 'soNumber';
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
   static const String RECOMMENDATION = 'recomendation';

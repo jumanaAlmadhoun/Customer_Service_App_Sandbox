@@ -64,5 +64,6 @@
   "qty": "QTY",
   "desc":"Description",
   "add_item":"Add Item",
-  "delivery_category":"Delivery Type"
+  "delivery_category":"Delivery Type",
+  "so_number":"SO Number"
 }

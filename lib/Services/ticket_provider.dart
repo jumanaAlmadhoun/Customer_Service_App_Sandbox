@@ -193,9 +193,29 @@ class TicketProvider with ChangeNotifier {
     return Future.value(SC_FAILED_RESPONSE);
   }
 
-  Future<void> submitNewDeliveryTicket(
+  Future<String> submitNewDeliveryTicket(
       Map<String, dynamic> json, String firebaseUrl) async {
+    var jsonToSend = jsonEncode(json);
     var response =
-        await http.post(Uri.parse(firebaseUrl), body: jsonEncode(json));
+        await http.get(Uri.parse('$OPEN_NEW_DELIVERY_TICKET?json=$jsonToSend'));
+    var data = jsonDecode(response.body);
+    if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+      String rowDataAddress = data[SC_ROW_ADDRESS_KEY].toString();
+      String ticketNumber = data[SC_TICKET_NUMBER_KEY].toString();
+      json.update(
+        Ticket.ROW_ADDRESS,
+        (value) => rowDataAddress,
+        ifAbsent: () => rowDataAddress,
+      );
+      json.update(
+        Ticket.TICKET_NUMBER,
+        (value) => ticketNumber,
+        ifAbsent: () => ticketNumber,
+      );
+      await http.post(Uri.parse(firebaseUrl), body: jsonEncode(json));
+
+      return Future.value(SC_SUCCESS_RESPONSE);
+    }
+    return Future.value(SC_FAILED_RESPONSE);
   }
 }

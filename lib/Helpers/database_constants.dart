@@ -17,5 +17,6 @@ const String DB_RFA_MACHINES = 'RfaMachinesCS';
 const String DB_CLOSED_TICKETS = 'ClosedTickets';
 const String DB_SPARE_PARTS = 'SpareParts';
 const String DB_CHARGES = 'Charges';
+const String DB_ASSIGNED_DELIVERY_TICKETS = 'AssignedDeliveryCS';
 
 const String TEMP_SANREMO = 'SanremoCS';
