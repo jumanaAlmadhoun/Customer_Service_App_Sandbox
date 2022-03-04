@@ -1,6 +1,6 @@
 import 'package:customer_service_app/Config/responsive.dart';
 import 'package:customer_service_app/Config/size_config.dart';
-import 'package:customer_service_app/Widgets/primary_text.dart';
+import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:flutter/material.dart';
 
 class InfoCard extends StatelessWidget {

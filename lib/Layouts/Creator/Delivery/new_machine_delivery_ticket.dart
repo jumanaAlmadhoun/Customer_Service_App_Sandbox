@@ -23,14 +23,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-class NewPartsDeliveryTicket extends StatefulWidget {
-  const NewPartsDeliveryTicket({Key? key}) : super(key: key);
+class NewMachineDeliveryTicket extends StatefulWidget {
+  const NewMachineDeliveryTicket({Key? key}) : super(key: key);
 
   @override
-  _NewPartsDeliveryTicketState createState() => _NewPartsDeliveryTicketState();
+  _NewMachineDeliveryTicketState createState() =>
+      _NewMachineDeliveryTicketState();
 }
 
-class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
+class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     with RouteAware {
   List<Widget> items = [];
   List<SparePart> _allParts = [];

@@ -7,18 +7,18 @@ import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
+import 'package:customer_service_app/Widgets/Tech/check_widget.dart';
+import 'package:customer_service_app/Widgets/Tech/machine_check_widget.dart';
+import 'package:customer_service_app/Widgets/Tech/spare_part_widget.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
-import 'package:customer_service_app/Widgets/check_widget.dart';
-import 'package:customer_service_app/Widgets/comment_widget.dart';
+import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
-import 'package:customer_service_app/Widgets/machine_check_widget.dart';
-import 'package:customer_service_app/Widgets/spare_part_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
 
-import '../../Widgets/text_widget.dart';
+import '../../Widgets/Tech/text_widget.dart';
 import 'tech_fill_sitevisit_page.dart';
 
 String invoiceUrl = 'N/A';

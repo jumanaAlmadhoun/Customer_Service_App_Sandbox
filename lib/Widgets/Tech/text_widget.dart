@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Helpers/layout_constants.dart';
+import '../../Helpers/layout_constants.dart';
 
 class TextWidget extends StatefulWidget {
   TextWidget({this.jsonKey, this.title, this.direction = TextDirection.rtl});

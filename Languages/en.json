@@ -65,5 +65,7 @@
   "desc":"Description",
   "add_item":"Add Item",
   "delivery_category":"Delivery Type",
-  "so_number":"SO Number"
+  "so_number":"SO Number",
+  "delivery_new":"New Machines",
+  "delivery_cus":"Customer Machines"
 }

@@ -3,7 +3,7 @@ import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Services/tech_provider.dart';
-import 'package:customer_service_app/Widgets/info_card.dart';
+import 'package:customer_service_app/Widgets/Admin/info_card.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

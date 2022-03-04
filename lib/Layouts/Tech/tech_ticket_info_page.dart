@@ -3,7 +3,7 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/logout_widget.dart';
-import 'package:customer_service_app/Widgets/primary_text.dart';
+import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:flutter/material.dart';
 
 class TechTicketInfoPage extends StatefulWidget {

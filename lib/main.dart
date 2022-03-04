@@ -81,7 +81,6 @@ class _MyAppState extends State<MyApp> {
         title: 'Customer Service App',
         theme: ThemeData(
             canvasColor: BACK_GROUND_COLOR,
-            focusColor: APP_BAR_COLOR,
             primarySwatch: Colors.brown,
             iconTheme: const IconThemeData(color: ICON_COLOR),
             appBarTheme: const AppBarTheme(
@@ -116,6 +115,7 @@ class _MyAppState extends State<MyApp> {
         },
         initialRoute: loginRoute,
         onGenerateRoute: CustomRouter.allRoutes,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

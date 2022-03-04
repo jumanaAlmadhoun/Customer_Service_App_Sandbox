@@ -4,7 +4,7 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
-import 'package:customer_service_app/Widgets/tech_ticket_widget.dart';
+import 'package:customer_service_app/Widgets/Tech/tech_ticket_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
