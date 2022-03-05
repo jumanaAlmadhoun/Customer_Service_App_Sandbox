@@ -24,19 +24,22 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-class NewPartsDeliveryTicket extends StatefulWidget {
-  const NewPartsDeliveryTicket({Key? key}) : super(key: key);
+class EditPartsDeliveryTicket extends StatefulWidget {
+  EditPartsDeliveryTicket(this.argTicket);
+  Ticket? argTicket;
 
   @override
-  _NewPartsDeliveryTicketState createState() => _NewPartsDeliveryTicketState();
+  _EditPartsDeliveryTicketState createState() =>
+      _EditPartsDeliveryTicketState();
 }
 
-class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
+class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
     with RouteAware {
   List<Widget> items = [];
   List<SparePart> _allParts = [];
   bool _isLoading = false;
   bool _didContact = false;
+  Ticket? ticket;
   final _formKey = GlobalKey<FormState>();
   TextEditingController? customerNumber = TextEditingController();
   TextEditingController? customerName = TextEditingController();
@@ -72,6 +75,8 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
 
   @override
   void didPush() async {
+    ticket = widget.argTicket!;
+    getData();
     super.didPush();
     setState(() {
       _isLoading = true;
@@ -472,5 +477,44 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
     setState(() {
       controller.text = pickedTime.format(context);
     });
+  }
+
+  void getData() {
+    try {
+      customerNumber!.text = ticket!.customerNumber!;
+      customerName!.text = ticket!.customerName!;
+      customerMobile!.text = ticket!.customerMobile!;
+      cafeName!.text = ticket!.cafeName!;
+      cafeLocation!.text = ticket!.cafeLocation!;
+      city!.text = ticket!.city!;
+      extraNumber!.text = ticket!.extraContactNumber!;
+      visitDate!.text = ticket!.visitDate!;
+      from!.text = ticket!.from!;
+      to!.text = ticket!.to!;
+      selectedCustomer = allCustomers!.firstWhere(
+          (element) => element.customerNumber == ticket!.customerNumber);
+      customerBalance!.text = selectedCustomer!.balance!.abs().toString();
+      print('${ticket!.deliveryItems}  SSS');
+      if (ticket!.deliveryItems != null) {
+        print('${ticket!.deliveryItems}  SSS');
+        ticket!.deliveryItems!.forEach((key, value) {
+          print(key);
+          items.add(DeliveryItemWidget(
+            allParts: _allParts,
+          ));
+        });
+        int i = 0;
+        ticket!.deliveryItems!.forEach((key, value) {
+          DeliveryItemWidget item = items[i] as DeliveryItemWidget;
+          item.partNo.text = key;
+          item.desc.text = value[0];
+          item.qty.text = value[1];
+
+          i++;
+        });
+      }
+    } catch (ex) {
+      print('ex');
+    }
   }
 }

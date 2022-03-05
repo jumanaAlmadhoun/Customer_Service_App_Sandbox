@@ -28,7 +28,9 @@ class _DeliveryTypePageState extends State<DeliveryTypePage> {
             CategoryItem(
               image: IMG_RENT_MACHINE,
               title: getTranselted(context, LBL_DELIVERY_NEW_MACHINE)!,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, creatorNewMachineDeliveryRoute);
+              },
             ),
             CategoryItem(
               image: IMG_RENT_MACHINE,

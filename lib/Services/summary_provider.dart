@@ -16,6 +16,8 @@ int deliveryTickets = -1;
 int exchangeTickets = -1;
 int pickupTickets = -1;
 int accountingTickets = -1;
+int deliveryOpenTickets = -1;
+int deliveryAssignedTickets = -1;
 List<Tech> techs = [];
 
 class SummaryProvider with ChangeNotifier {
@@ -28,6 +30,9 @@ class SummaryProvider with ChangeNotifier {
     queueTickets = 0;
     assignedTickets = 0;
     accountingTickets = -1;
+    deliveryOpenTickets = -1;
+    deliveryAssignedTickets = 0;
+
     try {
       get(Uri.parse('$DB_URL$DB_EXCHANGE_TICKETS.json')).then((value) {
         var data = jsonDecode(value.body) as Map<String, dynamic>;

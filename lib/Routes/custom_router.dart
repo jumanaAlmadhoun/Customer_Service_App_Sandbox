@@ -1,4 +1,6 @@
 import 'package:customer_service_app/Layouts/Creator/Delivery/delivery_type_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Delivery/edit_parts_delivery_ticket.dart';
+import 'package:customer_service_app/Layouts/Creator/Delivery/new_machine_delivery_ticket.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/new_parts_delivery_ticket.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
@@ -32,6 +34,9 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const DeliveryTicketsPage());
       case creatorDeliveryTypeSelection:
         return MaterialPageRoute(builder: (_) => const DeliveryTypePage());
+      case creatorNewMachineDeliveryRoute:
+        return MaterialPageRoute(
+            builder: (_) => const NewMachineDeliveryTicket());
       case creatorPartsDeliveryRoute:
         return MaterialPageRoute(
             builder: (_) => const NewPartsDeliveryTicket());
@@ -62,6 +67,10 @@ class CustomRouter {
       case techTicketInfoRoute:
         return MaterialPageRoute(
             builder: (_) => TechTicketInfoPage(settings.arguments as Ticket));
+      case creatorEditPartsDeliveryRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                EditPartsDeliveryTicket(settings.arguments as Ticket));
       case techFillSiteVisitRoute:
         return MaterialPageRoute(
             builder: (_) => TechFillTicketPage(settings.arguments as Ticket));

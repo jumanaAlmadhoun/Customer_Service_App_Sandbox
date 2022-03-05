@@ -159,6 +159,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                     },
                   ),
                   TextFormField(
+                    inputFormatters: [UpperCaseFormatter()],
                     validator: (value) => validateInput(value, context),
                     controller: customerNumber,
                     decoration: InputDecoration(
@@ -513,7 +514,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
           customerName!.text = selectedCustomer!.customerName!;
           cafeName!.text = selectedCustomer!.companyName!;
           customerMobile!.text = selectedCustomer!.mobile!;
-          customerBalance!.text = selectedCustomer!.balance.toString();
+          customerBalance!.text = selectedCustomer!.balance!.abs().toString();
           customerNumber!.text = selectedCustomer!.customerNumber!;
           selectedModel!.text = machine.machineModel.toString();
         });
@@ -528,7 +529,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
       customerName!.text = selectedCustomer!.customerName!;
       cafeName!.text = selectedCustomer!.companyName!;
       customerMobile!.text = selectedCustomer!.mobile!;
-      customerBalance!.text = selectedCustomer!.balance.toString();
+      customerBalance!.text = selectedCustomer!.balance!.abs().toString();
       customerNumber!.text = selectedCustomer!.customerNumber!;
     } catch (ex) {
       print(ex);

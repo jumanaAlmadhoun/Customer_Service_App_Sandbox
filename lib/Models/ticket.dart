@@ -56,6 +56,8 @@ class Ticket with ChangeNotifier {
   static const String STA_PENDING = 'Pending';
   static const String DELIVERY_CATEGORY = 'Delivery';
   static const String PARTS_DELIVERY = 'Parts And Beans';
+  static const String NEW_MACHINE_DELIVERY = 'New Machines';
+  static const String CUSTOMER_MACHINE_DELIVERY = 'Customer Machines';
   static const String DELIVERY_ITEMS = 'deliveredItems';
   static const String DELIVERY_TYPE = 'deliveryType';
 
@@ -92,7 +94,8 @@ class Ticket with ChangeNotifier {
       this.visitDate,
       this.firebaseID,
       this.fromTable,
-      this.laborCharges});
+      this.laborCharges,
+      this.deliveryItems});
 
   String? machineModel;
   String? assignDate;
@@ -127,4 +130,5 @@ class Ticket with ChangeNotifier {
   String? firebaseID;
   String? fromTable;
   double? laborCharges;
+  Map<String, dynamic>? deliveryItems;
 }

@@ -11,9 +11,12 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
+import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
+import 'package:customer_service_app/Util/formatters.dart';
+import 'package:customer_service_app/Widgets/Delivery/delivery_machine_widget.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/Widgets/Delivery/delivery_item_widget.dart';
@@ -34,7 +37,6 @@ class NewMachineDeliveryTicket extends StatefulWidget {
 class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     with RouteAware {
   List<Widget> items = [];
-  List<SparePart> _allParts = [];
   bool _isLoading = false;
   bool _didContact = false;
   final _formKey = GlobalKey<FormState>();
@@ -63,6 +65,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   List<String> category = ['N/A', 'Tech', 'Courier'];
   List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
   String _selectedStatus = 'In Dispatch Area';
+  List<String> machineModels = [];
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -83,10 +86,11 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
         .then((value) {
       techs = Provider.of<UserProvider>(context, listen: false).techs;
     });
-    await Provider.of<SparePartProvider>(context, listen: false)
-        .fetchSpareParts()
+    await Provider.of<MachinesProvider>(context, listen: false)
+        .fetchModels()
         .then((value) {
-      _allParts = Provider.of<SparePartProvider>(context, listen: false).parts;
+      machineModels =
+          Provider.of<MachinesProvider>(context, listen: false).models;
       setState(() {
         _isLoading = false;
       });
@@ -107,6 +111,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                 key: _formKey,
                 child: ListView(children: [
                   TextFormField(
+                    inputFormatters: [UpperCaseFormatter()],
                     validator: (value) => validateInput(value, context),
                     controller: customerNumber,
                     decoration: InputDecoration(
@@ -305,8 +310,8 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                     text: getTranselted(context, LBL_ADD_ITEM)!,
                     onTap: () {
                       setState(() {
-                        items.add(DeliveryItemWidget(
-                          allParts: _allParts,
+                        items.add(DeliveryMachineWidget(
+                          allModels: machineModels,
                         ));
                       });
                     },
@@ -350,11 +355,10 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
 
   Future<String> validateReport() async {
     Map<String, dynamic> json = getTicketHeader()!;
-    if (_techName != 'N/A') {
+    if (_techName != NA) {
       if (_formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .submitNewDeliveryTicket(
-                json, '$DB_URL$DB_ASSIGNED_DELIVERY_TICKETS/$_techName.json');
+            .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
@@ -401,16 +405,16 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   Map<String, dynamic>? getTicketHeader() {
     Map<String, dynamic> map = {};
     items.forEach((element) {
-      if (element is DeliveryItemWidget) {
-        if (map.containsKey(element.partNo.text)) {
-          double qty = double.parse(map[element.partNo.text][1]);
+      if (element is DeliveryMachineWidget) {
+        if (map.containsKey(element.machineNumber.text)) {
+          double qty = double.parse(map[element.machineNumber.text][1]);
           qty += double.parse(element.qty.text);
-          map[element.partNo.text][1] = qty;
+          map[element.machineNumber.text][1] = qty;
         } else {
           map.update(
-            element.partNo.text,
-            (value) => [element.desc.text, element.qty.text],
-            ifAbsent: () => [element.desc.text, element.qty.text],
+            element.machineNumber.text,
+            (value) => [element.machineModel.text, element.qty.text],
+            ifAbsent: () => [element.machineModel.text, element.qty.text],
           );
         }
       }
@@ -419,7 +423,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),
-      Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
+      Ticket.CONTACT_NUMBER: extraNumber!.text.toUpperCase().trim(),
       Ticket.CREATED_BY: userName,
       Ticket.LAST_EDIT_BY: userName,
       Ticket.VISIT_DATE: visitDate!.text,
@@ -429,7 +433,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
       Ticket.REGION: _selectedReg,
       Ticket.TECH_NAME: _techName,
       Ticket.MAIN_CATEGORY: Ticket.DELIVERY_CATEGORY,
-      Ticket.SUB_CATEGORY: Ticket.PARTS_DELIVERY,
+      Ticket.SUB_CATEGORY: Ticket.NEW_MACHINE_DELIVERY,
       Ticket.DELIVERY_TYPE: _selectedCategory,
       Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
@@ -437,7 +441,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
       Ticket.VISIT_END_TIME: to!.text.trim(),
       Ticket.DELIVERY_ITEMS: map,
       Ticket.SO_NUMBER: so!.text.trim(),
-      Ticket.STATUS: _selectedStatus
+      Ticket.STATUS: _selectedStatus,
     };
   }
 
