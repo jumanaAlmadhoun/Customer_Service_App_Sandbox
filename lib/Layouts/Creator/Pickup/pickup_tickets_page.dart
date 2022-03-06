@@ -11,15 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class DeliveryTicketsPage extends StatefulWidget {
-  const DeliveryTicketsPage({Key? key}) : super(key: key);
+class PickupTicketsPage extends StatefulWidget {
+  const PickupTicketsPage({Key? key}) : super(key: key);
 
   @override
-  _DeliveryTicketsPageState createState() => _DeliveryTicketsPageState();
+  _PickupTicketsPageState createState() => _PickupTicketsPageState();
 }
 
-class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
-    with RouteAware {
+class _PickupTicketsPageState extends State<PickupTicketsPage> with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
@@ -37,7 +36,7 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
       _isLoading = true;
     });
     Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets(DB_DELIVERY_TICKETS)
+        .fetchTickets(DB_PICKUP_TICKETS)
         .then((value) {
       setState(() {
         _isLoading = false;
@@ -59,7 +58,7 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
                   hintStyle: const TextStyle(color: Colors.white),
                 ),
               )
-            : Text(getTranselted(context, TIC_DELIVERY)!),
+            : Text(getTranselted(context, TIC_PICK_UP)!),
         actions: [
           IconButton(
             onPressed: () {
@@ -74,7 +73,7 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
           ),
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, creatorDeliveryTypeSelection);
+                Navigator.pushNamed(context, creatorNewPickupTicketRoute);
               },
               icon: const Icon(Icons.add))
         ],
@@ -97,15 +96,8 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
                   type: _tickets[i].subCategory,
                   deliveryType: _tickets[i].deliveryType,
                   onTap: () {
-                    if (_tickets[i].subCategory == Ticket.PARTS_DELIVERY) {
-                      Navigator.pushNamed(
-                          context, creatorEditPartsDeliveryRoute,
-                          arguments: _tickets[i]);
-                    } else {
-                      Navigator.pushNamed(
-                          context, creatorEditNewMachineDeliveryRoute,
-                          arguments: _tickets[i]);
-                    }
+                    Navigator.pushNamed(context, creatorEditPickupTicketRoute,
+                        arguments: _tickets[i]);
                   },
                 );
               },

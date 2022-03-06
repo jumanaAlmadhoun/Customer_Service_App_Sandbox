@@ -12,6 +12,12 @@ const String creatorDeliveryTypeSelection = 'creatorDeliveryTypeSelection';
 const String creatorPartsDeliveryRoute = 'creatorPartsDeliveryRoute';
 const String creatorNewMachineDeliveryRoute = 'creatorNewMachineDeliveryRoute';
 const String creatorEditPartsDeliveryRoute = 'creatorEditPartsDeliveryRoute';
+const String creatorEditNewMachineDeliveryRoute =
+    'creatorEditNewMachineDeliveryRoute';
+
+const String creatorNewPickupTicketRoute = 'creatorNewPickupTicketRoute';
+const String creatorEditPickupTicketRoute = 'creatorEditPickupTicketRoute';
+const String creatorPickupTicketsRoute = 'creatorPickupTicketsRoute';
 
 const String techHomeRoute = 'techHomeRoute';
 const String techOpenTicketRoute = 'techOpenTicketRoute';

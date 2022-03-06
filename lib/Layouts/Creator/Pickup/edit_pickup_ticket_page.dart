@@ -3,43 +3,44 @@ import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
-import 'package:customer_service_app/Layouts/Creator/creator_home_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Delivery/new_machine_delivery_ticket.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/customer.dart';
-import 'package:customer_service_app/Models/spare_parts.dart';
+import 'package:customer_service_app/Models/machine.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
-import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
-import 'package:customer_service_app/Widgets/Delivery/delivery_machine_widget.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
-import 'package:customer_service_app/Widgets/Delivery/delivery_item_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-class NewMachineDeliveryTicket extends StatefulWidget {
-  const NewMachineDeliveryTicket({Key? key}) : super(key: key);
+import '../creator_home_page.dart';
+
+class EditPickupTicketPage extends StatefulWidget {
+  EditPickupTicketPage(this.argTicket);
+  final Ticket? argTicket;
 
   @override
-  _NewMachineDeliveryTicketState createState() =>
-      _NewMachineDeliveryTicketState();
+  _EditPickupTicketPageState createState() => _EditPickupTicketPageState();
 }
 
-class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
+class _EditPickupTicketPageState extends State<EditPickupTicketPage>
     with RouteAware {
-  List<Widget> items = [];
+  final formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _didContact = false;
-  final _formKey = GlobalKey<FormState>();
+  Ticket? ticket;
+  TextEditingController? selectedModel = TextEditingController();
   TextEditingController? customerNumber = TextEditingController();
   TextEditingController? customerName = TextEditingController();
   TextEditingController? customerMobile = TextEditingController();
@@ -47,25 +48,40 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   TextEditingController? cafeLocation = TextEditingController();
   TextEditingController? city = TextEditingController();
   TextEditingController? extraNumber = TextEditingController();
-  TextEditingController? customerBalance = TextEditingController();
-  TextEditingController? _techNameController = TextEditingController();
-  TextEditingController? _machineModelController = TextEditingController();
+  TextEditingController? machineNumber = TextEditingController();
+  TextEditingController? problemDesc = TextEditingController();
   TextEditingController? visitDate = TextEditingController();
   TextEditingController? from = TextEditingController();
   TextEditingController? to = TextEditingController();
-  TextEditingController? so = TextEditingController();
+  TextEditingController? customerBalance = TextEditingController();
+  TextEditingController? _techNameController = TextEditingController();
+  TextEditingController? _machineModelController = TextEditingController();
+
   String _techName = 'N/A';
   TextEditingController _selectedCity = TextEditingController();
   String _selectedReg = '';
   List<String> techs = [];
+  List<String>? machineModels;
   List<Customer>? allCustomers;
+  List<Machine>? allMachines;
   Customer? selectedCustomer;
+  Machine? selectedMachines;
   Map<String, dynamic>? ticketHeader;
+  String? _assignDirection = '';
   String _selectedCategory = 'N/A';
   List<String> category = ['N/A', 'Tech', 'Courier'];
-  List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
-  String _selectedStatus = 'In Dispatch Area';
-  List<String> machineModels = [];
+  List<String> status = [
+    'Waiting for customer prep',
+    'Pickup requested',
+    'In transit',
+    'Arrived',
+    'Customer refused',
+    'Customer rescheduled',
+    'No response by customer',
+    'Other'
+  ];
+  String _selectedStatus = 'Waiting for customer prep';
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -76,40 +92,73 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   @override
   void didPush() async {
     super.didPush();
-    setState(() {
-      _isLoading = true;
-    });
+    ticket = widget.argTicket;
+    allMachines =
+        Provider.of<MachinesProvider>(context, listen: false).machines;
     allCustomers =
         Provider.of<CustomerProvider>(context, listen: false).customers;
-    await Provider.of<UserProvider>(context, listen: false)
-        .fetchTechs()
-        .then((value) {
-      techs = Provider.of<UserProvider>(context, listen: false).techs;
+    setState(() {
+      _isLoading = true;
     });
     await Provider.of<MachinesProvider>(context, listen: false)
         .fetchModels()
         .then((value) {
       machineModels =
           Provider.of<MachinesProvider>(context, listen: false).models;
+    });
+    await Provider.of<UserProvider>(context, listen: false)
+        .fetchTechs()
+        .then((value) {
+      techs = Provider.of<UserProvider>(context, listen: false).techs;
       setState(() {
         _isLoading = false;
       });
+      getData();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(getTranselted(context, TIC_DELIVERY)!)),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _isLoading
-            ? const SpinKitChasingDots(
-                color: APP_BAR_COLOR,
-              )
-            : Form(
-                key: _formKey,
-                child: ListView(children: [
+      appBar: AppBar(
+        title: Text(getTranselted(context, TIC_PICK_UP)!),
+      ),
+      body: _isLoading
+          ? const SpinKitPianoWave(
+              color: APP_BAR_COLOR,
+            )
+          : Form(
+              key: formKey,
+              child: ListView(
+                padding: const EdgeInsets.all(15),
+                children: [
+                  SearchField(
+                    controller: selectedModel,
+                    hint: getTranselted(context, LBL_MACHINE_MODEL),
+                    suggestions: machineModels!,
+                    onTap: (value) {
+                      setState(() {
+                        selectedModel!.text = value!;
+                      });
+                    },
+                  ),
+                  TextFormField(
+                    validator: (value) => validateInput(value, context),
+                    inputFormatters: [UpperCaseFormatter()],
+                    controller: machineNumber,
+                    decoration: InputDecoration(
+                      label: Text(getTranselted(context, LBL_MACHINE_NUMBER)!),
+                    ),
+                    onChanged: (value) {
+                      selectedMachines = findMachine(value);
+                      if (selectedMachines != null) {
+                        fetchCustomerInfo(context, selectedMachines!);
+                      } else {
+                        customerNumber!.text = '';
+                        clearCustomerValues();
+                      }
+                    },
+                  ),
                   TextFormField(
                     inputFormatters: [UpperCaseFormatter()],
                     validator: (value) => validateInput(value, context),
@@ -118,14 +167,12 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                       label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
                     ),
                     onChanged: (value) {
-                      setState(() {
-                        selectedCustomer = findCustomer(value);
-                        if (selectedCustomer != null) {
-                          fetchCustomerByNumber(context, selectedCustomer!);
-                        } else {
-                          clearCustomerValues();
-                        }
-                      });
+                      selectedCustomer = findCustomer(value);
+                      if (selectedCustomer != null) {
+                        fetchCustomerByNumber(context, selectedCustomer!);
+                      } else {
+                        clearCustomerValues();
+                      }
                     },
                   ),
                   selectedCustomer != null
@@ -196,6 +243,14 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                   ),
                   TextFormField(
                     validator: (value) => validateInput(value, context),
+                    controller: problemDesc,
+                    decoration: InputDecoration(
+                      label: Text(getTranselted(context, LBL_PROBLEM_DESC)!),
+                    ),
+                    onChanged: (value) {},
+                  ),
+                  TextFormField(
+                    validator: (value) => validateInput(value, context),
                     controller: visitDate,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
@@ -218,12 +273,8 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                     ),
                     onTap: () => pickTime(context, to!),
                   ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: so,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_SO_NUMBER)!),
-                    ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   SearchField(
                     controller: _selectedCity,
@@ -296,155 +347,48 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                   const SizedBox(
                     height: 10,
                   ),
-                  // ListView.builder(
-                  //     physics: const ClampingScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: items.length,
-                  //     itemBuilder: (context, i) {
-                  //       return items[i];
-                  //     }),
-                  // const SizedBox(
-                  //   height: 10,
-                  // ),
-                  // ButtonWidget(
-                  //   text: getTranselted(context, LBL_ADD_ITEM)!,
-                  //   onTap: () {
-                  //     setState(() {
-                  //       items.add(DeliveryMachineWidget(
-                  //         allModels: machineModels,
-                  //       ));
-                  //     });
-                  //   },
-                  // ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   ButtonWidget(
                     text: getTranselted(context, BTN_SUBMIT)!,
                     onTap: () async {
                       setState(() {
                         _isLoading = true;
                       });
-                      String result = await validateReport();
-                      if (result == SC_SUCCESS_RESPONSE) {
+                      String response = await validateReport();
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      if (response == SC_SUCCESS_RESPONSE) {
                         CoolAlert.show(
                           context: context,
                           type: CoolAlertType.success,
-                          confirmBtnColor: APP_BAR_COLOR,
-                          backgroundColor: APP_BAR_COLOR,
                           onConfirmBtnTap: () {
                             Navigator.pushNamedAndRemoveUntil(context,
                                 creatorHomeRoute, (route) => route.isFirst);
                           },
+                          onCancelBtnTap: () {
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                creatorHomeRoute, (route) => route.isFirst);
+                          },
                         );
-                      } else {
+                      } else if (response == SC_FAILED_RESPONSE) {
                         CoolAlert.show(
-                            context: context, type: CoolAlertType.error);
+                            context: context,
+                            type: CoolAlertType.error,
+                            title: getTranselted(context, ERR_TITL)!,
+                            text: getTranselted(context, ERR_UNKWON_TXT)!);
+                      } else if (response == ASSIGN_DIRECTION_ERR) {
+                        CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            title: getTranselted(context, ERR_TITL)!,
+                            text: getTranselted(context, ERR_ASSIGN)!);
                       }
-                      setState(() {
-                        _isLoading = false;
-                      });
-                      print(result);
                     },
-                  ),
-                ]),
+                  )
+                ],
               ),
-      ),
+            ),
     );
-  }
-
-  Future<String> validateReport() async {
-    Map<String, dynamic> json = getTicketHeader()!;
-    if (_techName != NA) {
-      if (_formKey.currentState!.validate()) {
-        return await Provider.of<TicketProvider>(context, listen: false)
-            .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
-      }
-    } else {
-      return await Provider.of<TicketProvider>(context, listen: false)
-          .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
-    }
-    return SC_FAILED_RESPONSE;
-  }
-
-  void fetchCustomerByNumber(BuildContext? context, Customer customer) {
-    try {
-      setState(() {
-        customerName!.text = selectedCustomer!.customerName!;
-        cafeName!.text = selectedCustomer!.companyName!;
-        customerMobile!.text = selectedCustomer!.mobile!;
-        customerBalance!.text = selectedCustomer!.balance!.abs().toString();
-        customerNumber!.text = selectedCustomer!.customerNumber!;
-      });
-    } catch (ex) {
-      print(ex);
-    }
-  }
-
-  void clearCustomerValues() {
-    setState(() {
-      customerName!.text = '';
-      cafeName!.text = '';
-      customerMobile!.text = '';
-      customerBalance!.text = '';
-      selectedCustomer = null;
-    });
-  }
-
-  Customer? findCustomer(String customerNumber) {
-    try {
-      return allCustomers!.firstWhere((element) =>
-          (element.customerNumber!.toUpperCase().trim() ==
-              customerNumber.toUpperCase().trim()));
-    } catch (ex) {
-      print(ex);
-      return null;
-    }
-  }
-
-  Map<String, dynamic>? getTicketHeader() {
-    // Map<String, dynamic> map = {};
-    // items.forEach((element) {
-    //   if (element is DeliveryMachineWidget) {
-    //     if (map.containsKey(element.machineNumber.text)) {
-    //       double qty = double.parse(map[element.machineNumber.text][1]);
-    //       qty += double.parse(element.qty.text);
-    //       map[element.machineNumber.text][1] = qty;
-    //     } else {
-    //       map.update(
-    //         element.machineNumber.text,
-    //         (value) => [element.machineModel.text, element.qty.text],
-    //         ifAbsent: () => [element.machineModel.text, element.qty.text],
-    //       );
-    //     }
-    //   }
-    // });
-    return {
-      Ticket.CAFE_NAME: cafeName!.text.trim(),
-      Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
-      Ticket.CUSTOMER_NAME: customerName!.text.toUpperCase().trim(),
-      Ticket.CONTACT_NUMBER: extraNumber!.text.toUpperCase().trim(),
-      Ticket.CREATED_BY: userName,
-      Ticket.LAST_EDIT_BY: userName,
-      Ticket.VISIT_DATE: visitDate!.text,
-      Ticket.DID_CONTACT: _didContact,
-      Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
-      Ticket.CITY: _selectedCity.text.trim(),
-      Ticket.REGION: _selectedReg,
-      Ticket.TECH_NAME: _techName,
-      Ticket.MAIN_CATEGORY: Ticket.DELIVERY_CATEGORY,
-      Ticket.SUB_CATEGORY: Ticket.NEW_MACHINE_DELIVERY,
-      Ticket.DELIVERY_TYPE: _selectedCategory,
-      Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
-      Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
-      Ticket.VISIT_START_TIME: from!.text.trim(),
-      Ticket.VISIT_END_TIME: to!.text.trim(),
-      // Ticket.DELIVERY_ITEMS: map,
-      Ticket.SO_NUMBER: so!.text.trim(),
-      Ticket.STATUS: _selectedStatus,
-      Ticket.MACHINE_MODEL: NA,
-      Ticket.SERIAL_NUMBER: NA
-    };
   }
 
   Future pickDate(BuildContext context) async {
@@ -475,5 +419,138 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     setState(() {
       controller.text = pickedTime.format(context);
     });
+  }
+
+  Machine? findMachine(String machineNumber) {
+    try {
+      return allMachines!.firstWhere((element) =>
+          (element.machineNumber!.toUpperCase().trim() ==
+              machineNumber.toUpperCase().trim()));
+    } catch (ex) {
+      return null;
+    }
+  }
+
+  Customer? findCustomer(String customerNumber) {
+    try {
+      return allCustomers!.firstWhere((element) =>
+          (element.customerNumber!.toUpperCase().trim() ==
+              customerNumber.toUpperCase().trim()));
+    } catch (ex) {
+      return null;
+    }
+  }
+
+  void fetchCustomerInfo(BuildContext context, Machine? machine) {
+    try {
+      print(machine!.machineModel);
+      selectedCustomer = allCustomers!.firstWhere((element) =>
+          machine.customerNumber!.toUpperCase().trim() ==
+          element.customerNumber!.toUpperCase().trim());
+      if (selectedCustomer != null) {
+        setState(() {
+          customerName!.text = selectedCustomer!.customerName!;
+          cafeName!.text = selectedCustomer!.companyName!;
+          customerMobile!.text = selectedCustomer!.mobile!;
+          customerBalance!.text = selectedCustomer!.balance!.abs().toString();
+          customerNumber!.text = selectedCustomer!.customerNumber!;
+          selectedModel!.text = machine.machineModel.toString();
+        });
+      }
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  void fetchCustomerByNumber(BuildContext? context, Customer customer) {
+    try {
+      customerName!.text = selectedCustomer!.customerName!;
+      cafeName!.text = selectedCustomer!.companyName!;
+      customerMobile!.text = selectedCustomer!.mobile!;
+      customerBalance!.text = selectedCustomer!.balance!.abs().toString();
+      customerNumber!.text = selectedCustomer!.customerNumber!;
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<String> validateReport() async {
+    String date = DateTime.now().toString().split(' ')[0];
+    Map<String, dynamic> json = getTicketHeader()!;
+    if (_techName != NA) {
+      if (formKey.currentState!.validate()) {
+        return await Provider.of<TicketProvider>(context, listen: false)
+            .editPickupTicket(
+                json, '$DB_URL$DB_PICKUP_TICKETS/${ticket!.firebaseID}.json');
+      }
+    } else {
+      return await Provider.of<TicketProvider>(context, listen: false)
+          .editPickupTicket(
+              json, '$DB_URL$DB_PICKUP_TICKETS/${ticket!.firebaseID}.json');
+    }
+    return SC_FAILED_RESPONSE;
+  }
+
+  void clearCustomerValues() {
+    setState(() {
+      customerName!.text = '';
+      cafeName!.text = '';
+      customerMobile!.text = '';
+      customerBalance!.text = '';
+      selectedCustomer = null;
+    });
+  }
+
+  Map<String, dynamic>? getTicketHeader() {
+    return {
+      Ticket.CAFE_NAME: cafeName!.text.trim(),
+      Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
+      Ticket.CUSTOMER_NAME: customerName!.text.trim(),
+      Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
+      Ticket.CREATED_BY: ticket!.createdBy,
+      Ticket.CREATION_DATE: ticket!.creationDate,
+      Ticket.LAST_EDIT_BY: userName,
+      Ticket.VISIT_DATE: visitDate!.text,
+      Ticket.DID_CONTACT: _didContact,
+      Ticket.CITY: _selectedCity.text.trim(),
+      Ticket.REGION: _selectedReg,
+      Ticket.TECH_NAME: _techName,
+      Ticket.MAIN_CATEGORY: Ticket.PICKUP_CATEGORY,
+      Ticket.SUB_CATEGORY: Ticket.PICKUP_CATEGORY,
+      Ticket.DELIVERY_TYPE: _selectedCategory,
+      Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
+      Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
+      Ticket.VISIT_START_TIME: from!.text.trim(),
+      Ticket.VISIT_END_TIME: to!.text.trim(),
+      // Ticket.DELIVERY_ITEMS: map,
+      Ticket.STATUS: _selectedStatus,
+      Ticket.ROW_ADDRESS: ticket!.rowAddress,
+      Ticket.MACHINE_MODEL: selectedModel!.text,
+      Ticket.SERIAL_NUMBER: machineNumber!.text,
+    };
+  }
+
+  void getData() {
+    try {
+      customerNumber!.text = ticket!.customerNumber!;
+      customerName!.text = ticket!.customerName!;
+      customerMobile!.text = ticket!.customerMobile!;
+      cafeName!.text = ticket!.cafeName!;
+      cafeLocation!.text = ticket!.cafeLocation!;
+      city!.text = ticket!.city!;
+      extraNumber!.text = ticket!.extraContactNumber!;
+      visitDate!.text = ticket!.visitDate!;
+      from!.text = ticket!.from!;
+      to!.text = ticket!.to!;
+      selectedCustomer = allCustomers!.firstWhere(
+          (element) => element.customerNumber == ticket!.customerNumber);
+      customerBalance!.text = selectedCustomer!.balance!.abs().toString();
+      machineNumber!.text = ticket!.machineNumber!;
+      selectedModel!.text = ticket!.machineModel!;
+      _selectedCategory = ticket!.deliveryType!;
+      _selectedStatus = ticket!.status!;
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

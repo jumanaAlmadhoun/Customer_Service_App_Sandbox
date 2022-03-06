@@ -35,7 +35,7 @@ class EditPartsDeliveryTicket extends StatefulWidget {
 
 class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
     with RouteAware {
-  List<Widget> items = [];
+  // List<Widget> items = [];
   List<SparePart> _allParts = [];
   bool _isLoading = false;
   bool _didContact = false;
@@ -76,7 +76,6 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
   @override
   void didPush() async {
     ticket = widget.argTicket!;
-    getData();
     super.didPush();
     setState(() {
       _isLoading = true;
@@ -95,6 +94,7 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
       setState(() {
         _isLoading = false;
       });
+      getData();
     });
   }
 
@@ -297,26 +297,26 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
                   const SizedBox(
                     height: 10,
                   ),
-                  ListView.builder(
-                      physics: const ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: items.length,
-                      itemBuilder: (context, i) {
-                        return items[i];
-                      }),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ButtonWidget(
-                    text: getTranselted(context, LBL_ADD_ITEM)!,
-                    onTap: () {
-                      setState(() {
-                        items.add(DeliveryItemWidget(
-                          allParts: _allParts,
-                        ));
-                      });
-                    },
-                  ),
+                  // ListView.builder(
+                  //     physics: const ClampingScrollPhysics(),
+                  //     shrinkWrap: true,
+                  //     itemCount: items.length,
+                  //     itemBuilder: (context, i) {
+                  //       return items[i];
+                  //     }),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                  // ButtonWidget(
+                  //   text: getTranselted(context, LBL_ADD_ITEM)!,
+                  //   onTap: () {
+                  //     setState(() {
+                  //       items.add(DeliveryItemWidget(
+                  //         allParts: _allParts,
+                  //       ));
+                  //     });
+                  //   },
+                  // ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -345,7 +345,6 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
                       setState(() {
                         _isLoading = false;
                       });
-                      print(result);
                     },
                   ),
                 ]),
@@ -359,11 +358,13 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
     if (_techName != NA) {
       if (_formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+            .editDeliveryTicket(
+                json, '$DB_URL$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
-          .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+          .editDeliveryTicket(
+              json, '$DB_URL$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
     }
     return SC_FAILED_RESPONSE;
   }
@@ -404,32 +405,32 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
   }
 
   Map<String, dynamic>? getTicketHeader() {
-    Map<String, dynamic> map = {};
-    items.forEach((element) {
-      if (element is DeliveryItemWidget) {
-        if (map.containsKey(element.partNo.text)) {
-          double qty = double.parse(map[element.partNo.text][1]);
-          qty += double.parse(element.qty.text);
-          map[element.partNo.text][1] = qty;
-        } else {
-          map.update(
-            element.partNo.text,
-            (value) => [element.desc.text, element.qty.text],
-            ifAbsent: () => [element.desc.text, element.qty.text],
-          );
-        }
-      }
-    });
+    // Map<String, dynamic> map = {};
+    // items.forEach((element) {
+    //   if (element is DeliveryItemWidget) {
+    //     if (map.containsKey(element.partNo.text)) {
+    //       double qty = double.parse(map[element.partNo.text][1]);
+    //       qty += double.parse(element.qty.text);
+    //       map[element.partNo.text][1] = qty;
+    //     } else {
+    //       map.update(
+    //         element.partNo.text,
+    //         (value) => [element.desc.text, element.qty.text],
+    //         ifAbsent: () => [element.desc.text, element.qty.text],
+    //       );
+    //     }
+    //   }
+    // });
     return {
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),
       Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
-      Ticket.CREATED_BY: userName,
+      Ticket.CREATED_BY: ticket!.createdBy,
+      Ticket.CREATION_DATE: ticket!.creationDate,
       Ticket.LAST_EDIT_BY: userName,
       Ticket.VISIT_DATE: visitDate!.text,
       Ticket.DID_CONTACT: _didContact,
-      Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
       Ticket.CITY: _selectedCity.text.trim(),
       Ticket.REGION: _selectedReg,
       Ticket.TECH_NAME: _techName,
@@ -440,9 +441,10 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
       Ticket.VISIT_START_TIME: from!.text.trim(),
       Ticket.VISIT_END_TIME: to!.text.trim(),
-      Ticket.DELIVERY_ITEMS: map,
+      // Ticket.DELIVERY_ITEMS: map,
       Ticket.SO_NUMBER: so!.text.toUpperCase().trim(),
       Ticket.STATUS: _selectedStatus,
+      Ticket.ROW_ADDRESS: ticket!.rowAddress,
       Ticket.MACHINE_MODEL: NA,
       Ticket.SERIAL_NUMBER: NA,
       Ticket.CLOSE_DATE: NA,
@@ -493,28 +495,29 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
       to!.text = ticket!.to!;
       selectedCustomer = allCustomers!.firstWhere(
           (element) => element.customerNumber == ticket!.customerNumber);
+      print(selectedCustomer);
       customerBalance!.text = selectedCustomer!.balance!.abs().toString();
-      print('${ticket!.deliveryItems}  SSS');
-      if (ticket!.deliveryItems != null) {
-        print('${ticket!.deliveryItems}  SSS');
-        ticket!.deliveryItems!.forEach((key, value) {
-          print(key);
-          items.add(DeliveryItemWidget(
-            allParts: _allParts,
-          ));
-        });
-        int i = 0;
-        ticket!.deliveryItems!.forEach((key, value) {
-          DeliveryItemWidget item = items[i] as DeliveryItemWidget;
-          item.partNo.text = key;
-          item.desc.text = value[0];
-          item.qty.text = value[1];
+      // print('${ticket!.deliveryItems}  SSS');
+      // if (ticket!.deliveryItems != null) {
+      //   print('${ticket!.deliveryItems}  SSS');
+      //   ticket!.deliveryItems!.forEach((key, value) {
+      //     print(key);
+      //     items.add(DeliveryItemWidget(
+      //       allParts: _allParts,
+      //     ));
+      //   });
+      //   int i = 0;
+      //   ticket!.deliveryItems!.forEach((key, value) {
+      //     DeliveryItemWidget item = items[i] as DeliveryItemWidget;
+      //     item.partNo.text = key;
+      //     item.desc.text = value[0];
+      //     item.qty.text = value[1];
 
-          i++;
-        });
-      }
+      //     i++;
+      //   });
+      // }
     } catch (ex) {
-      print('ex');
+      print(ex);
     }
   }
 }

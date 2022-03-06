@@ -115,6 +115,9 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                   title: getTranselted(context, TIC_PICK_UP)!,
                   image: IMG_PICKUP,
                   number: pickupTickets,
+                  onTap: () {
+                    Navigator.pushNamed(context, creatorPickupTicketsRoute);
+                  },
                 ),
           CategoryItem(
             title: getTranselted(context, TIC_ACCOUNTING)!,

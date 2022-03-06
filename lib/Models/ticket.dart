@@ -61,6 +61,9 @@ class Ticket with ChangeNotifier {
   static const String DELIVERY_ITEMS = 'deliveredItems';
   static const String DELIVERY_TYPE = 'deliveryType';
 
+  static const String PICKUP_CATEGORY = 'Pickup';
+  static const String OUT_MACHINE = 'exOut';
+
   Ticket(
       {this.assignDate,
       this.cafeLocation,
@@ -95,7 +98,8 @@ class Ticket with ChangeNotifier {
       this.firebaseID,
       this.fromTable,
       this.laborCharges,
-      this.deliveryItems});
+      this.deliveryItems,
+      this.deliveryType});
 
   String? machineModel;
   String? assignDate;
@@ -130,5 +134,6 @@ class Ticket with ChangeNotifier {
   String? firebaseID;
   String? fromTable;
   double? laborCharges;
+  String? deliveryType;
   Map<String, dynamic>? deliveryItems;
 }

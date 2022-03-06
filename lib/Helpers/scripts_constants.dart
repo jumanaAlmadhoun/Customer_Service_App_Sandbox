@@ -16,3 +16,9 @@ const String TECH_FILL_SCRIPT =
     'https://script.google.com/macros/s/AKfycbxpDA5YNfehUKnzlPF8TrMRJ71sPwGn9NRsMEFa6HjCPMjxvUMMMiQq1q2slgtMSy04/exec';
 const String OPEN_NEW_DELIVERY_TICKET =
     'https://script.google.com/macros/s/AKfycbzU-FTGN_M4ZPFQSCCjpjS_ikDCd7CdBdX-4VEer-A-GlayQUEJt27o94BxqjI6i3Fw/exec';
+const String EDIT_DELIVERY_TICKET_SCRIPT =
+    'https://script.google.com/macros/s/AKfycbyFjU_0cIRfgm9kCNsC9d6XkqRNEPsVWCC0pa28S_NJyKZA-qZ1cP28f53MI3D2dSZD/exec';
+const String OPEN_NEW_PICUP_TICKET =
+    'https://script.google.com/macros/s/AKfycbxUEv-DERzZaEdp8pVFW2L0ZYy5_2ZrK34dY7X9dG6UhTcevOlF8tc3hiiTD_ac47tM/exec';
+const String EDIT_PICKUP_TICKET_SCRIPT =
+    'https://script.google.com/macros/s/AKfycbwHBf0k0z-_tYFTLRD7jrNJ9Gqe4bENY0FczUoxHtkGEylXneSIn-esV4LrXGfEnhwcMA/exec';

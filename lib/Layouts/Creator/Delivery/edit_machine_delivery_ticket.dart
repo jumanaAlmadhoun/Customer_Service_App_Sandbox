@@ -11,12 +11,10 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
-import 'package:customer_service_app/Services/machines_provider.dart';
 import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
-import 'package:customer_service_app/Widgets/Delivery/delivery_machine_widget.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/Widgets/Delivery/delivery_item_widget.dart';
@@ -26,19 +24,22 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-class NewMachineDeliveryTicket extends StatefulWidget {
-  const NewMachineDeliveryTicket({Key? key}) : super(key: key);
+class EditPartsDeliveryTicket extends StatefulWidget {
+  EditPartsDeliveryTicket(this.argTicket);
+  Ticket? argTicket;
 
   @override
-  _NewMachineDeliveryTicketState createState() =>
-      _NewMachineDeliveryTicketState();
+  _EditPartsDeliveryTicketState createState() =>
+      _EditPartsDeliveryTicketState();
 }
 
-class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
+class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
     with RouteAware {
-  List<Widget> items = [];
+  // List<Widget> items = [];
+  List<SparePart> _allParts = [];
   bool _isLoading = false;
   bool _didContact = false;
+  Ticket? ticket;
   final _formKey = GlobalKey<FormState>();
   TextEditingController? customerNumber = TextEditingController();
   TextEditingController? customerName = TextEditingController();
@@ -54,18 +55,17 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   TextEditingController? from = TextEditingController();
   TextEditingController? to = TextEditingController();
   TextEditingController? so = TextEditingController();
-  String _techName = 'N/A';
+  String _techName = NA;
   TextEditingController _selectedCity = TextEditingController();
   String _selectedReg = '';
   List<String> techs = [];
   List<Customer>? allCustomers;
   Customer? selectedCustomer;
   Map<String, dynamic>? ticketHeader;
-  String _selectedCategory = 'N/A';
-  List<String> category = ['N/A', 'Tech', 'Courier'];
+  String _selectedCategory = NA;
+  List<String> category = [NA, 'Tech', 'Courier'];
   List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
   String _selectedStatus = 'In Dispatch Area';
-  List<String> machineModels = [];
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -75,10 +75,12 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
 
   @override
   void didPush() async {
+    ticket = widget.argTicket!;
     super.didPush();
     setState(() {
       _isLoading = true;
     });
+
     allCustomers =
         Provider.of<CustomerProvider>(context, listen: false).customers;
     await Provider.of<UserProvider>(context, listen: false)
@@ -86,14 +88,14 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
         .then((value) {
       techs = Provider.of<UserProvider>(context, listen: false).techs;
     });
-    await Provider.of<MachinesProvider>(context, listen: false)
-        .fetchModels()
+    await Provider.of<SparePartProvider>(context, listen: false)
+        .fetchSpareParts()
         .then((value) {
-      machineModels =
-          Provider.of<MachinesProvider>(context, listen: false).models;
+      _allParts = Provider.of<SparePartProvider>(context, listen: false).parts;
       setState(() {
         _isLoading = false;
       });
+      getData();
     });
   }
 
@@ -310,8 +312,8 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                   //   text: getTranselted(context, LBL_ADD_ITEM)!,
                   //   onTap: () {
                   //     setState(() {
-                  //       items.add(DeliveryMachineWidget(
-                  //         allModels: machineModels,
+                  //       items.add(DeliveryItemWidget(
+                  //         allParts: _allParts,
                   //       ));
                   //     });
                   //   },
@@ -344,7 +346,6 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
                       setState(() {
                         _isLoading = false;
                       });
-                      print(result);
                     },
                   ),
                 ]),
@@ -358,11 +359,13 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     if (_techName != NA) {
       if (_formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+            .editDeliveryTicket(
+                json, '$DB_URL$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
-          .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+          .editDeliveryTicket(
+              json, '$DB_URL$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
     }
     return SC_FAILED_RESPONSE;
   }
@@ -405,16 +408,16 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   Map<String, dynamic>? getTicketHeader() {
     // Map<String, dynamic> map = {};
     // items.forEach((element) {
-    //   if (element is DeliveryMachineWidget) {
-    //     if (map.containsKey(element.machineNumber.text)) {
-    //       double qty = double.parse(map[element.machineNumber.text][1]);
+    //   if (element is DeliveryItemWidget) {
+    //     if (map.containsKey(element.partNo.text)) {
+    //       double qty = double.parse(map[element.partNo.text][1]);
     //       qty += double.parse(element.qty.text);
-    //       map[element.machineNumber.text][1] = qty;
+    //       map[element.partNo.text][1] = qty;
     //     } else {
     //       map.update(
-    //         element.machineNumber.text,
-    //         (value) => [element.machineModel.text, element.qty.text],
-    //         ifAbsent: () => [element.machineModel.text, element.qty.text],
+    //         element.partNo.text,
+    //         (value) => [element.desc.text, element.qty.text],
+    //         ifAbsent: () => [element.desc.text, element.qty.text],
     //       );
     //     }
     //   }
@@ -422,13 +425,11 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     return {
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
-      Ticket.CUSTOMER_NAME: customerName!.text.toUpperCase().trim(),
-      Ticket.CONTACT_NUMBER: extraNumber!.text.toUpperCase().trim(),
-      Ticket.CREATED_BY: userName,
+      Ticket.CUSTOMER_NAME: customerName!.text.trim(),
+      Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
       Ticket.LAST_EDIT_BY: userName,
       Ticket.VISIT_DATE: visitDate!.text,
       Ticket.DID_CONTACT: _didContact,
-      Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
       Ticket.CITY: _selectedCity.text.trim(),
       Ticket.REGION: _selectedReg,
       Ticket.TECH_NAME: _techName,
@@ -440,10 +441,12 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
       Ticket.VISIT_START_TIME: from!.text.trim(),
       Ticket.VISIT_END_TIME: to!.text.trim(),
       // Ticket.DELIVERY_ITEMS: map,
-      Ticket.SO_NUMBER: so!.text.trim(),
+      Ticket.SO_NUMBER: so!.text.toUpperCase().trim(),
       Ticket.STATUS: _selectedStatus,
+      Ticket.ROW_ADDRESS: ticket!.rowAddress,
       Ticket.MACHINE_MODEL: NA,
-      Ticket.SERIAL_NUMBER: NA
+      Ticket.SERIAL_NUMBER: NA,
+      Ticket.CLOSE_DATE: NA,
     };
   }
 
@@ -475,5 +478,44 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     setState(() {
       controller.text = pickedTime.format(context);
     });
+  }
+
+  void getData() {
+    try {
+      customerNumber!.text = ticket!.customerNumber!;
+      customerName!.text = ticket!.customerName!;
+      customerMobile!.text = ticket!.customerMobile!;
+      cafeName!.text = ticket!.cafeName!;
+      cafeLocation!.text = ticket!.cafeLocation!;
+      city!.text = ticket!.city!;
+      extraNumber!.text = ticket!.extraContactNumber!;
+      visitDate!.text = ticket!.visitDate!;
+      from!.text = ticket!.from!;
+      to!.text = ticket!.to!;
+      selectedCustomer = allCustomers!.firstWhere(
+          (element) => element.customerNumber == ticket!.customerNumber);
+      customerBalance!.text = selectedCustomer!.balance!.abs().toString();
+      // print('${ticket!.deliveryItems}  SSS');
+      // if (ticket!.deliveryItems != null) {
+      //   print('${ticket!.deliveryItems}  SSS');
+      //   ticket!.deliveryItems!.forEach((key, value) {
+      //     print(key);
+      //     items.add(DeliveryItemWidget(
+      //       allParts: _allParts,
+      //     ));
+      //   });
+      //   int i = 0;
+      //   ticket!.deliveryItems!.forEach((key, value) {
+      //     DeliveryItemWidget item = items[i] as DeliveryItemWidget;
+      //     item.partNo.text = key;
+      //     item.desc.text = value[0];
+      //     item.qty.text = value[1];
+
+      //     i++;
+      //   });
+      // }
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

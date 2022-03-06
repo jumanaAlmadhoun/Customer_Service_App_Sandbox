@@ -2,6 +2,9 @@ import 'package:customer_service_app/Layouts/Creator/Delivery/delivery_type_page
 import 'package:customer_service_app/Layouts/Creator/Delivery/edit_parts_delivery_ticket.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/new_machine_delivery_ticket.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/new_parts_delivery_ticket.dart';
+import 'package:customer_service_app/Layouts/Creator/Pickup/edit_pickup_ticket_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Pickup/new_pickup_ticket_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Pickup/pickup_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
 import 'package:customer_service_app/Models/ticket.dart';
@@ -32,6 +35,10 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const CreatorHomePage());
       case creatorDeliveryTicketsRoute:
         return MaterialPageRoute(builder: (_) => const DeliveryTicketsPage());
+      case creatorNewPickupTicketRoute:
+        return MaterialPageRoute(builder: (_) => const NewPickupTicket());
+      case creatorPickupTicketsRoute:
+        return MaterialPageRoute(builder: (_) => const PickupTicketsPage());
       case creatorDeliveryTypeSelection:
         return MaterialPageRoute(builder: (_) => const DeliveryTypePage());
       case creatorNewMachineDeliveryRoute:
@@ -68,6 +75,13 @@ class CustomRouter {
         return MaterialPageRoute(
             builder: (_) => TechTicketInfoPage(settings.arguments as Ticket));
       case creatorEditPartsDeliveryRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                EditPartsDeliveryTicket(settings.arguments as Ticket));
+      case creatorEditPickupTicketRoute:
+        return MaterialPageRoute(
+            builder: (_) => EditPickupTicketPage(settings.arguments as Ticket));
+      case creatorEditNewMachineDeliveryRoute:
         return MaterialPageRoute(
             builder: (_) =>
                 EditPartsDeliveryTicket(settings.arguments as Ticket));

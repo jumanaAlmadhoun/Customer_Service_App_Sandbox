@@ -13,7 +13,8 @@ class DeliveryTicketWidget extends StatelessWidget {
       this.didContact,
       this.onTap,
       this.techName,
-      this.type});
+      this.type,
+      this.deliveryType});
 
   final String? customerName;
   final String? customerMobile;
@@ -22,6 +23,7 @@ class DeliveryTicketWidget extends StatelessWidget {
   final String? city;
   final String? techName;
   final String? type;
+  final String? deliveryType;
   final bool? didContact;
   final onTap;
 
@@ -86,11 +88,15 @@ class DeliveryTicketWidget extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Text(
-                  getTranselted(context, LBL_TECH_NAME)! + ': ' + techName!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
+                deliveryType == 'Tech'
+                    ? Text(
+                        getTranselted(context, LBL_TECH_NAME)! +
+                            ': ' +
+                            techName!,
+                        textAlign: TextAlign.left,
+                        style: TICKET_TEXT_STYLE,
+                      )
+                    : Container(),
                 const SizedBox(
                   height: 8,
                 ),

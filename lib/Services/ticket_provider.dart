@@ -19,7 +19,8 @@ class TicketProvider with ChangeNotifier {
       var response = await http.get(Uri.parse('$DB_URL$from.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {
-        tickets.add(Ticket(
+        tickets.add(
+          Ticket(
             machineModel: value[Ticket.MACHINE_MODEL] ?? '',
             assignDate: value[Ticket.ASSIGN_DATE] ?? '',
             cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
@@ -53,9 +54,10 @@ class TicketProvider with ChangeNotifier {
             firebaseID: key,
             fromTable: from,
             laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
-            deliveryItems:
-                value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>));
-        print(value[Ticket.DELIVERY_ITEMS]);
+            deliveryItems: value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
+            deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
+          ),
+        );
       });
       _tickets = tickets;
       notifyListeners();
@@ -196,27 +198,103 @@ class TicketProvider with ChangeNotifier {
 
   Future<String> submitNewDeliveryTicket(
       Map<String, dynamic> json, String firebaseUrl) async {
-    var jsonToSend = jsonEncode(json);
-    var response =
-        await http.get(Uri.parse('$OPEN_NEW_DELIVERY_TICKET?json=$jsonToSend'));
-    var data = jsonDecode(response.body);
-    if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
-      String rowDataAddress = data[SC_ROW_ADDRESS_KEY].toString();
-      String ticketNumber = data[SC_TICKET_NUMBER_KEY].toString();
-      json.update(
-        Ticket.ROW_ADDRESS,
-        (value) => rowDataAddress,
-        ifAbsent: () => rowDataAddress,
-      );
-      json.update(
-        Ticket.TICKET_NUMBER,
-        (value) => ticketNumber,
-        ifAbsent: () => ticketNumber,
-      );
-      await http.post(Uri.parse(firebaseUrl), body: jsonEncode(json));
-
-      return Future.value(SC_SUCCESS_RESPONSE);
+    try {
+      var jsonToSend = jsonEncode(json);
+      var response = await http
+          .get(Uri.parse('$OPEN_NEW_DELIVERY_TICKET?json=$jsonToSend'));
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        String rowDataAddress = data[SC_ROW_ADDRESS_KEY].toString();
+        String ticketNumber = data[SC_TICKET_NUMBER_KEY].toString();
+        json.update(
+          Ticket.ROW_ADDRESS,
+          (value) => rowDataAddress,
+          ifAbsent: () => rowDataAddress,
+        );
+        json.update(
+          Ticket.TICKET_NUMBER,
+          (value) => ticketNumber,
+          ifAbsent: () => ticketNumber,
+        );
+        await http.post(Uri.parse(firebaseUrl), body: jsonEncode(json));
+        return Future.value(SC_SUCCESS_RESPONSE);
+      }
+      return Future.value(SC_FAILED_RESPONSE);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
     }
-    return Future.value(SC_FAILED_RESPONSE);
+  }
+
+  Future<String> editDeliveryTicket(
+      Map<String, dynamic> json, String firebaseUrl) async {
+    try {
+      var jsonToSend = jsonEncode(json);
+      print(jsonToSend);
+      var response = await http
+          .get(Uri.parse('$EDIT_DELIVERY_TICKET_SCRIPT?json=$jsonToSend'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        print(firebaseUrl);
+        await http.patch(Uri.parse(firebaseUrl), body: jsonEncode(json));
+        return Future.value(SC_SUCCESS_RESPONSE);
+      }
+      return Future.value(SC_FAILED_RESPONSE);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
+
+  Future<String> submitNewPickupTicket(
+      Map<String, dynamic> json, String firebaseUrl) async {
+    try {
+      var jsonToSend = jsonEncode(json);
+      var response =
+          await http.get(Uri.parse('$OPEN_NEW_PICUP_TICKET?json=$jsonToSend'));
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        String rowDataAddress = data[SC_ROW_ADDRESS_KEY].toString();
+        String ticketNumber = data[SC_TICKET_NUMBER_KEY].toString();
+        json.update(
+          Ticket.ROW_ADDRESS,
+          (value) => rowDataAddress,
+          ifAbsent: () => rowDataAddress,
+        );
+        json.update(
+          Ticket.TICKET_NUMBER,
+          (value) => ticketNumber,
+          ifAbsent: () => ticketNumber,
+        );
+        await http.post(Uri.parse(firebaseUrl), body: jsonEncode(json));
+        return Future.value(SC_SUCCESS_RESPONSE);
+      }
+      return Future.value(SC_FAILED_RESPONSE);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
+
+  Future<String> editPickupTicket(
+      Map<String, dynamic> json, String firebaseUrl) async {
+    try {
+      var jsonToSend = jsonEncode(json);
+      print(jsonToSend);
+      var response = await http
+          .get(Uri.parse('$EDIT_PICKUP_TICKET_SCRIPT?json=$jsonToSend'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        print(firebaseUrl);
+        await http.patch(Uri.parse(firebaseUrl), body: jsonEncode(json));
+        return Future.value(SC_SUCCESS_RESPONSE);
+      }
+      return Future.value(SC_FAILED_RESPONSE);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
   }
 }
