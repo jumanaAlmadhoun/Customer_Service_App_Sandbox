@@ -71,11 +71,17 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
             image: IMG_QUEUE_TICKETS,
             title: getTranselted(context, STA_QUEUE)!,
             number: queueTickets,
+            onTap: () {
+              Navigator.pushNamed(context, creatorQueueTicketsRoute);
+            },
           ),
           CategoryItem(
             image: IMG_ASSIGNED_TICKETS,
             title: getTranselted(context, STA_ASSIGNED)!,
             number: assignedTickets,
+            onTap: () {
+              Navigator.pushNamed(context, creatorAssignedTicketRoute);
+            },
           ),
           CategoryItem(
             image: IMG_PENDING_TICKETS,

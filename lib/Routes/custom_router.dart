@@ -5,8 +5,13 @@ import 'package:customer_service_app/Layouts/Creator/Delivery/new_parts_delivery
 import 'package:customer_service_app/Layouts/Creator/Pickup/edit_pickup_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Pickup/new_pickup_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Pickup/pickup_tickets_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/assigned_tickets_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/queue_tickets_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned_tickets.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
+import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
@@ -33,8 +38,12 @@ class CustomRouter {
     switch (settings.name) {
       case creatorHomeRoute:
         return MaterialPageRoute(builder: (_) => const CreatorHomePage());
+      case creatorQueueTicketsRoute:
+        return MaterialPageRoute(builder: (_) => const QueueTikcketsPage());
       case creatorDeliveryTicketsRoute:
         return MaterialPageRoute(builder: (_) => const DeliveryTicketsPage());
+      case creatorAssignedTicketRoute:
+        return MaterialPageRoute(builder: (_) => const AssignedTikcketsPage());
       case creatorNewPickupTicketRoute:
         return MaterialPageRoute(builder: (_) => const NewPickupTicket());
       case creatorPickupTicketsRoute:
@@ -96,6 +105,12 @@ class CustomRouter {
         return MaterialPageRoute(
             builder: (_) =>
                 EditSanremoNewTicketPage(settings.arguments as Ticket));
+      case creatorTechAssignedTicketRoute:
+        return MaterialPageRoute(
+            builder: (_) => TechAssignedTicketPage(settings.arguments as Tech));
+      case creatorTechQueueTicketRoute:
+        return MaterialPageRoute(
+            builder: (_) => TechQueueTicketPage(settings.arguments as Tech));
     }
   }
 }

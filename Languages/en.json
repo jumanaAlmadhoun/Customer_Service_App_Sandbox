@@ -67,5 +67,7 @@
   "delivery_category":"Delivery Type",
   "so_number":"SO Number",
   "delivery_new":"New Machines",
-  "delivery_cus":"Customer Machines"
+  "delivery_cus":"Customer Machines",
+  "get_back":"Get Back Ticket",
+  "queue_assign":"Send To Tech"
 }
