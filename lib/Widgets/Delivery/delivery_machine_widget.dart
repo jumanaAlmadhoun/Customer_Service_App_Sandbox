@@ -36,7 +36,9 @@ class _DeliveryMachineWidgetState extends State<DeliveryMachineWidget> {
                   label: Text(getTranselted(context, LBL_MACHINE_MODEL)!),
                 ),
                 controller: widget.machineModel,
-                suggestions: widget.allModels!,
+                suggestions: widget.allModels!
+                    .map((e) => SearchFieldListItem(e.toString()))
+                    .toList(),
               ),
             ),
             Padding(

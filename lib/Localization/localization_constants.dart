@@ -80,6 +80,8 @@ const String LBL_DESCRIPTION = 'desc';
 const String LBL_ADD_ITEM = 'add_item';
 const String LBL_DELIVERY_CATEGORY = 'delivery_category';
 const String LBL_SO_NUMBER = 'so_number';
+const String STA_QUEUE_GET_BACK = 'get_back';
+const String STA_QUEUE_ASSIGN = 'queue_assign';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

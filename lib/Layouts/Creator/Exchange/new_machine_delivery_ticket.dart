@@ -130,10 +130,12 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
                   SearchField(
                     controller: selectedModel,
                     hint: getTranselted(context, LBL_MACHINE_MODEL),
-                    suggestions: machineModels!,
+                    suggestions: machineModels!
+                        .map((e) => SearchFieldListItem(e))
+                        .toList(),
                     onTap: (value) {
                       setState(() {
-                        selectedModel!.text = value!;
+                        selectedModel!.text = value.searchKey;
                       });
                     },
                   ),
@@ -274,15 +276,19 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
                   SearchField(
                     controller: _selectedCity,
                     hint: getTranselted(context, LBL_CITY),
-                    suggestions:
-                        cities.map((e) => e['name_ar'].toString()).toList(),
+                    suggestions: cities
+                        .map(
+                            (e) => SearchFieldListItem(e['name_ar'].toString()))
+                        .toList(),
                     onTap: (value) {
-                      setState(() {
-                        _selectedCity.text = value!;
-                        var city = cities.firstWhere((element) =>
-                            element['name_ar'] == _selectedCity.text);
-                        _selectedReg = city['reg_name_ar'];
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _selectedCity.text = value.searchKey;
+                          var city = cities.firstWhere((element) =>
+                              element['name_ar'] == _selectedCity.text);
+                          _selectedReg = city['reg_name_ar'];
+                        });
+                      }
                     },
                   ),
                   const SizedBox(
@@ -320,13 +326,16 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
                   ),
                   _selectedCategory == 'Tech'
                       ? SearchField(
-                          suggestions: techs,
+                          suggestions:
+                              techs.map((e) => SearchFieldListItem(e)).toList(),
                           hint: getTranselted(context, LBL_TECH_NAME),
                           controller: _techNameController,
-                          onTap: (String? value) {
-                            setState(() {
-                              _techName = value!;
-                            });
+                          onTap: (value) {
+                            if (mounted) {
+                              setState(() {
+                                _techName = value.searchKey;
+                              });
+                            }
                           },
                         )
                       : Container(),

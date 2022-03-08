@@ -36,11 +36,13 @@ class _DeliveryItemWidgetState extends State<DeliveryItemWidget> {
                   label: Text(getTranselted(context, LBL_ITEM_NO)!),
                 ),
                 controller: widget.partNo,
-                suggestions:
-                    widget.allParts!.map((e) => e.partNo.toString()).toList(),
+                suggestions: widget.allParts!
+                    .map((e) => SearchFieldListItem(e.partNo.toString()))
+                    .toList(),
                 onTap: (value) {
                   SparePart part = widget.allParts!.firstWhere((element) =>
-                      element.partNo!.toUpperCase() == value!.toUpperCase());
+                      element.partNo!.toUpperCase() ==
+                      value.searchKey.toUpperCase());
                   if (part != null) {
                     setState(() {
                       widget.desc.text = part.desc!;

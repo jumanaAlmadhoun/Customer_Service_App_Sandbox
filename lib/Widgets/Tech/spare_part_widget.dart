@@ -48,7 +48,7 @@ class _SparePartWidgetState extends State<SparePartWidget> {
                       }
                     },
                     suggestions: widget.allParts!
-                        .map((e) => e.partNo.toString())
+                        .map((e) => SearchFieldListItem(e.partNo.toString()))
                         .toList()),
               ),
             ),

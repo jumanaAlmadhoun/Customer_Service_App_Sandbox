@@ -20,6 +20,7 @@ import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -34,7 +35,7 @@ class SanremoNewTicketPage extends StatefulWidget {
 
 class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     with RouteAware {
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   bool _isLoading = false;
   bool _isSubmitting = false;
   bool _didContact = false;
@@ -69,10 +70,10 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     'M10X'
   ];
   String _techName = 'N/A';
-  TextEditingController _selectedCity = TextEditingController();
+  TextEditingController selectedCity = TextEditingController();
   String _selectedReg = '';
   List<String> techs = [];
-  List<String>? machineModels;
+  List<String>? machineModels = [];
   List<Customer>? allCustomers;
   List<Machine>? allMachines;
   Customer? selectedCustomer;
@@ -86,20 +87,23 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    print('Dep Here');
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPush() async {
+    print('Push Here');
     super.didPush();
-    allMachines =
-        Provider.of<MachinesProvider>(context, listen: false).machines;
-    allCustomers =
-        Provider.of<CustomerProvider>(context, listen: false).customers;
     setState(() {
       _isLoading = true;
     });
+    allMachines =
+        Provider.of<MachinesProvider>(context, listen: false).machines;
+
+    allCustomers =
+        Provider.of<CustomerProvider>(context, listen: false).customers;
     await Provider.of<MachinesProvider>(context, listen: false)
         .fetchModels()
         .then((value) {
@@ -117,300 +121,304 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranselted(context, NEW_SANREMO_TICKET)!),
       ),
-      body: _isLoading
-          ? const SpinKitPianoWave(
-              color: APP_BAR_COLOR,
-            )
-          : Form(
-              key: formKey,
-              child: ListView(
-                padding: const EdgeInsets.all(15),
-                children: [
-                  SearchField(
-                    controller: selectedModel,
-                    hint: getTranselted(context, LBL_MACHINE_MODEL),
-                    suggestions: machineModels!,
-                    onTap: (value) {
-                      setState(() {
-                        selectedModel!.text = value!;
-                      });
-                    },
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    inputFormatters: [UpperCaseFormatter()],
-                    controller: machineNumber,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_MACHINE_NUMBER)!),
-                    ),
-                    onChanged: (value) {
-                      selectedMachines = findMachine(value);
-                      if (selectedMachines != null) {
-                        fetchCustomerInfo(context, selectedMachines!);
+      body: ModalProgressHUD(
+        inAsyncCall: _isLoading,
+        child: Form(
+          key: formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(15),
+            children: [
+              SearchField(
+                controller: selectedModel,
+                hint: getTranselted(context, LBL_MACHINE_MODEL),
+                suggestions:
+                    machineModels!.map((e) => SearchFieldListItem(e)).toList(),
+                onTap: (value) {
+                  setState(() {
+                    selectedModel!.text = value.searchKey;
+                  });
+                },
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                inputFormatters: [UpperCaseFormatter()],
+                controller: machineNumber,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_MACHINE_NUMBER)!),
+                ),
+                onChanged: (value) {
+                  selectedMachines = findMachine(value);
+                  if (selectedMachines != null) {
+                    fetchCustomerInfo(context, selectedMachines!);
+                  } else {
+                    debugPrint;
+                    customerNumber!.text = '';
+                    clearCustomerValues();
+                  }
+                },
+              ),
+              TextFormField(
+                inputFormatters: [UpperCaseFormatter()],
+                validator: (value) => validateInput(value, context),
+                controller: customerNumber,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
+                ),
+                onChanged: (value) {
+                  selectedCustomer = findCustomer(value);
+                  if (selectedCustomer != null) {
+                    fetchCustomerByNumber(context, selectedCustomer!);
+                  } else {
+                    clearCustomerValues();
+                  }
+                },
+              ),
+              selectedCustomer != null
+                  ? TextFormField(
+                      enabled: false,
+                      controller: customerBalance,
+                      decoration: InputDecoration(
+                        label: Text(
+                          selectedCustomer!.blocked == ''
+                              ? getTranselted(context, LBL_CUSTOMER_BALANCE)!
+                              : getTranselted(context, LBL_CUSTOMER_BALANCE)! +
+                                  ' ' +
+                                  getTranselted(context, LBL_CUSTOMER_BLOCKED)!,
+                          style: TextStyle(
+                              color: selectedCustomer!.balance! < 0
+                                  ? Colors.green
+                                  : Colors.red),
+                        ),
+                      ),
+                      onChanged: (value) {},
+                    )
+                  : Container(),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: customerName,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_CUSTOMER_NAME)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: customerMobile,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_MOBILE)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: extraNumber,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_EXTRA_NUMBER)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: cafeName,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_CAFE_NAME)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: cafeLocation,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_CAFE_LOCATION)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: problemDesc,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_PROBLEM_DESC)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: recommendation,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_RECOMMENDATION)!),
+                ),
+                onChanged: (value) {},
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: visitDate,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
+                ),
+                onTap: () => pickDate(context),
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: from,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_FROM)!),
+                ),
+                onTap: () => pickTime(context, from!),
+              ),
+              TextFormField(
+                validator: (value) => validateInput(value, context),
+                controller: to,
+                decoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_TO)!),
+                ),
+                onTap: () => pickTime(context, to!),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              DropdownButton(
+                hint: Text(getTranselted(context, LBL_VISIT_CATEGORY)!),
+                items: categorys
+                    .map((e) => DropdownMenuItem(
+                          child: Text(e),
+                          value: e,
+                        ))
+                    .toList(),
+                value: selectedCategory,
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value.toString();
+                    if (selectedCategory.trim() == 'Installation' ||
+                        selectedCategory.trim() == 'M10X') {
+                      _freeParts = true;
+                      _freeVisit = true;
+                    } else {
+                      _freeParts = false;
+                      _freeVisit = false;
+                    }
+                  });
+                },
+              ),
+              SearchField(
+                controller: selectedCity,
+                hint: getTranselted(context, LBL_CITY),
+                suggestions: cities
+                    .map((e) => SearchFieldListItem(e['name_ar'].toString()))
+                    .toList(),
+                onTap: (value) {
+                  if (mounted) {
+                    setState(() {
+                      selectedCity.text = value.searchKey;
+                      var city = cities.firstWhere(
+                          (element) => element['name_ar'] == selectedCity.text);
+                      _selectedReg = city['reg_name_ar'];
+                    });
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SearchField(
+                suggestions: techs.map((e) => SearchFieldListItem(e)).toList(),
+                hint: getTranselted(context, LBL_TECH_NAME),
+                controller: _techNameController,
+                onTap: (value) {
+                  if (mounted) {
+                    setState(() {
+                      _techName = value.searchKey;
+                      if (_techName != 'N/A') {
+                        _readyToAssign = false;
                       } else {
-                        customerNumber!.text = '';
-                        clearCustomerValues();
+                        _assignDirection = '';
                       }
-                    },
-                  ),
-                  TextFormField(
-                    inputFormatters: [UpperCaseFormatter()],
-                    validator: (value) => validateInput(value, context),
-                    controller: customerNumber,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
-                    ),
-                    onChanged: (value) {
-                      selectedCustomer = findCustomer(value);
-                      if (selectedCustomer != null) {
-                        fetchCustomerByNumber(context, selectedCustomer!);
-                      } else {
-                        clearCustomerValues();
-                      }
-                    },
-                  ),
-                  selectedCustomer != null
-                      ? TextFormField(
-                          enabled: false,
-                          controller: customerBalance,
-                          decoration: InputDecoration(
-                            label: Text(
-                              selectedCustomer!.blocked == ''
-                                  ? getTranselted(
-                                      context, LBL_CUSTOMER_BALANCE)!
-                                  : getTranselted(
-                                          context, LBL_CUSTOMER_BALANCE)! +
-                                      ' ' +
-                                      getTranselted(
-                                          context, LBL_CUSTOMER_BLOCKED)!,
-                              style: TextStyle(
-                                  color: selectedCustomer!.balance! < 0
-                                      ? Colors.green
-                                      : Colors.red),
-                            ),
-                          ),
-                          onChanged: (value) {},
-                        )
-                      : Container(),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: customerName,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_CUSTOMER_NAME)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: customerMobile,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_MOBILE)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: extraNumber,
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_EXTRA_NUMBER)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: cafeName,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_CAFE_NAME)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: cafeLocation,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_CAFE_LOCATION)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: problemDesc,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_PROBLEM_DESC)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: recommendation,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_RECOMMENDATION)!),
-                    ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: visitDate,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
-                    ),
-                    onTap: () => pickDate(context),
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: from,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_FROM)!),
-                    ),
-                    onTap: () => pickTime(context, from!),
-                  ),
-                  TextFormField(
-                    validator: (value) => validateInput(value, context),
-                    controller: to,
-                    decoration: InputDecoration(
-                      label: Text(getTranselted(context, LBL_TO)!),
-                    ),
-                    onTap: () => pickTime(context, to!),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  DropdownButton(
-                    hint: Text(getTranselted(context, LBL_VISIT_CATEGORY)!),
-                    items: categorys
-                        .map((e) => DropdownMenuItem(
-                              child: Text(e),
-                              value: e,
-                            ))
-                        .toList(),
-                    value: selectedCategory,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCategory = value.toString();
-                        if (selectedCategory.trim() == 'Installation' ||
-                            selectedCategory.trim() == 'M10X') {
-                          _freeParts = true;
-                          _freeVisit = true;
-                        } else {
-                          _freeParts = false;
-                          _freeVisit = false;
-                        }
-                      });
-                    },
-                  ),
-                  SearchField(
-                    controller: _selectedCity,
-                    hint: getTranselted(context, LBL_CITY),
-                    suggestions:
-                        cities.map((e) => e['name_ar'].toString()).toList(),
-                    onTap: (value) {
-                      setState(() {
-                        _selectedCity.text = value!;
-                        var city = cities.firstWhere((element) =>
-                            element['name_ar'] == _selectedCity.text);
-                        _selectedReg = city['reg_name_ar'];
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SearchField(
-                    initialValue: _techName,
-                    suggestions: techs,
-                    hint: getTranselted(context, LBL_TECH_NAME),
-                    controller: _techNameController,
-                    onTap: (value) {
-                      setState(() {
-                        _techName = value!;
-                        if (_techName != 'N/A') {
-                          _readyToAssign = false;
-                        } else {
-                          _assignDirection = '';
-                        }
-                      });
-                    },
-                  ),
-                  _techName != 'N/A'
-                      ? RadioGroup<String>.builder(
-                          direction: Axis.horizontal,
-                          groupValue: _assignDirection!,
-                          onChanged: (value) => setState(() {
-                            _assignDirection = value;
-                            print(_assignDirection);
-                          }),
-                          items: [
-                            getTranselted(context, LBL_DIRECT_ASSIGN)!,
-                            getTranselted(context, LBL_PUSH_QUEUE)!
-                          ],
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item,
-                          ),
-                        )
-                      : Container(),
-                  _techName == 'N/A'
-                      ? CustomCheckBox(
-                          title: LBL_READY_ASSIGN,
-                          value: _readyToAssign,
-                          onChanged: (value) {
-                            setState(() {
-                              _readyToAssign = value!;
-                            });
-                          },
-                        )
-                      : Container(),
-                  CustomCheckBox(
-                    title: LBL_DID_CONTACT,
-                    value: _didContact,
-                    onChanged: (value) {
-                      setState(() {
-                        _didContact = value!;
-                      });
-                    },
-                  ),
-                  CustomCheckBox(
-                    title: LBL_SOLVED_BY_PHONE,
-                    value: _solveByPhone,
-                    onChanged: (value) {
-                      setState(() {
-                        if (!_readyToAssign) {
-                          _solveByPhone = value!;
-                        }
-                      });
-                    },
-                  ),
-                  CustomCheckBox(
-                    title: LBL_FREE_VISIT,
-                    value: _freeVisit,
-                    onChanged: (value) {
-                      setState(() {
-                        _freeVisit = value!;
-                      });
-                    },
-                  ),
-                  CustomCheckBox(
-                    title: LBL_FREE_PARTS,
-                    value: _freeParts,
-                    onChanged: (value) {
-                      setState(() {
-                        _freeParts = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  ButtonWidget(
-                    text: getTranselted(context, BTN_SUBMIT)!,
-                    onTap: () async {
+                    });
+                  }
+                },
+              ),
+              _techName != 'N/A'
+                  ? RadioGroup<String>.builder(
+                      direction: Axis.horizontal,
+                      groupValue: _assignDirection!,
+                      onChanged: (value) => setState(() {
+                        _assignDirection = value;
+                        print(_assignDirection);
+                      }),
+                      items: [
+                        getTranselted(context, LBL_DIRECT_ASSIGN)!,
+                        getTranselted(context, LBL_PUSH_QUEUE)!
+                      ],
+                      itemBuilder: (item) => RadioButtonBuilder(
+                        item,
+                      ),
+                    )
+                  : Container(),
+              _techName == 'N/A'
+                  ? CustomCheckBox(
+                      title: LBL_READY_ASSIGN,
+                      value: _readyToAssign,
+                      onChanged: (value) {
+                        setState(() {
+                          _readyToAssign = value!;
+                        });
+                      },
+                    )
+                  : Container(),
+              CustomCheckBox(
+                title: LBL_DID_CONTACT,
+                value: _didContact,
+                onChanged: (value) {
+                  setState(() {
+                    _didContact = value!;
+                  });
+                },
+              ),
+              CustomCheckBox(
+                title: LBL_SOLVED_BY_PHONE,
+                value: _solveByPhone,
+                onChanged: (value) {
+                  setState(() {
+                    if (!_readyToAssign) {
+                      _solveByPhone = value!;
+                    }
+                  });
+                },
+              ),
+              CustomCheckBox(
+                title: LBL_FREE_VISIT,
+                value: _freeVisit,
+                onChanged: (value) {
+                  setState(() {
+                    _freeVisit = value!;
+                  });
+                },
+              ),
+              CustomCheckBox(
+                title: LBL_FREE_PARTS,
+                value: _freeParts,
+                onChanged: (value) {
+                  setState(() {
+                    _freeParts = value!;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ButtonWidget(
+                text: getTranselted(context, BTN_SUBMIT)!,
+                onTap: () async {
+                  try {
+                    if (mounted) {
                       setState(() {
                         _isLoading = true;
                       });
@@ -444,11 +452,16 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                             title: getTranselted(context, ERR_TITL)!,
                             text: getTranselted(context, ERR_ASSIGN)!);
                       }
-                    },
-                  )
-                ],
-              ),
-            ),
+                    }
+                  } catch (ex) {
+                    print(ex);
+                  }
+                },
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -615,7 +628,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
       Ticket.VISIT_DATE: visitDate!.text,
       Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
       Ticket.SUB_CATEGORY: selectedCategory,
-      Ticket.CITY: _selectedCity.text.trim(),
+      Ticket.CITY: selectedCity.text.trim(),
       Ticket.REGION: _selectedReg,
       Ticket.TECH_NAME: _techName,
       Ticket.DID_CONTACT: _didContact,
