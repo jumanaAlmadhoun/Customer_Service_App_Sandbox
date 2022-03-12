@@ -8,7 +8,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Helpers/layout_constants.dart';
 import '../../main.dart';
+import 'mobile_logIn_page.dart';
+import 'web_logIn_page.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'LoginScreen';
@@ -50,56 +53,22 @@ class _LoginScreenState extends State<LoginScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranselted(context, LOGIN_TXT)!),
-        centerTitle: true,
-        actions: const [LanguageWidget()],
-      ),
-      body: _isLoading
-          ? const Center(
-              child: SpinKitPumpingHeart(
-              color: APP_BAR_COLOR,
-            ))
-          : Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ListView(children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(height: 150, child: Image.asset(IMG_LOGO)),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          labelText: getTranselted(context, PHONE_HINT),
-                          suffixIcon: const Icon(Icons.phone),
-                          contentPadding:
-                              const EdgeInsets.only(top: 12.0, bottom: 12.0)),
-                      controller: phoneNumber,
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.visiblePassword,
-                      controller: password,
-                      decoration: InputDecoration(
-                        labelText: getTranselted(context, PASSWORD_HINT)!,
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.remove_red_eye),
-                          onPressed: _viewPassword,
-                        ),
-                        contentPadding:
-                            const EdgeInsets.only(top: 12.0, bottom: 12.0),
-                      ),
-                      obscureText: _obscureText,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ButtonWidget(
-                      text: getTranselted(context, LOGIN_TXT).toString(),
+    Size size = MediaQuery.of(context).size;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < mobileWidth) {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text(getTranselted(context, LOGIN_TXT)!),
+                centerTitle: true,
+                actions: [LanguageWidget()],
+              ),
+              body: _isLoading
+                  ? const Center(
+                      child: SpinKitPumpingHeart(
+                      color: APP_BAR_COLOR,
+                    ))
+                  : MobileLogInPage(
                       onTap: () {
                         setState(() {
                           _isLoading = true;
@@ -113,11 +82,36 @@ class _LoginScreenState extends State<LoginScreen> with RouteAware {
                           });
                         });
                       },
-                    ),
-                  ],
-                ),
-              ]),
-            ),
+                      password: password,
+                      phoneNumber: phoneNumber,
+                    ));
+        } else {
+          return Scaffold(
+            body: _isLoading
+                ? const Center(
+                    child: SpinKitPumpingHeart(
+                    color: APP_BAR_COLOR,
+                  ))
+                : WebLogInPage(
+                    onTap: () {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      Provider.of<LoginHandeler>(context, listen: false)
+                          .loginUser(context, phoneNumber.text.trim(),
+                              password.text.trim())
+                          .then((value) {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      });
+                    },
+                    password: password,
+                    phoneNumber: phoneNumber,
+                  ),
+          );
+        }
+      },
     );
   }
 }

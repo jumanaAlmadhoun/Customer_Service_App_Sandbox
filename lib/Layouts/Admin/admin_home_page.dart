@@ -40,47 +40,49 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
         title: Text(getTranselted(context, HOME_PAGE_TITLE)!),
         actions: const [LogoutWidget()],
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: .70,
-        crossAxisSpacing: 0,
-        mainAxisSpacing: 0,
-        children: [
-          totalRfaMachines == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, STA_RENT_MACHINES)!,
-                  image: IMG_RENT_MACHINE,
-                  number: totalRfaMachines,
-                  onTap: () {
-                    Navigator.pushNamed(context, adminRentMachineRoute);
-                  },
-                ),
-          totalRfaMachines == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, STA_TECHS_REPORT)!,
-                  image: IMG_TECH_REPORT,
-                  onTap: () {
-                    Navigator.pushNamed(context, adminTechReportRoute);
-                  },
-                ),
-          totalRfaMachines == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, STA_TECHS_REPORT)!,
-                  image: IMG_WORKSHO_REPORT,
-                  onTap: () {
-                    Navigator.pushNamed(context, adminTechReportRoute);
-                  },
-                ),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return GridView.count(
+            crossAxisCount: constraints.maxWidth < mobileWidth ? 2 : 3,
+            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 0.9,
+            children: [
+              totalRfaMachines == -1
+                  ? const SpinKitDancingSquare(
+                      color: APP_BAR_COLOR,
+                    )
+                  : CategoryItem(
+                      title: getTranselted(context, STA_RENT_MACHINES)!,
+                      image: IMG_RENT_MACHINE,
+                      number: totalRfaMachines,
+                      onTap: () {
+                        Navigator.pushNamed(context, adminRentMachineRoute);
+                      },
+                    ),
+              totalRfaMachines == -1
+                  ? const SpinKitDancingSquare(
+                      color: APP_BAR_COLOR,
+                    )
+                  : CategoryItem(
+                      title: getTranselted(context, STA_TECHS_REPORT)!,
+                      image: IMG_TECH_REPORT,
+                      onTap: () {
+                        Navigator.pushNamed(context, adminTechReportRoute);
+                      },
+                    ),
+              totalRfaMachines == -1
+                  ? const SpinKitDancingSquare(
+                      color: APP_BAR_COLOR,
+                    )
+                  : CategoryItem(
+                      title: getTranselted(context, STA_TECHS_REPORT)!,
+                      image: IMG_WORKSHO_REPORT,
+                      onTap: () {
+                        Navigator.pushNamed(context, adminTechReportRoute);
+                      },
+                    ),
+            ],
+          );
+        },
       ),
     );
   }

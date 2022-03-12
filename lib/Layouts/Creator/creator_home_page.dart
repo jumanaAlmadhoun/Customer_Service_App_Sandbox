@@ -68,62 +68,64 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
         actions: const [LogoutWidget()],
       ),
       drawer: const CreatorDrawerWidget(),
-      body: GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: .70,
-        crossAxisSpacing: 0,
-        mainAxisSpacing: 0,
-        children: [
-          siteVisitTickets == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, TIC_SITE_VISIT)!,
-                  image: IMG_SITE_VISIT,
-                  number: siteVisitTickets,
-                  onTap: () {
-                    Navigator.pushNamed(context, creatorSiteVisitRoute);
-                  },
-                ),
-          deliveryTickets == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, TIC_DELIVERY)!,
-                  image: IMG_DELIVERY,
-                  number: deliveryTickets,
-                  onTap: () {
-                    Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
-                  },
-                ),
-          exchangeTickets == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, TIC_EXCHANGE)!,
-                  image: IMG_EXCHANGE,
-                  number: exchangeTickets,
-                ),
-          pickupTickets == -1
-              ? const SpinKitDancingSquare(
-                  color: APP_BAR_COLOR,
-                )
-              : CategoryItem(
-                  title: getTranselted(context, TIC_PICK_UP)!,
-                  image: IMG_PICKUP,
-                  number: pickupTickets,
-                  onTap: () {
-                    Navigator.pushNamed(context, creatorPickupTicketsRoute);
-                  },
-                ),
-          CategoryItem(
-            title: getTranselted(context, TIC_ACCOUNTING)!,
-            image: IMG_ACCOUNTING,
-          ),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) => GridView.count(
+          crossAxisCount: constraints.maxWidth < mobileWidth ? 2 : 3,
+          childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.1,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+          children: [
+            siteVisitTickets == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, TIC_SITE_VISIT)!,
+                    image: IMG_SITE_VISIT,
+                    number: siteVisitTickets,
+                    onTap: () {
+                      Navigator.pushNamed(context, creatorSiteVisitRoute);
+                    },
+                  ),
+            deliveryTickets == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, TIC_DELIVERY)!,
+                    image: IMG_DELIVERY,
+                    number: deliveryTickets,
+                    onTap: () {
+                      Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
+                    },
+                  ),
+            exchangeTickets == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, TIC_EXCHANGE)!,
+                    image: IMG_EXCHANGE,
+                    number: exchangeTickets,
+                  ),
+            pickupTickets == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, TIC_PICK_UP)!,
+                    image: IMG_PICKUP,
+                    number: pickupTickets,
+                    onTap: () {
+                      Navigator.pushNamed(context, creatorPickupTicketsRoute);
+                    },
+                  ),
+            CategoryItem(
+              title: getTranselted(context, TIC_ACCOUNTING)!,
+              image: IMG_ACCOUNTING,
+            ),
+          ],
+        ),
       ),
     );
   }

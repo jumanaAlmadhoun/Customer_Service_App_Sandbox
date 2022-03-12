@@ -15,6 +15,7 @@ class RentMachineDashboard extends StatefulWidget {
 class _RentMachineDashboardState extends State<RentMachineDashboard> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     List<RfaMachine> machines =
         Provider.of<RfaMachinesProvider>(context, listen: false).machines;
     machines.sort((a, b) => b.status!.compareTo(a.status!));
@@ -22,31 +23,86 @@ class _RentMachineDashboardState extends State<RentMachineDashboard> {
         appBar: AppBar(
           title: Text(getTranselted(context, STA_RENT_MACHINES)!),
         ),
-        body: ListView.builder(
-          itemCount: machines.length,
-          itemBuilder: (context, i) {
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: APP_BAR_COLOR, width: 1),
-                    borderRadius: BorderRadius.circular(15),
-                    color: machines[i].status == 'With Customer'
-                        ? NOT_CONTACTED_COLOR
-                        : CONTACTED_COLOR),
-                child: ListTile(
-                  title: Text(
-                    machines[i].machineModel!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(machines[i].serialNumber!,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: Text(machines[i].location!,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  leading: Text(machines[i].status!,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
-              ),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < mobileWidth) {
+              return ListView.builder(
+                itemCount: machines.length,
+                itemBuilder: (context, i) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: APP_BAR_COLOR, width: 1),
+                          borderRadius: BorderRadius.circular(15),
+                          color: machines[i].status == 'With Customer'
+                              ? NOT_CONTACTED_COLOR
+                              : CONTACTED_COLOR),
+                      child: ListTile(
+                        title: Text(
+                          machines[i].machineModel!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(machines[i].serialNumber!,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                        trailing: Text(machines[i].location!,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                        leading: Text(machines[i].status!,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: constraints.maxWidth < 750 ? 2 : 3,
+                  childAspectRatio: constraints.maxWidth < 750 ? 2.5 : 2),
+              itemCount: machines.length,
+              itemBuilder: (context, i) {
+                return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: APP_BAR_COLOR, width: 1),
+                          borderRadius: BorderRadius.circular(15),
+                          color: machines[i].status == 'With Customer'
+                              ? NOT_CONTACTED_COLOR
+                              : CONTACTED_COLOR),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(machines[i].status!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          Text(
+                            machines[i].machineModel!,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          Text(machines[i].serialNumber!,
+                              style: TextStyle(
+                                  color: Colors.grey.shade700,
+                                  fontWeight: FontWeight.bold)),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          Text(machines[i].location!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ));
+              },
             );
           },
         ));

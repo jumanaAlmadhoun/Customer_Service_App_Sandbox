@@ -35,66 +35,68 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranselted(context, TIC_SITE_VISIT)!),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, brandSelectionRoute);
-              },
-              icon: const Icon(Icons.add))
-        ],
-      ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: .70,
-        crossAxisSpacing: 0,
-        mainAxisSpacing: 0,
-        children: [
-          CategoryItem(
-            image: IMG_OPEN_TICKETS,
-            title: getTranselted(context, STA_OPEN)!,
-            number: openTickets,
-            onTap: () {
-              Navigator.pushNamed(context, creatorOpenTicketsRoute);
-            },
+        appBar: AppBar(
+          title: Text(getTranselted(context, TIC_SITE_VISIT)!),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, brandSelectionRoute);
+                },
+                icon: const Icon(Icons.add))
+          ],
+        ),
+        body: LayoutBuilder(
+          builder: (context, constraints) => GridView.count(
+            crossAxisCount: constraints.maxWidth < mobileWidth ? 2 : 3,
+            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.1,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+            children: [
+              CategoryItem(
+                image: IMG_OPEN_TICKETS,
+                title: getTranselted(context, STA_OPEN)!,
+                number: openTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorOpenTicketsRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_WAITING_TICKETS,
+                title: getTranselted(context, STA_WAITING)!,
+                number: readyToAssignTickets,
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, creatorReadyToAssignTicketsRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_QUEUE_TICKETS,
+                title: getTranselted(context, STA_QUEUE)!,
+                number: queueTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorQueueTicketsRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_ASSIGNED_TICKETS,
+                title: getTranselted(context, STA_ASSIGNED)!,
+                number: assignedTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorAssignedTicketRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_PENDING_TICKETS,
+                title: getTranselted(context, STA_PENDING)!,
+                number: pendingTickets,
+              ),
+              CategoryItem(
+                image: IMG_WORKSHO_REPORT,
+                title: getTranselted(context, STA_WORKSHOP)!,
+                number: pendingTickets,
+              ),
+            ],
           ),
-          CategoryItem(
-            image: IMG_WAITING_TICKETS,
-            title: getTranselted(context, STA_WAITING)!,
-            number: readyToAssignTickets,
-            onTap: () {
-              Navigator.pushNamed(context, creatorReadyToAssignTicketsRoute);
-            },
-          ),
-          CategoryItem(
-            image: IMG_QUEUE_TICKETS,
-            title: getTranselted(context, STA_QUEUE)!,
-            number: queueTickets,
-            onTap: () {
-              Navigator.pushNamed(context, creatorQueueTicketsRoute);
-            },
-          ),
-          CategoryItem(
-            image: IMG_ASSIGNED_TICKETS,
-            title: getTranselted(context, STA_ASSIGNED)!,
-            number: assignedTickets,
-            onTap: () {
-              Navigator.pushNamed(context, creatorAssignedTicketRoute);
-            },
-          ),
-          CategoryItem(
-            image: IMG_PENDING_TICKETS,
-            title: getTranselted(context, STA_PENDING)!,
-            number: pendingTickets,
-          ),
-          CategoryItem(
-            image: IMG_WORKSHO_REPORT,
-            title: getTranselted(context, STA_WORKSHOP)!,
-            number: pendingTickets,
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 
 class LanguageWidget extends StatefulWidget {
-  const LanguageWidget({Key? key}) : super(key: key);
+  Color color;
+  LanguageWidget({this.color = Colors.white, Key? key}) : super(key: key);
 
   @override
   _LanguageWidgetState createState() => _LanguageWidgetState();
@@ -14,9 +15,9 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton(
-      icon: const Icon(
+      icon: Icon(
         Icons.language,
-        color: Colors.white,
+        color: widget.color,
       ),
       underline: Container(),
       items: const [

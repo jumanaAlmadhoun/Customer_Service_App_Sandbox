@@ -31,3 +31,4 @@ const String IMG_BEANS = 'Assets/Images/beans.png';
 
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);
+const mobileWidth = 635;

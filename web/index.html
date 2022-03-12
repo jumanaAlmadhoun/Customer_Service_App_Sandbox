@@ -32,7 +32,39 @@
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+       https://developers.google.com/web/fundamentals/primers/service-workers --> 
+       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+     <script>const firebaseConfig = {
+     
+       apiKey: "AIzaSyBLL2y-UfzpE3PrISzAOnonnj-_Qfd9sv0",
+     
+       authDomain: "sanremov2.firebaseapp.com",
+     
+       databaseURL: "https://sanremov2-default-rtdb.firebaseio.com",
+     
+       projectId: "sanremov2",
+     
+       storageBucket: "sanremov2.appspot.com",
+     
+       messagingSenderId: "883503481041",
+     
+       appId: "1:883503481041:web:c6c8c2049ca34a682185f0",
+     
+       measurementId: "G-BHX62ER2LF"
+     
+     };
+     
+     
+     // Initialize Firebase
+     var app =firebase.initializeApp(firebaseConfig);
+     const firestore = getFirestore(app);
+     const auth = getAuth(app);
+  </script>
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
