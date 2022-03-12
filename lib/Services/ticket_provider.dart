@@ -19,6 +19,7 @@ class TicketProvider with ChangeNotifier {
       var response = await http.get(Uri.parse('$DB_URL$from.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {
+        print(value);
         tickets.add(
           Ticket(
             machineModel: value[Ticket.MACHINE_MODEL] ?? '',
@@ -62,7 +63,7 @@ class TicketProvider with ChangeNotifier {
       _tickets = tickets;
       notifyListeners();
     } catch (ex) {
-      print('ex');
+      print(ex);
     }
   }
 
@@ -298,11 +299,25 @@ class TicketProvider with ChangeNotifier {
     }
   }
 
-  // Future<String> getBackQueueTicket(String friebaseUrl) async{
-  //   try{
+  Future<String> getBackQueueTicket(Ticket? ticket, String firebaseUrl) async {
+    try {
+      var response = await http.get(Uri.parse(
+          '$RETURN_TICKET_FROM_QUEUE?$SC_ROW_ADDRESS_KEY=${ticket!.rowAddress}'));
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        var firebaseTicke = await http.get(Uri.parse(firebaseUrl));
+        var ticketData = jsonDecode(firebaseTicke.body) as Map<String, dynamic>;
 
-  //   }catch(ex){
-
-  //   }
-  // }
+        await http.post(Uri.parse('$DB_URL$DB_READY_TO_ASSIGN_TICKETS.json'),
+            body: jsonEncode(ticketData));
+        await http.delete(Uri.parse(firebaseUrl));
+        return Future.value(SC_SUCCESS_RESPONSE);
+      } else {
+        return Future.value(SC_FAILED_RESPONSE);
+      }
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
 }

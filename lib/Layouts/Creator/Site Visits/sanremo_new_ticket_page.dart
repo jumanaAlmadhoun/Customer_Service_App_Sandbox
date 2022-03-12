@@ -43,6 +43,13 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   bool _freeVisit = false;
   bool _freeParts = false;
   bool _readyToAssign = false;
+  bool _isUrgnt = false;
+
+  List<String> techs = [];
+  List<String>? machineModels = [];
+  List<Customer>? allCustomers = [];
+  List<Machine>? allMachines = [];
+
   TextEditingController? selectedModel = TextEditingController();
   TextEditingController? customerNumber = TextEditingController();
   TextEditingController? customerName = TextEditingController();
@@ -72,14 +79,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   String _techName = 'N/A';
   TextEditingController selectedCity = TextEditingController();
   String _selectedReg = '';
-  List<String> techs = [];
-  List<String>? machineModels = [];
-  List<Customer>? allCustomers;
-  List<Machine>? allMachines;
   Customer? selectedCustomer;
   Machine? selectedMachines;
   Map<String, dynamic>? ticketHeader;
-  Map<String, dynamic>? ticketBody;
   String? _assignDirection = '';
   String? sheetID;
   String? status;

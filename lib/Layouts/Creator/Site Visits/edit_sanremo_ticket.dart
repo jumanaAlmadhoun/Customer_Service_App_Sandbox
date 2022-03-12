@@ -114,7 +114,6 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       setState(() {
         _isLoading = false;
         ticket = widget.argTicket;
-        print(ticket);
         getData();
       });
     });
@@ -666,17 +665,43 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
 
   void getData() {
     try {
+      // Ticket.CAFE_NAME: cafeName!.text.trim(),
+      // Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
+      // Ticket.CUSTOMER_NAME: customerName!.text.trim(),
+      // Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
+      // Ticket.VISIT_DATE: visitDate!.text,
+      // Ticket.CREATION_DATE: DateTime.now().toString().split(' ')[0],
+      // Ticket.SUB_CATEGORY: selectedCategory,
+      // Ticket.CITY: selectedCity.text.trim(),
+      // Ticket.REGION: _selectedReg,
+      // Ticket.TECH_NAME: _techName,
+      // Ticket.DID_CONTACT: _didContact,
+      // Ticket.MAIN_CATEGORY: Ticket.SITE_VISIT_CATEGORY,
+      // Ticket.MACHINE_MODEL: selectedModel!.text.trim(),
+      // Ticket.SERIAL_NUMBER: machineNumber!.text.trim(),
+      // Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
+      // Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
+      // Ticket.PROBLEM_DESC: problemDesc!.text.trim(),
+      // Ticket.RECOMMENDATION: recommendation!.text.trim(),
+      // Ticket.VISIT_START_TIME: from!.text.trim(),
+      // Ticket.VISIT_END_TIME: to!.text.trim(),
+      // Ticket.FREE_PARTS: _freeParts,
+      // Ticket.FREE_VISIT: _freeVisit,
+      // Ticket.SOLVED: _solveByPhone
+
+      cafeName!.text = ticket!.cafeName!;
+      customerMobile!.text = ticket!.customerMobile!;
+      customerName!.text = ticket!.customerName!;
+      extraNumber!.text = ticket!.extraContactNumber!;
+      selectedCategory = ticket!.subCategory!;
+      city!.text = ticket!.city!;
+      _selectedReg = ticket!.region!;
+
       selectedModel!.text = ticket!.machineModel!;
       customerNumber!.text = ticket!.customerNumber!;
-      customerName!.text = ticket!.customerName!;
-      customerMobile!.text = ticket!.customerMobile!;
-      cafeName!.text = ticket!.cafeName!;
       cafeLocation!.text = ticket!.cafeLocation!;
-      city!.text = ticket!.city!;
       _selectedCity.text = ticket!.city!;
-      _selectedReg = ticket!.region!;
       _readyToAssign = ticket!.fromTable == DB_READY_TO_ASSIGN_TICKETS;
-      extraNumber!.text = ticket!.extraContactNumber!;
       machineNumber!.text = ticket!.machineNumber!;
       problemDesc!.text = ticket!.problemDesc!;
       recommendation!.text = ticket!.recomendation!;

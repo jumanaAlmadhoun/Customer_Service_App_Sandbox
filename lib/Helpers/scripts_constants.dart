@@ -22,3 +22,5 @@ const String OPEN_NEW_PICUP_TICKET =
     'https://script.google.com/macros/s/AKfycbxUEv-DERzZaEdp8pVFW2L0ZYy5_2ZrK34dY7X9dG6UhTcevOlF8tc3hiiTD_ac47tM/exec';
 const String EDIT_PICKUP_TICKET_SCRIPT =
     'https://script.google.com/macros/s/AKfycbwHBf0k0z-_tYFTLRD7jrNJ9Gqe4bENY0FczUoxHtkGEylXneSIn-esV4LrXGfEnhwcMA/exec';
+const String RETURN_TICKET_FROM_QUEUE =
+    'https://script.google.com/macros/s/AKfycbyG1_s2V1f-Mbb_XQ6uW01cS7fx0vkw7PDt3llwMLW_vyYzpu3MFh5bJrE5IXbmmmXN/exec';
