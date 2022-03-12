@@ -14,7 +14,7 @@ class CategoryItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: Colors.white,

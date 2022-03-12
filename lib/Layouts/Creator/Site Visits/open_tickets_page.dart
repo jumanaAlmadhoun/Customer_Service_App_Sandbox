@@ -48,45 +48,59 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _search
-            ? TextFormField(
-                decoration: InputDecoration(
-                    hintText: getTranselted(context, LBL_SEARCH)!),
-              )
-            : Text(getTranselted(context, STA_OPEN)!),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _search = !_search;
-              });
-            },
-            icon: const Icon(Icons.search),
-          )
-        ],
-      ),
-      body: _isLoading
-          ? const SpinKitRipple(
-              color: APP_BAR_COLOR,
-            )
-          : ListView.builder(
-              itemCount: _tickets.length,
-              itemBuilder: (context, i) {
-                return OpenTicketWidget(
-                  cafeName: _tickets[i].cafeName,
-                  city: _tickets[i].city,
-                  customerMobile: _tickets[i].extraContactNumber,
-                  customerName: _tickets[i].customerName,
-                  date: _tickets[i].creationDate,
-                  didContact: _tickets[i].didContact,
-                  onTap: () {
-                    Navigator.pushNamed(context, sanremoEditTicketRoute,
-                        arguments: _tickets[i]);
-                  },
-                );
+        appBar: AppBar(
+          title: _search
+              ? TextFormField(
+                  decoration: InputDecoration(
+                      hintText: getTranselted(context, LBL_SEARCH)!),
+                )
+              : Text(getTranselted(context, STA_OPEN)!),
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _search = !_search;
+                });
               },
-            ),
-    );
+              icon: const Icon(Icons.search),
+            )
+          ],
+        ),
+        body: _isLoading
+            ? const SpinKitRipple(
+                color: APP_BAR_COLOR,
+              )
+            : LayoutBuilder(
+                builder: (context, constraints) {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: constraints.maxWidth < mobileWidth
+                            ? 1
+                            : constraints.maxWidth > 750
+                                ? 3
+                                : 2,
+                        childAspectRatio: constraints.maxWidth < mobileWidth
+                            ? 2.5
+                            : constraints.maxWidth < 750
+                                ? 1.3
+                                : 1.2),
+                    itemCount: _tickets.length,
+                    itemBuilder: (context, i) {
+                      return OpenTicketWidget(
+                        cafeName: _tickets[i].cafeName,
+                        city: _tickets[i].city,
+                        customerMobile: _tickets[i].extraContactNumber,
+                        customerName: _tickets[i].customerName,
+                        date: _tickets[i].creationDate,
+                        didContact: _tickets[i].didContact,
+                        onTap: () {
+                          Navigator.pushNamed(context, sanremoEditTicketRoute,
+                              arguments: _tickets[i]);
+                        },
+                      );
+                    },
+                  );
+                },
+              ));
   }
 }

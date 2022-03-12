@@ -70,7 +70,11 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
       drawer: const CreatorDrawerWidget(),
       body: LayoutBuilder(
         builder: (context, constraints) => GridView.count(
-          crossAxisCount: constraints.maxWidth < mobileWidth ? 2 : 3,
+          crossAxisCount: constraints.maxWidth < mobileWidth
+              ? 2
+              : constraints.maxWidth > 850
+                  ? 4
+                  : 3,
           childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.1,
           crossAxisSpacing: 0,
           mainAxisSpacing: 0,

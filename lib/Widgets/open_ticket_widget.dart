@@ -33,6 +33,7 @@ class OpenTicketWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 color: didContact! ? CONTACTED_COLOR : NOT_CONTACTED_COLOR),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,

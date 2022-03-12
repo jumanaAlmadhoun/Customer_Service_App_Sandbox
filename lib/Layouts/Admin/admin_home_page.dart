@@ -43,7 +43,13 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return GridView.count(
-            crossAxisCount: constraints.maxWidth < mobileWidth ? 2 : 3,
+            crossAxisCount: constraints.maxWidth < mobileWidth
+                ? 2
+                : constraints.maxWidth < mobileWidth
+                    ? 2
+                    : constraints.maxWidth > 850
+                        ? 4
+                        : 3,
             childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 0.9,
             children: [
               totalRfaMachines == -1
