@@ -47,7 +47,7 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
                 ? 2
                 : constraints.maxWidth < mobileWidth
                     ? 2
-                    : constraints.maxWidth > 850
+                    : constraints.maxWidth > ipadWidth
                         ? 4
                         : 3,
             childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 0.9,
