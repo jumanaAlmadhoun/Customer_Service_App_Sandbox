@@ -31,6 +31,9 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
   List<SparePart> _allParts = [];
   List<SparePart> _selectedParts = [];
   List<Widget> _machineCheckDesign = [];
+  List<Widget> _spareParts = [];
+  bool _isCash = false;
+  List<Ticket> _tickets = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -43,6 +46,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
     setState(() {
       _isLoading = true;
     });
+
     Provider.of<SparePartProvider>(context, listen: false)
         .fetchSpareParts()
         .then((value) {
@@ -53,6 +57,33 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
     });
 
     initMachineCheckDesign();
+  }
+
+  final formKey = GlobalKey<FormState>();
+  String? validateNote(value) {
+    if (value.isEmpty) {
+      return 'required';
+    } else {
+      return null;
+    }
+  }
+
+  String? validatePartNum(value) {
+    /*var isNull = _allParts.firstWhere(
+        (element) => element.partNo!.toUpperCase() == value!.toUpperCase());*/
+    if (value.isEmpty) {
+      return 'أدخل رقم القطعة الصحيح';
+    } else {
+      return null;
+    }
+  }
+
+  String? validatePartQuantity(value) {
+    if (value.isEmpty || value == 0.toString()) {
+      return 'أدخل الكمية الصحيحة';
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -107,54 +138,67 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       MachineChekWidget(
         title: 'قطع مكسورة أو مفقودة',
         keyJson: '1',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'نظافة المكينة العامة',
         keyJson: '2',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص وجود تهريبات في المكينة',
         keyJson: '3',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص العدادات',
         keyJson: '4',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص مصدر الماء',
         keyJson: '5',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص جودة تسخين الحليب',
         keyJson: '6',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص التوصيلات والسلامة العامة',
         keyJson: '7',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص ضغط المضخة الرئيسية (بار)',
         keyJson: '8',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص وحدة التحكم بالبخار',
         keyJson: '9',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص قوة البخار',
         keyJson: '10',
+        validate: validateNote,
       ),
       MachineChekWidget(
         title: 'فحص سرعة الفتح والاغلاق للبخار',
         keyJson: '11',
+        validate: validateNote,
       ),
       TextWidget(
         title: 'عدد الأكواب',
         jsonKey: 'total_cups',
+        validate: validateNote,
       ),
       TextWidget(
         title: 'إصدار برنامج التشغيل',
         jsonKey: 'os',
+        validate: validateNote,
       ),
       GroupCheckWidget(
         title: 'ضغط رأس المجموعة',

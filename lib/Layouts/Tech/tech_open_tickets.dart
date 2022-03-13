@@ -58,7 +58,7 @@ class _TechOpenTicketPageState extends State<TechOpenTicketPage>
               });
             },
             icon: const Icon(Icons.search),
-          )
+          ),
         ],
       ),
       body: _isLoading

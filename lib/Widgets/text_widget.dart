@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../Helpers/layout_constants.dart';
+import '../Helpers/layout_constants.dart';
 
 class TextWidget extends StatefulWidget {
-  TextWidget(
-      {this.jsonKey,
-      this.title,
-      this.direction = TextDirection.rtl,
-      this.validate});
+  TextWidget({this.jsonKey, this.title, this.validate});
   TextEditingController controller = TextEditingController();
   String? jsonKey;
   String? title;
-  TextDirection direction;
   String? Function(String?)? validate;
 
   @override
@@ -31,11 +26,11 @@ class _TextWidgetState extends State<TextWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Directionality(
-            textDirection: widget.direction,
+            textDirection: TextDirection.rtl,
             child: TextFormField(
+              validator: widget.validate,
               decoration: InputDecoration(label: Text(widget.title!)),
               controller: widget.controller,
-              validator: widget.validate,
             ),
           ),
         ),
