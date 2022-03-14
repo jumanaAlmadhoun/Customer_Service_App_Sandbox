@@ -67,7 +67,9 @@ class MobileCreateHomePage extends StatelessWidget {
                   title: getTranselted(context, TIC_PICK_UP)!,
                   image: IMG_PICKUP,
                   number: pickupTickets,
-                ),
+                  onTap: () {
+                    Navigator.pushNamed(context, creatorPickupTicketsRoute);
+                  }),
           CategoryItem(
             title: getTranselted(context, TIC_ACCOUNTING)!,
             image: IMG_ACCOUNTING,

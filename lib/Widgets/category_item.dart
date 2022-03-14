@@ -19,7 +19,6 @@ class CategoryItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(13),
-          border: Border.all(width: 0.7),
           boxShadow: const [
             BoxShadow(
               offset: Offset(0, 17),

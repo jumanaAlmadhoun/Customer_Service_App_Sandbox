@@ -93,6 +93,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                         customerName: _tickets[i].customerName,
                         date: _tickets[i].creationDate,
                         didContact: _tickets[i].didContact,
+                        machineNumber: _tickets[i].machineNumber,
                         onTap: () {
                           Navigator.pushNamed(context, sanremoEditTicketRoute,
                               arguments: _tickets[i]);

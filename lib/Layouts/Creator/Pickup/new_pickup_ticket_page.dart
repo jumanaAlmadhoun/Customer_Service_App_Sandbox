@@ -59,9 +59,9 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
   TextEditingController _selectedCity = TextEditingController();
   String _selectedReg = '';
   List<String> techs = [];
-  List<String>? machineModels;
-  List<Customer>? allCustomers;
-  List<Machine>? allMachines;
+  List<String>? machineModels = [];
+  List<Customer>? allCustomers = [];
+  List<Machine>? allMachines = [];
   Customer? selectedCustomer;
   Machine? selectedMachines;
   Map<String, dynamic>? ticketHeader;
@@ -448,9 +448,8 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
 
   void fetchCustomerInfo(BuildContext context, Machine? machine) {
     try {
-      print(machine!.machineModel);
       selectedCustomer = allCustomers!.firstWhere((element) =>
-          machine.customerNumber!.toUpperCase().trim() ==
+          machine!.customerNumber!.toUpperCase().trim() ==
           element.customerNumber!.toUpperCase().trim());
       if (selectedCustomer != null) {
         setState(() {
@@ -459,7 +458,7 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
           customerMobile!.text = selectedCustomer!.mobile!;
           customerBalance!.text = selectedCustomer!.balance!.abs().toString();
           customerNumber!.text = selectedCustomer!.customerNumber!;
-          selectedModel!.text = machine.machineModel.toString();
+          selectedModel!.text = machine!.machineModel.toString();
         });
       }
     } catch (ex) {

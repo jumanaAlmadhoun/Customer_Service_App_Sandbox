@@ -63,6 +63,7 @@ class Ticket with ChangeNotifier {
 
   static const String PICKUP_CATEGORY = 'Pickup';
   static const String OUT_MACHINE = 'exOut';
+  static const String IS_URGENT = 'isUrgent';
 
   Ticket(
       {this.assignDate,
@@ -99,7 +100,8 @@ class Ticket with ChangeNotifier {
       this.fromTable,
       this.laborCharges,
       this.deliveryItems,
-      this.deliveryType});
+      this.deliveryType,
+      this.isUrgent});
 
   String? machineModel;
   String? assignDate;
@@ -135,5 +137,6 @@ class Ticket with ChangeNotifier {
   String? fromTable;
   double? laborCharges;
   String? deliveryType;
+  bool? isUrgent;
   Map<String, dynamic>? deliveryItems;
 }
