@@ -76,12 +76,12 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: constraints.maxWidth < mobileWidth
                             ? 1
-                            : constraints.maxWidth > 750
+                            : constraints.maxWidth > ipadWidth
                                 ? 3
                                 : 2,
                         childAspectRatio: constraints.maxWidth < mobileWidth
                             ? 2.5
-                            : constraints.maxWidth < 750
+                            : constraints.maxWidth < ipadWidth
                                 ? 1.3
                                 : 1.2),
                     itemCount: _tickets.length,

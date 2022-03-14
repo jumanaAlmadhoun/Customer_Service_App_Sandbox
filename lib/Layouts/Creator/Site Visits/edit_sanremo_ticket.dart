@@ -132,8 +132,12 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
             key: formKey,
             child: LayoutBuilder(
               builder: (context, constraints) => GridView.count(
-                padding: const EdgeInsets.only(top: 20),
-                crossAxisCount: constraints.maxWidth < mobileWidth ? 1 : 2,
+                padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                crossAxisCount: constraints.maxWidth < mobileWidth
+                    ? 1
+                    : constraints.maxWidth > ipadWidth
+                        ? 3
+                        : 2,
                 mainAxisSpacing: 0.0,
                 crossAxisSpacing: 15,
                 childAspectRatio: constraints.maxWidth < mobileWidth ? 7.5 : 4,
@@ -159,7 +163,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: machineNumber,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_MACHINE_NUMBER)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {
                       selectedMachines = findMachine(value);
@@ -177,7 +181,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: customerNumber,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CUSTOMER_NUMBER)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {
                       selectedCustomer = findCustomer(value);
@@ -207,7 +211,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                                       ? Colors.green
                                       : Colors.red),
                             ),
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                           ),
                           onChanged: (value) {},
                         )
@@ -217,7 +221,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: customerName,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CUSTOMER_NAME)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -227,7 +231,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_MOBILE)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -238,7 +242,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     maxLength: 10,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_EXTRA_NUMBER)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -247,7 +251,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: cafeName,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CAFE_NAME)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -256,7 +260,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: cafeLocation,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_CAFE_LOCATION)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -265,7 +269,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: problemDesc,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_PROBLEM_DESC)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -274,7 +278,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: recommendation,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_RECOMMENDATION)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {},
                   ),
@@ -283,7 +287,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: visitDate,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_VISIT_SCHEDULE)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onTap: () => pickDate(context),
                   ),
@@ -292,7 +296,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: from,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_FROM)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onTap: () => pickTime(context, from!),
                   ),
@@ -301,7 +305,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     controller: to,
                     decoration: InputDecoration(
                       label: Text(getTranselted(context, LBL_TO)!),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                     onTap: () => pickTime(context, to!),
                   ),

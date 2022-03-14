@@ -49,7 +49,7 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
           builder: (context, constraints) => GridView.count(
             crossAxisCount: constraints.maxWidth < mobileWidth
                 ? 2
-                : constraints.maxWidth > 850
+                : constraints.maxWidth > ipadWidth
                     ? 4
                     : 3,
             childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.0,

@@ -71,23 +71,35 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
           ? const SpinKitRipple(
               color: APP_BAR_COLOR,
             )
-          : ListView.builder(
-              itemCount: _tickets.length,
-              itemBuilder: (context, i) {
-                return OpenTicketWidget(
-                  cafeName: _tickets[i].cafeName,
-                  city: _tickets[i].city,
-                  customerMobile: _tickets[i].extraContactNumber,
-                  customerName: _tickets[i].customerName,
-                  date: _tickets[i].creationDate,
-                  didContact: _tickets[i].didContact,
-                  onTap: () {
-                    Navigator.pushNamed(context, sanremoEditTicketRoute,
-                        arguments: _tickets[i]);
-                  },
-                );
-              },
-            ),
+          : LayoutBuilder(builder: (context, constraints) {
+              return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constraints.maxWidth < mobileWidth
+                          ? 1
+                          : constraints.maxWidth > ipadWidth
+                              ? 3
+                              : 2,
+                      childAspectRatio: constraints.maxWidth < mobileWidth
+                          ? 2.5
+                          : constraints.maxWidth < ipadWidth
+                              ? 1.3
+                              : 1.2),
+                  itemCount: _tickets.length,
+                  itemBuilder: (context, i) {
+                    return OpenTicketWidget(
+                      cafeName: _tickets[i].cafeName,
+                      city: _tickets[i].city,
+                      customerMobile: _tickets[i].extraContactNumber,
+                      customerName: _tickets[i].customerName,
+                      date: _tickets[i].creationDate,
+                      didContact: _tickets[i].didContact,
+                      onTap: () {
+                        Navigator.pushNamed(context, sanremoEditTicketRoute,
+                            arguments: _tickets[i]);
+                      },
+                    );
+                  });
+            }),
     );
   }
 }
