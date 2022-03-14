@@ -17,9 +17,6 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
     return Row(
       children: [
         Checkbox(value: widget.value, onChanged: widget.onChanged),
-        const SizedBox(
-          width: 10,
-        ),
         Text(getTranselted(context, widget.title)!),
       ],
     );

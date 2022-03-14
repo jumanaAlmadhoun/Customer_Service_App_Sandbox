@@ -132,10 +132,11 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
             key: formKey,
             child: LayoutBuilder(
               builder: (context, constraints) => GridView.count(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.all(10),
                 crossAxisCount: constraints.maxWidth < mobileWidth ? 1 : 2,
+                shrinkWrap: true,
                 mainAxisSpacing: 0.0,
-                crossAxisSpacing: 15,
+                crossAxisSpacing: 0.0,
                 childAspectRatio: constraints.maxWidth < mobileWidth ? 7.5 : 4,
                 children: [
                   SearchField(
@@ -376,7 +377,6 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                           groupValue: _assignDirection!,
                           onChanged: (value) => setState(() {
                             _assignDirection = value;
-                            print(_assignDirection);
                           }),
                           items: [
                             getTranselted(context, LBL_DIRECT_ASSIGN)!,
@@ -440,18 +440,14 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                   ButtonWidget(
                     text: getTranselted(context, BTN_SUBMIT)!,
                     onTap: () async {
-                      print('Here');
-
                       setState(() {
                         _isLoading = true;
                       });
                       String response = await validateReport();
-                      print('Here2');
                       setState(() {
                         _isLoading = false;
                       });
                       if (response == SC_SUCCESS_RESPONSE) {
-                        print('Here3');
                         CoolAlert.show(
                           context: context,
                           type: CoolAlertType.success,
@@ -464,7 +460,6 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                                 creatorHomeRoute, (route) => route.isFirst);
                           },
                         );
-                        print('Here4');
                       } else if (response == SC_FAILED_RESPONSE) {
                         CoolAlert.show(
                             context: context,
@@ -540,9 +535,8 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
 
   void fetchCustomerInfo(BuildContext context, Machine? machine) {
     try {
-      print(machine!.machineModel);
       selectedCustomer = allCustomers!.firstWhere((element) =>
-          machine.customerNumber!.toUpperCase().trim() ==
+          machine!.customerNumber!.toUpperCase().trim() ==
           element.customerNumber!.toUpperCase().trim());
       if (selectedCustomer != null) {
         setState(() {
@@ -551,7 +545,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
           customerMobile!.text = selectedCustomer!.mobile!;
           customerBalance!.text = selectedCustomer!.balance!.abs().toString();
           customerNumber!.text = selectedCustomer!.customerNumber!;
-          selectedModel!.text = machine.machineModel.toString();
+          selectedModel!.text = machine!.machineModel.toString();
         });
       }
     } catch (ex) {

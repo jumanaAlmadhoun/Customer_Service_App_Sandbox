@@ -11,13 +11,15 @@ class OpenTicketWidget extends StatelessWidget {
       this.customerName,
       this.date,
       this.didContact,
-      this.onTap});
+      this.onTap,
+      this.machineNumber});
 
   final String? customerName;
   final String? customerMobile;
   final String? cafeName;
   final String? date;
   final String? city;
+  final String? machineNumber;
   final bool? didContact;
   final onTap;
 
@@ -33,47 +35,39 @@ class OpenTicketWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 color: didContact! ? CONTACTED_COLOR : NOT_CONTACTED_COLOR),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
                   getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,
                   textAlign: TextAlign.left,
                   style: TICKET_TEXT_STYLE,
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
                 Text(
                   getTranselted(context, LBL_NAME)! + ': ' + customerName!,
                   textAlign: TextAlign.left,
                   style: TICKET_TEXT_STYLE,
                 ),
-                const SizedBox(
-                  height: 8,
+                Text(
+                  getTranselted(context, LBL_MACHINE_NUMBER)! +
+                      ': ' +
+                      machineNumber!,
+                  textAlign: TextAlign.left,
+                  style: TICKET_TEXT_STYLE,
                 ),
                 Text(
                   getTranselted(context, LBL_PHONE)! + ': ' + customerMobile!,
                   textAlign: TextAlign.left,
                   style: TICKET_TEXT_STYLE,
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
                 Text(
                   getTranselted(context, LBL_CITY)! + ': ' + city!,
                   textAlign: TextAlign.left,
                   style: TICKET_TEXT_STYLE,
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
                 Text(
                   getTranselted(context, LBL_DATE)! + ': ' + date!,
                   textAlign: TextAlign.left,
                   style: TICKET_TEXT_STYLE,
-                ),
-                const SizedBox(
-                  height: 8,
                 ),
               ],
             ),

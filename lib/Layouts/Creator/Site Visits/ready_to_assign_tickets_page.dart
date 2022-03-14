@@ -81,6 +81,7 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                   customerName: _tickets[i].customerName,
                   date: _tickets[i].creationDate,
                   didContact: _tickets[i].didContact,
+                  machineNumber: _tickets[i].machineNumber,
                   onTap: () {
                     Navigator.pushNamed(context, sanremoEditTicketRoute,
                         arguments: _tickets[i]);

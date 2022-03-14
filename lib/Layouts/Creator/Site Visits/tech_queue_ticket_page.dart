@@ -84,6 +84,7 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
                   customerName: widget.tech!.queueTicket![i].customerName,
                   date: widget.tech!.queueTicket![i].creationDate,
                   didContact: widget.tech!.queueTicket![i].didContact,
+                  machineNumber: widget.tech!.queueTicket![i].machineNumber,
                 ),
               );
             } catch (ex) {

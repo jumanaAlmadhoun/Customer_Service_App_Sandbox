@@ -69,5 +69,6 @@
   "delivery_new":"New Machines",
   "delivery_cus":"Customer Machines",
   "get_back":"Get Back Ticket",
-  "queue_assign":"Send To Tech"
+  "queue_assign":"Send To Tech",
+  "urgent":"Urgent"
 }

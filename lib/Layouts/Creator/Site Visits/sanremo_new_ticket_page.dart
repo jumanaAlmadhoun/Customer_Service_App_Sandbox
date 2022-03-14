@@ -89,14 +89,12 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    print('Dep Here');
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPush() async {
-    print('Push Here');
     super.didPush();
     setState(() {
       _isLoading = true;
@@ -159,7 +157,6 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   if (selectedMachines != null) {
                     fetchCustomerInfo(context, selectedMachines!);
                   } else {
-                    debugPrint;
                     customerNumber!.text = '';
                     clearCustomerValues();
                   }
@@ -353,7 +350,6 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                       groupValue: _assignDirection!,
                       onChanged: (value) => setState(() {
                         _assignDirection = value;
-                        print(_assignDirection);
                       }),
                       items: [
                         getTranselted(context, LBL_DIRECT_ASSIGN)!,
@@ -375,6 +371,15 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                       },
                     )
                   : Container(),
+              CustomCheckBox(
+                title: LBL_URGENT,
+                value: _isUrgnt,
+                onChanged: (value) {
+                  setState(() {
+                    _isUrgnt = value!;
+                  });
+                },
+              ),
               CustomCheckBox(
                 title: LBL_DID_CONTACT,
                 value: _didContact,
@@ -520,9 +525,8 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
 
   void fetchCustomerInfo(BuildContext context, Machine? machine) {
     try {
-      print(machine!.machineModel);
       selectedCustomer = allCustomers!.firstWhere((element) =>
-          machine.customerNumber!.toUpperCase().trim() ==
+          machine!.customerNumber!.toUpperCase().trim() ==
           element.customerNumber!.toUpperCase().trim());
       if (selectedCustomer != null) {
         setState(() {
@@ -531,7 +535,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
           customerMobile!.text = selectedCustomer!.mobile!;
           customerBalance!.text = selectedCustomer!.balance!.abs().toString();
           customerNumber!.text = selectedCustomer!.customerNumber!;
-          selectedModel!.text = machine.machineModel.toString();
+          selectedModel!.text = machine!.machineModel.toString();
         });
       }
     } catch (ex) {
@@ -645,7 +649,8 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
       Ticket.VISIT_END_TIME: to!.text.trim(),
       Ticket.FREE_PARTS: _freeParts,
       Ticket.FREE_VISIT: _freeVisit,
-      Ticket.SOLVED: _solveByPhone
+      Ticket.SOLVED: _solveByPhone,
+      Ticket.IS_URGENT: _isUrgnt
     };
   }
 

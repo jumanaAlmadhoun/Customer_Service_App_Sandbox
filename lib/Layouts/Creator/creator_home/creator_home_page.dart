@@ -29,13 +29,11 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    print('shady');
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPush() async {
-    // TODO: implement didPush
     super.didPush();
     readJson();
     Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
@@ -45,9 +43,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
 
   @override
   void didPopNext() {
-    // TODO: implement didPopNext
     super.didPopNext();
-    print('object');
     readJson();
     Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
     Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
@@ -55,11 +51,10 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth < mobileWidth) {
-        return const MobileCreateHomePage();
+        return MobileCreateHomePage();
       } else {
         return WebCreateHomePage(
           constraints: constraints.maxWidth,
