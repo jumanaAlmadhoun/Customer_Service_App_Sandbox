@@ -80,6 +80,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Customer Service App',
         theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
             canvasColor: BACK_GROUND_COLOR,
             primarySwatch: Colors.brown,
             iconTheme: const IconThemeData(color: ICON_COLOR),

@@ -60,8 +60,8 @@ class _RentMachineDashboardState extends State<RentMachineDashboard> {
             }
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: constraints.maxWidth < 750 ? 2 : 3,
-                  childAspectRatio: constraints.maxWidth < 750 ? 2.5 : 2),
+                  crossAxisCount: constraints.maxWidth < ipadWidth ? 2 : 3,
+                  childAspectRatio: constraints.maxWidth < ipadWidth ? 2.5 : 2),
               itemCount: machines.length,
               itemBuilder: (context, i) {
                 return Padding(

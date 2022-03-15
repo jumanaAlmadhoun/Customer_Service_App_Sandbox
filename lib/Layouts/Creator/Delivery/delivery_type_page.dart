@@ -22,8 +22,8 @@ class _DeliveryTypePageState extends State<DeliveryTypePage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return GridView.count(
-            crossAxisCount: constraints.maxWidth < mobileWidth ? 2 : 3,
-            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.1,
+            crossAxisCount: constraints.maxWidth < ipadWidth ? 2 : 4,
+            childAspectRatio: 1,
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
             children: [
