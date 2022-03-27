@@ -69,36 +69,24 @@ class TicketProvider with ChangeNotifier {
   Future<String> createNewSanremoTicket(
       Map<String, dynamic>? ticketHeader, String firebaseURL) async {
     try {
+      var chargeResponse = await http.get(Uri.parse(
+          '$DB_URL$DB_CHARGES/${ticketHeader![Ticket.MACHINE_MODEL]}.json'));
+      var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
+      print(chargeData);
+      if (chargeData != null) {
+        String charge = chargeData[Ticket.CHARGES_PRICE].toString();
+        print(charge);
+        ticketHeader.update(
+          Ticket.LABOR_CHRGES,
+          (value) => charge,
+          ifAbsent: () => charge,
+        );
+      }
       var json = jsonEncode(ticketHeader);
-      var response = await http
-          .get(Uri.parse('$OPEN_NEW_TICKET_SCRIPT?ticketHeaders=$json'));
+      var response = await http.get(Uri.parse(
+          '$OPEN_NEW_TICKET_SCRIPT?ticketHeaders=$json&firebaseURL=$firebaseURL'));
       var data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
-        String sheetID = data[SC_SHEET_ID_KEY];
-        String sheetURL = data[SC_SHEET_URL_KEY];
-        String rowAddress = data[SC_ROW_ADDRESS_KEY].toString();
-        String ticketNumber = data[SC_TICKET_NUMBER_KEY].toString();
-        ticketHeader!.update(Ticket.SHEET_ID, (value) => sheetID,
-            ifAbsent: () => sheetID);
-        ticketHeader.update(Ticket.ROW_ADDRESS, (value) => rowAddress,
-            ifAbsent: () => rowAddress);
-        ticketHeader.update(Ticket.SHEET_URL, (value) => sheetURL,
-            ifAbsent: () => sheetURL);
-        ticketHeader.update(Ticket.TICKET_NUMBER, (value) => ticketNumber,
-            ifAbsent: () => ticketNumber);
-        var chargeResponse = await http.get(Uri.parse(
-            '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
-        var chargeData =
-            jsonDecode(chargeResponse.body) as Map<String, dynamic>;
-        if (chargeData != null) {
-          String charge = chargeData[Ticket.CHARGES_PRICE].toString();
-          ticketHeader.update(
-            Ticket.LABOR_CHRGES,
-            (value) => charge,
-            ifAbsent: () => charge,
-          );
-        }
-        await http.post(Uri.parse(firebaseURL), body: jsonEncode(ticketHeader));
         return Future.value(SC_SUCCESS_RESPONSE);
       } else {
         return Future.value(SC_FAILED_RESPONSE);
@@ -114,34 +102,33 @@ class TicketProvider with ChangeNotifier {
 
   Future<String> editSanremoTicket(
       Map<String, dynamic> ticketHeader, Ticket? ticket, String toTable) async {
+    var chargeResponse = await http.get(Uri.parse(
+        '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
+    var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
+    if (chargeData != null) {
+      String charge = chargeData[Ticket.CHARGES_PRICE].toString();
+      ticketHeader.update(
+        Ticket.LABOR_CHRGES,
+        (value) => charge,
+        ifAbsent: () => charge,
+      );
+    }
     var json = jsonEncode(ticketHeader);
-
-    var response = await http
-        .get(Uri.parse('$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$json'));
-
+    var response = await http.get(Uri.parse(
+        '$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$json&firebaseID=${ticket!.firebaseID}&fromTable=${ticket.fromTable}&toTable=$toTable&DB_URL=$DB_URL'));
+    print(response.body);
     var data = jsonDecode(response.body);
     if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
-      var chargeResponse = await http.get(Uri.parse(
-          '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
-      var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
-      if (chargeData != null) {
-        String charge = chargeData[Ticket.CHARGES_PRICE].toString();
-        ticketHeader.update(
-          Ticket.LABOR_CHRGES,
-          (value) => charge,
-          ifAbsent: () => charge,
-        );
-      }
-      if (toTable != ticket!.fromTable) {
-        await http.post(Uri.parse('$DB_URL$toTable.json'),
-            body: jsonEncode(ticketHeader));
-        await http.delete(
-            Uri.parse('$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json'));
-      } else {
-        await http.patch(
-            Uri.parse('$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json'),
-            body: jsonEncode(ticketHeader));
-      }
+      // if (toTable != ticket.fromTable) {
+      //   await http.post(Uri.parse('$DB_URL$toTable.json'),
+      //       body: jsonEncode(ticketHeader));
+      //   await http.delete(
+      //       Uri.parse('$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json'));
+      // } else {
+      //   await http.patch(
+      //       Uri.parse('$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json'),
+      //       body: jsonEncode(ticketHeader));
+      // }
       return Future.value(SC_SUCCESS_RESPONSE);
     }
     return Future.value(SC_FAILED_RESPONSE);

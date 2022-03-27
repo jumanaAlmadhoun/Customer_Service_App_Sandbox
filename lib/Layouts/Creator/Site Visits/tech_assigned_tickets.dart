@@ -35,6 +35,7 @@ class TechAssignedTicketPage extends StatelessWidget {
                 customerName: tech!.assignedTickets![i].customerName,
                 date: tech!.assignedTickets![i].creationDate,
                 didContact: tech!.assignedTickets![i].didContact,
+                machineNumber: tech!.assignedTickets![i].machineNumber,
               );
             },
           ),

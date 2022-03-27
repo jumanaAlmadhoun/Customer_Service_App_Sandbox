@@ -30,6 +30,7 @@ class LoginHandeler with ChangeNotifier {
         found = true;
         userName = value[NAME];
         role = value[ROLE];
+        print(userName);
       }
     });
     if (found) {
