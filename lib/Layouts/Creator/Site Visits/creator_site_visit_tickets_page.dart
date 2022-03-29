@@ -52,7 +52,7 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
                 : constraints.maxWidth > ipadWidth
                     ? 4
                     : 3,
-            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.0,
+            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.99 : 1.0,
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
             children: [

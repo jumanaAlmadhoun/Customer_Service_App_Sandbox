@@ -17,32 +17,31 @@ class CategoryItem extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.circular(13),
-          boxShadow: const [
-            BoxShadow(
-              offset: Offset(0, 17),
-              blurRadius: 17,
-              spreadRadius: -23,
-              color: SHADOW_COLOR,
-            ),
-          ],
+          image: DecorationImage(
+              image: AssetImage(image!),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.4), BlendMode.luminosity)),
         ),
         child: Column(
           children: [
             const Spacer(),
-            Container(
-              height: number == null ? 100 : 100,
-              child: Image.asset(
-                image!,
-                fit: BoxFit.contain,
-              ),
-            ),
-            const Spacer(),
+            // Container(
+            //   height: number == null ? 100 : 100,
+            //   child: Image.asset(
+            //     image!,
+            //     fit: BoxFit.contain,
+            //   ),
+            // ),
+            // const Spacer(),
             Text(
               title!,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white),
             ),
             const SizedBox(
               height: 10,
@@ -50,8 +49,12 @@ class CategoryItem extends StatelessWidget {
             Text(
               '${number ?? ''}',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            )
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white),
+            ),
+            const Spacer(),
           ],
         ),
       ),

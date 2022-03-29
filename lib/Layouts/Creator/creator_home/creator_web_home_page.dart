@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import '../../../../Helpers/layout_constants.dart';
 import '../../../../Localization/localization_constants.dart';
 import '../../../../Routes/route_names.dart';

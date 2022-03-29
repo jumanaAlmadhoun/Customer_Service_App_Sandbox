@@ -132,7 +132,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
             key: formKey,
             child: LayoutBuilder(
               builder: (context, constraints) => GridView.count(
-                padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                padding: const EdgeInsets.all(20),
                 crossAxisCount: constraints.maxWidth < mobileWidth
                     ? 1
                     : constraints.maxWidth > ipadWidth
@@ -440,7 +440,9 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                       });
                     },
                   ),
-                  SizedBox(),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   ButtonWidget(
                     text: getTranselted(context, BTN_SUBMIT)!,
                     onTap: () async {
