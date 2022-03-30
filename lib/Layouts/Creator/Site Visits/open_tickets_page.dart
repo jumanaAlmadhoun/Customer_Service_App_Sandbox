@@ -52,7 +52,21 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
           title: _search
               ? TextFormField(
                   decoration: InputDecoration(
-                      hintText: getTranselted(context, LBL_SEARCH)!),
+                      hintText: getTranselted(context, LBL_SEARCH)!,
+                      hintStyle: const TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.white),
+                  onChanged: (value) {
+                    setState(() {
+                      try {
+                        _showedTickets = _tickets
+                            .where((element) => element.searchText!
+                                .contains(value.toUpperCase()))
+                            .toList();
+                      } catch (ex) {
+                        print(ex);
+                      }
+                    });
+                  },
                 )
               : Text(getTranselted(context, STA_OPEN)!),
           actions: [
@@ -60,6 +74,10 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
               onPressed: () {
                 setState(() {
                   _search = !_search;
+                  if (!_search) {
+                    _showedTickets = _tickets;
+                  }
+                  print(_search);
                 });
               },
               icon: const Icon(Icons.search),
@@ -84,19 +102,19 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                             : constraints.maxWidth < ipadWidth
                                 ? 1.3
                                 : 1.2),
-                    itemCount: _tickets.length,
+                    itemCount: _showedTickets.length,
                     itemBuilder: (context, i) {
                       return OpenTicketWidget(
-                        cafeName: _tickets[i].cafeName,
-                        city: _tickets[i].city,
-                        customerMobile: _tickets[i].extraContactNumber,
-                        customerName: _tickets[i].customerName,
-                        date: _tickets[i].creationDate,
-                        didContact: _tickets[i].didContact,
-                        machineNumber: _tickets[i].machineNumber,
+                        cafeName: _showedTickets[i].cafeName,
+                        city: _showedTickets[i].city,
+                        customerMobile: _showedTickets[i].extraContactNumber,
+                        customerName: _showedTickets[i].customerName,
+                        date: _showedTickets[i].creationDate,
+                        didContact: _showedTickets[i].didContact,
+                        machineNumber: _showedTickets[i].machineNumber,
                         onTap: () {
                           Navigator.pushNamed(context, sanremoEditTicketRoute,
-                              arguments: _tickets[i]);
+                              arguments: _showedTickets[i]);
                         },
                       );
                     },

@@ -101,7 +101,8 @@ class Ticket with ChangeNotifier {
       this.laborCharges,
       this.deliveryItems,
       this.deliveryType,
-      this.isUrgent});
+      this.isUrgent,
+      this.searchText});
 
   String? machineModel;
   String? assignDate;
@@ -139,4 +140,5 @@ class Ticket with ChangeNotifier {
   String? deliveryType;
   bool? isUrgent;
   Map<String, dynamic>? deliveryItems;
+  String? searchText;
 }
