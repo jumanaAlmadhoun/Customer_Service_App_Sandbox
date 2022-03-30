@@ -139,8 +139,8 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                         ? 3
                         : 2,
                 shrinkWrap: true,
-                mainAxisSpacing: 0.0,
-                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 9.0,
+                crossAxisSpacing: 9.0,
                 childAspectRatio: constraints.maxWidth < mobileWidth ? 7.5 : 4,
                 children: [
                   SearchField(
@@ -441,7 +441,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     },
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 5,
                   ),
                   ButtonWidget(
                     text: getTranselted(context, BTN_SUBMIT)!,

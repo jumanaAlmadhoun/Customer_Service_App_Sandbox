@@ -21,7 +21,7 @@ class BrandSelectionPage extends StatelessWidget {
                 : constraints.maxWidth > ipadWidth
                     ? 4
                     : 3,
-            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 1.1,
+            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.99 : 1.1,
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
             children: [

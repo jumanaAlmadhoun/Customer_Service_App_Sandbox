@@ -132,7 +132,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
         child: Form(
           key: formKey,
           child: ListView(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(20),
             children: [
               SearchField(
                 controller: selectedModel,
@@ -360,6 +360,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                       ),
                     )
                   : Container(),
+              const SizedBox(
+                height: 20,
+              ),
               _techName == 'N/A'
                   ? CustomCheckBox(
                       title: LBL_READY_ASSIGN,
@@ -419,7 +422,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                 },
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
               ),
               ButtonWidget(
                 text: getTranselted(context, BTN_SUBMIT)!,
