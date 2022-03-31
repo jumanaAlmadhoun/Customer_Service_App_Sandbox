@@ -104,18 +104,41 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                                 : 1.2),
                     itemCount: _showedTickets.length,
                     itemBuilder: (context, i) {
-                      return OpenTicketWidget(
-                        cafeName: _showedTickets[i].cafeName,
-                        city: _showedTickets[i].city,
-                        customerMobile: _showedTickets[i].extraContactNumber,
-                        customerName: _showedTickets[i].customerName,
-                        date: _showedTickets[i].creationDate,
-                        didContact: _showedTickets[i].didContact,
-                        machineNumber: _showedTickets[i].machineNumber,
-                        onTap: () {
-                          Navigator.pushNamed(context, sanremoEditTicketRoute,
-                              arguments: _showedTickets[i]);
+                      return Dismissible(
+                        key: const Key('key'),
+                        direction: DismissDirection.horizontal,
+                        onDismissed: (direction) {},
+                        confirmDismiss: (direction) async {
+                          return await showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    title: const Text(
+                                        'Are you sure you want to archive ticket?'),
+                                    actions: [
+                                      MaterialButton(
+                                        onPressed: () => true,
+                                        child: const Text('Yes'),
+                                      ),
+                                      MaterialButton(
+                                        onPressed: () => false,
+                                        child: const Text('No'),
+                                      ),
+                                    ],
+                                  ));
                         },
+                        child: OpenTicketWidget(
+                          cafeName: _showedTickets[i].cafeName,
+                          city: _showedTickets[i].city,
+                          customerMobile: _showedTickets[i].extraContactNumber,
+                          customerName: _showedTickets[i].customerName,
+                          date: _showedTickets[i].creationDate,
+                          didContact: _showedTickets[i].didContact,
+                          machineNumber: _showedTickets[i].machineNumber,
+                          onTap: () {
+                            Navigator.pushNamed(context, sanremoEditTicketRoute,
+                                arguments: _showedTickets[i]);
+                          },
+                        ),
                       );
                     },
                   );
