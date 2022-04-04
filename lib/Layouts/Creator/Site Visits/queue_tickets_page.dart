@@ -24,14 +24,10 @@ class _QueueTikcketsPageState extends State<QueueTikcketsPage> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: constraints.maxWidth < mobileWidth
                     ? 1
-                    : constraints.maxWidth > ipadWidth
-                        ? 3
-                        : 2,
-                childAspectRatio: constraints.maxWidth < mobileWidth
-                    ? 2.5
                     : constraints.maxWidth < ipadWidth
-                        ? 1.3
-                        : 1.2),
+                        ? 2
+                        : 3,
+                childAspectRatio: constraints.maxWidth < mobileWidth ? 6 : 4.5),
             itemCount: techs.length,
             itemBuilder: (context, i) {
               return techs[i].queueTicket != null
