@@ -70,5 +70,8 @@
   "delivery_cus":"Customer Machines",
   "get_back":"Get Back Ticket",
   "queue_assign":"Send To Tech",
-  "urgent":"Urgent"
+  "urgent":"Urgent",
+  "send":"Send",
+  "cancel":"Cancel",
+  "choose_archive":"Please Select Reason"
 }

@@ -1,9 +1,13 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
+import 'package:customer_service_app/Widgets/Creator/custom_list_dialgo.dart';
 import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +26,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
   bool _search = false;
+  CustomListDialog? dialog;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -34,6 +39,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
     setState(() {
       _isLoading = true;
     });
+
     Provider.of<TicketProvider>(context, listen: false)
         .fetchTickets(DB_OPEN_TICKETS)
         .then((value) {
@@ -105,26 +111,26 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                     itemCount: _showedTickets.length,
                     itemBuilder: (context, i) {
                       return Dismissible(
-                        key: const Key('key'),
+                        key: UniqueKey(),
                         direction: DismissDirection.horizontal,
-                        onDismissed: (direction) {},
+                        onDismissed: (direction) async {
+                          if (dialog != null) {
+                            Provider.of<TicketProvider>(context, listen: false)
+                                .archiveTicket(_showedTickets[i], dialog!.value)
+                                .then((value) async {
+                              if (value == SC_SUCCESS_RESPONSE) {
+                                _showedTickets.remove(_showedTickets[i]);
+                              } else {}
+                            });
+                          }
+                        },
                         confirmDismiss: (direction) async {
+                          dialog = CustomListDialog(
+                            msg: 'Archive Ticket',
+                            items: archiveReasons,
+                          );
                           return await showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                    title: const Text(
-                                        'Are you sure you want to archive ticket?'),
-                                    actions: [
-                                      MaterialButton(
-                                        onPressed: () => true,
-                                        child: const Text('Yes'),
-                                      ),
-                                      MaterialButton(
-                                        onPressed: () => false,
-                                        child: const Text('No'),
-                                      ),
-                                    ],
-                                  ));
+                              context: context, builder: (_) => dialog!);
                         },
                         child: OpenTicketWidget(
                           cafeName: _showedTickets[i].cafeName,

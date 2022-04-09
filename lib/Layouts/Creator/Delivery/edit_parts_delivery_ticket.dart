@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
@@ -36,7 +37,7 @@ class EditPartsDeliveryTicket extends StatefulWidget {
 
 class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
     with RouteAware {
-  // List<Widget> items = [];
+  List<Widget> items = [];
   List<SparePart> _allParts = [];
   bool _isLoading = false;
   bool _didContact = false;
@@ -64,8 +65,7 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
   Customer? selectedCustomer;
   Map<String, dynamic>? ticketHeader;
   String _selectedCategory = NA;
-  List<String> category = [NA, 'Tech', 'Courier'];
-  List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
+
   String _selectedStatus = 'In Dispatch Area';
   @override
   void didChangeDependencies() {
@@ -244,7 +244,7 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: category
+                items: transitCategory
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
@@ -259,7 +259,7 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: status
+                items: deliveryStatus
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
@@ -299,26 +299,26 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
               const SizedBox(
                 height: 10,
               ),
-              // ListView.builder(
-              //     physics: const ClampingScrollPhysics(),
-              //     shrinkWrap: true,
-              //     itemCount: items.length,
-              //     itemBuilder: (context, i) {
-              //       return items[i];
-              //     }),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // ButtonWidget(
-              //   text: getTranselted(context, LBL_ADD_ITEM)!,
-              //   onTap: () {
-              //     setState(() {
-              //       items.add(DeliveryItemWidget(
-              //         allParts: _allParts,
-              //       ));
-              //     });
-              //   },
-              // ),
+              ListView.builder(
+                  physics: const ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, i) {
+                    return items[i];
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+              ButtonWidget(
+                text: getTranselted(context, LBL_ADD_ITEM)!,
+                onTap: () {
+                  setState(() {
+                    items.add(DeliveryItemWidget(
+                      allParts: _allParts,
+                    ));
+                  });
+                },
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -407,22 +407,22 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
   }
 
   Map<String, dynamic>? getTicketHeader() {
-    // Map<String, dynamic> map = {};
-    // items.forEach((element) {
-    //   if (element is DeliveryItemWidget) {
-    //     if (map.containsKey(element.partNo.text)) {
-    //       double qty = double.parse(map[element.partNo.text][1]);
-    //       qty += double.parse(element.qty.text);
-    //       map[element.partNo.text][1] = qty;
-    //     } else {
-    //       map.update(
-    //         element.partNo.text,
-    //         (value) => [element.desc.text, element.qty.text],
-    //         ifAbsent: () => [element.desc.text, element.qty.text],
-    //       );
-    //     }
-    //   }
-    // });
+    Map<String, dynamic> map = {};
+    items.forEach((element) {
+      if (element is DeliveryItemWidget) {
+        if (map.containsKey(element.partNo.text)) {
+          double qty = double.parse(map[element.partNo.text][1]);
+          qty += double.parse(element.qty.text);
+          map[element.partNo.text][1] = qty;
+        } else {
+          map.update(
+            element.partNo.text,
+            (value) => [element.desc.text, element.qty.text],
+            ifAbsent: () => [element.desc.text, element.qty.text],
+          );
+        }
+      }
+    });
     return {
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
@@ -443,7 +443,7 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
       Ticket.VISIT_START_TIME: from!.text.trim(),
       Ticket.VISIT_END_TIME: to!.text.trim(),
-      // Ticket.DELIVERY_ITEMS: map,
+      Ticket.DELIVERY_ITEMS: map,
       Ticket.SO_NUMBER: so!.text.toUpperCase().trim(),
       Ticket.STATUS: _selectedStatus,
       Ticket.ROW_ADDRESS: ticket!.rowAddress,
@@ -495,28 +495,27 @@ class _EditPartsDeliveryTicketState extends State<EditPartsDeliveryTicket>
       visitDate!.text = ticket!.visitDate!;
       from!.text = ticket!.from!;
       to!.text = ticket!.to!;
+      _selectedCity.text = ticket!.city!;
+      _selectedCategory = ticket!.deliveryType!;
+      _selectedReg = ticket!.region!;
+      _selectedStatus = ticket!.status!;
+      so!.text = ticket!.soNumber!;
+      _techName = ticket!.techName!;
+      _didContact = ticket!.didContact!;
       selectedCustomer = allCustomers!.firstWhere(
           (element) => element.customerNumber == ticket!.customerNumber);
       customerBalance!.text = selectedCustomer!.balance!.abs().toString();
-      // print('${ticket!.deliveryItems}  SSS');
-      // if (ticket!.deliveryItems != null) {
-      //   print('${ticket!.deliveryItems}  SSS');
-      //   ticket!.deliveryItems!.forEach((key, value) {
-      //     print(key);
-      //     items.add(DeliveryItemWidget(
-      //       allParts: _allParts,
-      //     ));
-      //   });
-      //   int i = 0;
-      //   ticket!.deliveryItems!.forEach((key, value) {
-      //     DeliveryItemWidget item = items[i] as DeliveryItemWidget;
-      //     item.partNo.text = key;
-      //     item.desc.text = value[0];
-      //     item.qty.text = value[1];
-
-      //     i++;
-      //   });
-      // }
+      if (ticket!.deliveryItems != null) {
+        ticket!.deliveryItems!.forEach((key, value) {
+          DeliveryItemWidget widget = DeliveryItemWidget(
+            allParts: _allParts,
+          );
+          widget.partNo.text = key;
+          widget.desc.text = value[0];
+          widget.qty.text = value[1];
+          items.add(widget);
+        });
+      }
     } catch (ex) {
       print(ex);
     }

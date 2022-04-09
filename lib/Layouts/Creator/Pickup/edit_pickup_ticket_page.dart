@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
@@ -71,16 +72,7 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
   String? _assignDirection = '';
   String _selectedCategory = 'N/A';
   List<String> category = ['N/A', 'Tech', 'Courier'];
-  List<String> status = [
-    'Waiting for customer prep',
-    'Pickup requested',
-    'In transit',
-    'Arrived',
-    'Customer refused',
-    'Customer rescheduled',
-    'No response by customer',
-    'Other'
-  ];
+
   String _selectedStatus = 'Waiting for customer prep';
 
   @override
@@ -310,7 +302,7 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: status
+                items: pickupStatus
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
@@ -552,6 +544,9 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
       selectedModel!.text = ticket!.machineModel!;
       _selectedCategory = ticket!.deliveryType!;
       _selectedStatus = ticket!.status!;
+      _selectedCity.text = ticket!.city!;
+      _techName = ticket!.techName!;
+      _selectedReg = ticket!.region!;
     } catch (ex) {
       print(ex);
     }

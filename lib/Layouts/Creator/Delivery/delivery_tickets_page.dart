@@ -56,6 +56,18 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
         title: _search
             ? TextFormField(
                 style: const TextStyle(color: Colors.white),
+                onChanged: (value) {
+                  setState(() {
+                    try {
+                      _showedTickets = _tickets
+                          .where((element) =>
+                              element.searchText!.contains(value.toUpperCase()))
+                          .toList();
+                    } catch (ex) {
+                      print(ex);
+                    }
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: getTranselted(context, LBL_SEARCH)!,
                   hintStyle: const TextStyle(color: Colors.white),
@@ -99,27 +111,28 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
                           ? 1.4
                           : 1.3,
                 ),
-                itemCount: _tickets.length,
+                itemCount: _showedTickets.length,
                 itemBuilder: (context, i) {
                   return DeliveryTicketWidget(
-                    cafeName: _tickets[i].cafeName,
-                    city: _tickets[i].city,
-                    customerMobile: _tickets[i].extraContactNumber,
-                    customerName: _tickets[i].customerName,
-                    date: _tickets[i].creationDate,
-                    didContact: _tickets[i].didContact,
-                    techName: _tickets[i].techName,
-                    type: _tickets[i].subCategory,
-                    deliveryType: _tickets[i].deliveryType,
+                    cafeName: _showedTickets[i].cafeName,
+                    city: _showedTickets[i].city,
+                    customerMobile: _showedTickets[i].extraContactNumber,
+                    customerName: _showedTickets[i].customerName,
+                    date: _showedTickets[i].creationDate,
+                    didContact: _showedTickets[i].didContact,
+                    techName: _showedTickets[i].techName,
+                    type: _showedTickets[i].subCategory,
+                    deliveryType: _showedTickets[i].deliveryType,
                     onTap: () {
-                      if (_tickets[i].subCategory == Ticket.PARTS_DELIVERY) {
+                      if (_showedTickets[i].subCategory ==
+                          Ticket.PARTS_DELIVERY) {
                         Navigator.pushNamed(
                             context, creatorEditPartsDeliveryRoute,
-                            arguments: _tickets[i]);
+                            arguments: _showedTickets[i]);
                       } else {
                         Navigator.pushNamed(
                             context, creatorEditNewMachineDeliveryRoute,
-                            arguments: _tickets[i]);
+                            arguments: _showedTickets[i]);
                       }
                     },
                   );

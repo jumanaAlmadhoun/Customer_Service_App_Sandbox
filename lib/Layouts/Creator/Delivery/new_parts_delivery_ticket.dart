@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
@@ -61,8 +62,7 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
   Customer? selectedCustomer;
   Map<String, dynamic>? ticketHeader;
   String _selectedCategory = NA;
-  List<String> category = [NA, 'Tech', 'Courier'];
-  List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
+
   String _selectedStatus = 'In Dispatch Area';
   @override
   void didChangeDependencies() {
@@ -239,7 +239,7 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: category
+                items: transitCategory
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
@@ -254,7 +254,7 @@ class _NewPartsDeliveryTicketState extends State<NewPartsDeliveryTicket>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: status
+                items: deliveryStatus
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
