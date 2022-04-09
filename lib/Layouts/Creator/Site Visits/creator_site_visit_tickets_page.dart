@@ -28,8 +28,11 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
   }
 
   @override
-  void didPush() {
-    super.didPush();
+  void didPopNext() {
+    // TODO: implement didPopNext
+    super.didPopNext();
+    print('deie');
+    Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
   }
 
   @override

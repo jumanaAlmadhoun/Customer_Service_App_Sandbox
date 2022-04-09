@@ -26,3 +26,5 @@ const String RETURN_TICKET_FROM_QUEUE =
     'https://script.google.com/macros/s/AKfycbyG1_s2V1f-Mbb_XQ6uW01cS7fx0vkw7PDt3llwMLW_vyYzpu3MFh5bJrE5IXbmmmXN/exec';
 const String ARCHIVE_TICKET_SCRIPT =
     'https://script.google.com/macros/s/AKfycby-CxCf1DwH1ZI-kc1VFMDsqSvYw5krjmJ0a6-LnIUddATJ21Mep3uRqS4j2gUnJofR/exec';
+const String SEND_TICKET_FROM_QUEUE_SCRIPT =
+    'https://script.google.com/macros/s/AKfycbzFY6naLeR_5ERwyBZB3NhaPLto10ubR1HzkohxHYLc9Kro5rBlUSpYVOup-4-6tURJFg/exec';

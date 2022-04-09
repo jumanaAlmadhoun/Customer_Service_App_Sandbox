@@ -48,33 +48,39 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
                     _isLoading = true;
                   });
                   if (value == 'Back') {
+                    setState(() {
+                      _isLoading = true;
+                    });
                     Provider.of<TicketProvider>(context, listen: false)
                         .getBackQueueTicket(widget.tech!.queueTicket![i],
                             '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
                         .then((value) {
                       if (value == SC_SUCCESS_RESPONSE) {
-                        CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.success,
-                          onConfirmBtnTap: () {
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                creatorHomeRoute, (route) => route.isFirst);
-                            setState(() {
-                              _isLoading = false;
-                            });
-                          },
-                        );
-                      } else {
                         setState(() {
+                          widget.tech!.queueTicket!.removeAt(i);
                           _isLoading = false;
                         });
-                        CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.error,
-                        );
                       }
                     });
-                  } else if (value == 'Send') {}
+                  } else if (value == 'Send') {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    Provider.of<TicketProvider>(context, listen: false)
+                        .sendTicketFromQueue(
+                            '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
+                        .then((value) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      if (value == SC_SUCCESS_RESPONSE) {
+                        setState(() {
+                          widget.tech!.queueTicket!.removeAt(i);
+                          _isLoading = false;
+                        });
+                      }
+                    });
+                  }
                 },
                 child: OpenTicketWidget(
                   cafeName: widget.tech!.queueTicket![i].cafeName,

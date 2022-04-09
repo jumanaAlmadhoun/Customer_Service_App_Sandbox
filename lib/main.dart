@@ -117,6 +117,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: loginRoute,
         onGenerateRoute: CustomRouter.allRoutes,
         debugShowCheckedModeBanner: false,
+        navigatorObservers: [routeObserver],
       ),
     );
   }

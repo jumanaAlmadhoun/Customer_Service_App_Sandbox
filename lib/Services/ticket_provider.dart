@@ -308,9 +308,18 @@ class TicketProvider with ChangeNotifier {
     }
   }
 
-  // Future<String> sendTicketFromQueue(Ticket?ticket,String firebaseUrl)async{
-
-  // }
+  Future<String> sendTicketFromQueue(String firebaseUrl) async {
+    try {
+      var response = await http
+          .get(Uri.parse('$SEND_TICKET_FROM_QUEUE_SCRIPT?url=$firebaseUrl'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      return Future.value(data[SC_STATUS_KEY]);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
 
   Future<String> archiveTicket(Ticket ticket, String? reason) async {
     String url = '$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json';
