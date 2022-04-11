@@ -73,5 +73,6 @@
   "urgent":"Urgent",
   "send":"Send",
   "cancel":"Cancel",
-  "choose_archive":"Please Select Reason"
+  "choose_archive":"Please Select Reason",
+  "client_ticket":"Customer's Tickets"
 }

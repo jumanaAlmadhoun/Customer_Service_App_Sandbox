@@ -126,6 +126,10 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
               title: getTranselted(context, TIC_ACCOUNTING)!,
               image: IMG_ACCOUNTING,
             ),
+            CategoryItem(
+              title: getTranselted(context, TIC_CUSTOMER_TICKETS)!,
+              image: IMG_ACCOUNTING,
+            ),
           ],
         ),
       ),
