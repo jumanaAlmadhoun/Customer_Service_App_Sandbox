@@ -23,9 +23,9 @@ class InfoCard extends StatelessWidget {
           left: 20,
           right: Responsive.isMobile(context) ? 20 : 40),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-      ),
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black, blurRadius: 2)]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

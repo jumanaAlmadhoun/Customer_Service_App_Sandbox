@@ -31,6 +31,7 @@ const String IMG_RENT_MACHINE = 'Assets/Images/machine.png';
 const String IMG_TECH_REPORT = 'Assets/Images/technician.png';
 const String IMG_WORKSHO_REPORT = 'Assets/Images/workshop_tickets.png';
 const String IMG_BEANS = 'Assets/Images/beans.png';
+const String IMG_CLIENT_TICKETS = 'Assets/Images/clients_tickets.jpg';
 
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);

@@ -65,6 +65,20 @@ class Ticket with ChangeNotifier {
   static const String OUT_MACHINE = 'exOut';
   static const String IS_URGENT = 'isUrgent';
 
+  static const String CLI_TIME = 'time';
+  static const String CLI_NAME = 'name';
+  static const String CLI_MOBILE = 'mobile';
+  static const String CLI_CAFE_NAME = 'coffeeName';
+  static const String CLI_MACHINE_IMAGE = 'image';
+  static const String CLI_VIEDO = 'viedo';
+  static const String CLI_LOCATION = 'location';
+  static const String CLI_PROBLEM_DESC = 'desc';
+  static const String CLI_CITY = 'city';
+  static const String CLI_CONTACT = 'contact';
+  static const String CLI_TICKET_NUMBER = 'ticketNumber';
+  static const String CLI_MACHINE_NUMBER = 'machineNumber';
+  static const String CLI_MACHINE_MODEL = 'machineModel';
+
   Ticket(
       {this.assignDate,
       this.cafeLocation,
@@ -143,4 +157,6 @@ class Ticket with ChangeNotifier {
   Map<String, dynamic>? deliveryItems;
   String? searchText;
   String? soNumber;
+  String? machineImage;
+  String? video;
 }

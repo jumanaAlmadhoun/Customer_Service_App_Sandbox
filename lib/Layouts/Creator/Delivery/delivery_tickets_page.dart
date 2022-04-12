@@ -122,7 +122,7 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
                     didContact: _showedTickets[i].didContact,
                     techName: _showedTickets[i].techName,
                     type: _showedTickets[i].subCategory,
-                    deliveryType: _showedTickets[i].deliveryType,
+                    deliveryType: _showedTickets[i].status,
                     onTap: () {
                       if (_showedTickets[i].subCategory ==
                           Ticket.PARTS_DELIVERY) {

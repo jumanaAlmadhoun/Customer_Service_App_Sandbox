@@ -20,6 +20,5 @@ const String DB_CHARGES = 'Charges';
 const String DB_ASSIGNED_DELIVERY_TICKETS = 'AssignedDeliveryCS';
 const String DB_DISPATCH_LINE = 'WaitingDispatchMachines';
 const String NA = 'N/A';
-List<String> ARCHIVE_REASONS = [];
-
+const String DB_CUSTOMER_TICKETS = 'ClientTickets';
 const String TEMP_SANREMO = 'SanremoCS';

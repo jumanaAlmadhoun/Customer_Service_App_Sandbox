@@ -40,7 +40,6 @@ class TicketProvider with ChangeNotifier {
           });
         }
         searchText = searchText.toUpperCase();
-        print(searchText);
         tickets.add(
           Ticket(
               machineModel: value[Ticket.MACHINE_MODEL] ?? '',
@@ -328,5 +327,14 @@ class TicketProvider with ChangeNotifier {
     print(response.body);
     var data = jsonDecode(response.body);
     return data[SC_STATUS_KEY];
+  }
+
+  Future<void> fetchCustomerTickets() async {
+    try {
+      var response =
+          await http.get(Uri.parse('$DB_URL$DB_CUSTOMER_TICKETS.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      data.forEach((key, value) {});
+    } catch (ex) {}
   }
 }

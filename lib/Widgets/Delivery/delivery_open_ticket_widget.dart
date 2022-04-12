@@ -71,7 +71,7 @@ class DeliveryTicketWidget extends StatelessWidget {
                     style: TICKET_TEXT_STYLE,
                   ),
                   Text(
-                    getTranselted(context, LBL_DELIVERY_TYPE)! + ': ' + type!,
+                    'Status: ' + deliveryType!,
                     textAlign: TextAlign.left,
                     style: TICKET_TEXT_STYLE,
                   ),

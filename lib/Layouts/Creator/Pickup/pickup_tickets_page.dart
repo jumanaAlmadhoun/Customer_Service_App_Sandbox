@@ -106,7 +106,7 @@ class _PickupTicketsPageState extends State<PickupTicketsPage> with RouteAware {
                     didContact: _tickets[i].didContact,
                     techName: _tickets[i].techName,
                     type: _tickets[i].subCategory,
-                    deliveryType: _tickets[i].deliveryType,
+                    deliveryType: _tickets[i].status,
                     onTap: () {
                       Navigator.pushNamed(context, creatorEditPickupTicketRoute,
                           arguments: _tickets[i]);

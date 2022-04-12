@@ -1,5 +1,6 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
+import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:flutter/material.dart';
 
 class CreatorDrawerWidget extends StatefulWidget {
@@ -36,6 +37,16 @@ class _CreatorDrawerWidgetState extends State<CreatorDrawerWidget> {
           ),
           const SizedBox(
             height: 10,
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.dashboard,
+              color: ICONS_COLOR,
+            ),
+            title: const Text('Dashboard'),
+            onTap: () {
+              Navigator.pushNamed(context, creatorDashBoardRoute);
+            },
           ),
           ListTile(
             leading: const Icon(

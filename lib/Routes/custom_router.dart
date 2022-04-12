@@ -1,3 +1,4 @@
+import 'package:customer_service_app/Layouts/Creator/DashBoard/creator_dashboard.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/delivery_type_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/edit_machine_delivery_ticket.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/edit_parts_delivery_ticket.dart';
@@ -39,6 +40,8 @@ class CustomRouter {
     switch (settings.name) {
       case creatorHomeRoute:
         return MaterialPageRoute(builder: (_) => const CreatorHomePage());
+      case creatorDashBoardRoute:
+        return MaterialPageRoute(builder: (_) => const CreatorDashBoard());
       case creatorQueueTicketsRoute:
         return MaterialPageRoute(builder: (_) => const QueueTikcketsPage());
       case creatorDeliveryTicketsRoute:

@@ -14,6 +14,7 @@ const String creatorNewMachineDeliveryRoute = 'creatorNewMachineDeliveryRoute';
 const String creatorEditPartsDeliveryRoute = 'creatorEditPartsDeliveryRoute';
 const String creatorEditNewMachineDeliveryRoute =
     'creatorEditNewMachineDeliveryRoute';
+const String creatorDashBoardRoute = 'creatorDashBoardRoute';
 
 const String creatorAssignedTicketRoute = 'creatorAssignedTicketRoute';
 const String creatorTechAssignedTicketRoute = 'creatorTechAssignedTicketRoute';
