@@ -722,12 +722,16 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       selectedCategory = ticket!.subCategory!;
       city!.text = ticket!.city!;
       _selectedReg = ticket!.region!;
-
       selectedModel!.text = ticket!.machineModel!;
       customerNumber!.text = ticket!.customerNumber!;
       cafeLocation!.text = ticket!.cafeLocation!;
       _selectedCity.text = ticket!.city!;
       _readyToAssign = ticket!.fromTable == DB_READY_TO_ASSIGN_TICKETS;
+      _selectedCity.text = ticket!.city!;
+      selectedCategory = ticket!.subCategory!;
+      _freeParts = ticket!.freeParts!;
+      _freeVisit = ticket!.freeVisit!;
+      _didContact = ticket!.didContact!;
       machineNumber!.text = ticket!.machineNumber!;
       problemDesc!.text = ticket!.problemDesc!;
       recommendation!.text = ticket!.recomendation!;

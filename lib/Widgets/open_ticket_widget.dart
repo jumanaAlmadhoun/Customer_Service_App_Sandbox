@@ -12,7 +12,8 @@ class OpenTicketWidget extends StatelessWidget {
       this.date,
       this.didContact,
       this.onTap,
-      this.machineNumber});
+      this.machineNumber,
+      this.onLongTap});
 
   final String? customerName;
   final String? customerMobile;
@@ -22,20 +23,25 @@ class OpenTicketWidget extends StatelessWidget {
   final String? machineNumber;
   final bool? didContact;
   final onTap;
+  final onLongTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                border: Border.all(color: APP_BAR_COLOR, width: 1),
-                borderRadius: BorderRadius.circular(15),
-                color: didContact! ? CONTACTED_COLOR : NOT_CONTACTED_COLOR),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              border: Border.all(color: APP_BAR_COLOR, width: 1),
+              borderRadius: BorderRadius.circular(15),
+              color: didContact! ? CONTACTED_COLOR : NOT_CONTACTED_COLOR),
+          child: Center(
+            child: Wrap(
+              spacing: 8,
+              direction: Axis.vertical,
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Text(
                   getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,
@@ -73,6 +79,9 @@ class OpenTicketWidget extends StatelessWidget {
             ),
           ),
         ),
-        onTap: onTap);
+      ),
+      onTap: onTap,
+      onLongPress: onLongTap,
+    );
   }
 }

@@ -83,6 +83,10 @@ const String LBL_SO_NUMBER = 'so_number';
 const String STA_QUEUE_GET_BACK = 'get_back';
 const String STA_QUEUE_ASSIGN = 'queue_assign';
 const String LBL_URGENT = 'urgent';
+const String BTN_SEND = 'send';
+const String BTN_CANCEL = 'cancel';
+const String LBL_CHOOSE_REASON = 'choose_archive';
+const String TIC_CUSTOMER_TICKETS = 'client_ticket';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

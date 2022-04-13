@@ -28,6 +28,26 @@ class MachinesProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchWSMachines(String from) async {
+    try {
+      List<Machine> machines = [];
+      var response = await http.get(Uri.parse('$DB_URL$from.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      data.forEach((key, value) {
+        machines.add(Machine(
+            machineModel: value[Machine.WS_MACHINE_MODEL],
+            machineNumber: value[Machine.WS_MACHINE_NUMBER],
+            customerNumber: value[Machine.CUSTOMER_NUMBER],
+            fromTable: from,
+            firebaseID: key));
+      });
+      _machines = machines;
+      notifyListeners();
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
   Future<void> fetchModels() async {
     try {
       List<String> models = [];

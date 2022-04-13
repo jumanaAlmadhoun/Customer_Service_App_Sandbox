@@ -31,8 +31,15 @@ class TicketProvider with ChangeNotifier {
         searchText += value[Ticket.SERIAL_NUMBER] ?? '';
         searchText += value[Ticket.PROBLEM_DESC] ?? '';
         searchText += value[Ticket.RECOMMENDATION] ?? '';
+        Map<String, dynamic> items =
+            value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>;
+        if (items != null) {
+          items.forEach((key, value) {
+            searchText += key.toUpperCase();
+            searchText += value[0].toString().toUpperCase();
+          });
+        }
         searchText = searchText.toUpperCase();
-        print(searchText);
         tickets.add(
           Ticket(
               machineModel: value[Ticket.MACHINE_MODEL] ?? '',
@@ -71,6 +78,7 @@ class TicketProvider with ChangeNotifier {
               deliveryItems:
                   value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
               deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
+              soNumber: value[Ticket.SO_NUMBER] ?? '',
               searchText: searchText),
         );
       });
@@ -286,7 +294,6 @@ class TicketProvider with ChangeNotifier {
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         var firebaseTicke = await http.get(Uri.parse(firebaseUrl));
         var ticketData = jsonDecode(firebaseTicke.body) as Map<String, dynamic>;
-
         await http.post(Uri.parse('$DB_URL$DB_READY_TO_ASSIGN_TICKETS.json'),
             body: jsonEncode(ticketData));
         await http.delete(Uri.parse(firebaseUrl));
@@ -298,5 +305,36 @@ class TicketProvider with ChangeNotifier {
       print(ex);
       return Future.value(SC_FAILED_RESPONSE);
     }
+  }
+
+  Future<String> sendTicketFromQueue(String firebaseUrl) async {
+    try {
+      var response = await http
+          .get(Uri.parse('$SEND_TICKET_FROM_QUEUE_SCRIPT?url=$firebaseUrl'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      return Future.value(data[SC_STATUS_KEY]);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
+
+  Future<String> archiveTicket(Ticket ticket, String? reason) async {
+    String url = '$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json';
+    var response = await http.get(Uri.parse(
+        '$ARCHIVE_TICKET_SCRIPT?url=$url&reason=$reason&userName=$userName'));
+    print(response.body);
+    var data = jsonDecode(response.body);
+    return data[SC_STATUS_KEY];
+  }
+
+  Future<void> fetchCustomerTickets() async {
+    try {
+      var response =
+          await http.get(Uri.parse('$DB_URL$DB_CUSTOMER_TICKETS.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      data.forEach((key, value) {});
+    } catch (ex) {}
   }
 }

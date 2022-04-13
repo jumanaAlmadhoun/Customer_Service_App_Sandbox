@@ -28,91 +28,79 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.tech!.name!)),
       body: ModalProgressHUD(
-        inAsyncCall: _isLoading,
-        child: LayoutBuilder(
-          builder: ((context, constraints) => GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: constraints.maxWidth < mobileWidth
-                        ? 1
-                        : constraints.maxWidth > ipadWidth
-                            ? 3
-                            : 2,
-                    childAspectRatio: constraints.maxWidth < mobileWidth
-                        ? 2.5
-                        : constraints.maxWidth < ipadWidth
-                            ? 1.3
-                            : 1.2),
-                itemCount: widget.tech!.queueTicket!.length,
-                itemBuilder: (context, i) {
-                  try {
-                    return PopupMenuButton(
-                      itemBuilder: ((context) => [
-                            PopupMenuItem(
-                              child: Text(
-                                  getTranselted(context, STA_QUEUE_GET_BACK)!),
-                              value: 'Back',
-                            ),
-                            PopupMenuItem(
-                              child: Text(
-                                  getTranselted(context, STA_QUEUE_ASSIGN)!),
-                              value: 'Send',
-                            ),
-                          ]),
-                      onSelected: (String? value) async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        if (value == 'Back') {
-                          Provider.of<TicketProvider>(context, listen: false)
-                              .getBackQueueTicket(widget.tech!.queueTicket![i],
-                                  '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
-                              .then((value) {
-                            if (value == SC_SUCCESS_RESPONSE) {
-                              CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.success,
-                                onConfirmBtnTap: () {
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      creatorHomeRoute,
-                                      (route) => route.isFirst);
-                                  setState(() {
-                                    _isLoading = false;
-                                  });
-                                },
-                              );
-                            } else {
+          inAsyncCall: _isLoading,
+          child: LayoutBuilder(
+              builder: ((context, constraints) => GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constraints.maxWidth < mobileWidth
+                          ? 1
+                          : constraints.maxWidth > ipadWidth
+                              ? 3
+                              : 2,
+                      childAspectRatio: constraints.maxWidth < mobileWidth
+                          ? 2.5
+                          : constraints.maxWidth < ipadWidth
+                              ? 1.3
+                              : 1.2),
+                  itemCount: widget.tech!.queueTicket!.length,
+                  itemBuilder: (context, i) {
+                    try {
+                      return PopupMenuButton(
+                        itemBuilder: ((context) => [
+                              PopupMenuItem(
+                                child: Text(getTranselted(
+                                    context, STA_QUEUE_GET_BACK)!),
+                                value: 'Back',
+                              ),
+                              PopupMenuItem(
+                                child: Text(
+                                    getTranselted(context, STA_QUEUE_ASSIGN)!),
+                                value: 'Send',
+                              ),
+                            ]),
+                        onSelected: (String? value) async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          if (value == 'Back') {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            Provider.of<TicketProvider>(context, listen: false)
+                                .getBackQueueTicket(
+                                    widget.tech!.queueTicket![i],
+                                    '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
+                                .then((value) {
+                              if (value == SC_SUCCESS_RESPONSE) {
+                                setState(() {
+                                  widget.tech!.queueTicket!.removeAt(i);
+                                  _isLoading = false;
+                                });
+                              }
+                            });
+                          } else if (value == 'Send') {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            Provider.of<TicketProvider>(context, listen: false)
+                                .sendTicketFromQueue(
+                                    '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
+                                .then((value) {
                               setState(() {
                                 _isLoading = false;
                               });
-                              CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.error,
-                              );
-                            }
-                          });
-                        } else if (value == 'Send') {}
-                      },
-                      child: OpenTicketWidget(
-                        cafeName: widget.tech!.queueTicket![i].cafeName,
-                        city: widget.tech!.queueTicket![i].city,
-                        customerMobile:
-                            widget.tech!.queueTicket![i].extraContactNumber,
-                        customerName: widget.tech!.queueTicket![i].customerName,
-                        date: widget.tech!.queueTicket![i].creationDate,
-                        didContact: widget.tech!.queueTicket![i].didContact,
-                        machineNumber:
-                            widget.tech!.queueTicket![i].machineNumber,
-                      ),
-                    );
-                  } catch (ex) {
-                    print(ex);
-                    return Container();
-                  }
-                },
-              )),
-        ),
-      ),
+                              if (value == SC_SUCCESS_RESPONSE) {
+                                setState(() {
+                                  widget.tech!.queueTicket!.removeAt(i);
+                                  _isLoading = false;
+                                });
+                              }
+                            });
+                          }
+                        },
+                      );
+                    } catch (e) {} //add throw statement
+                  })))),
     );
   }
 }

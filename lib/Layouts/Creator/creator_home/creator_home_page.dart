@@ -41,6 +41,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
 
   @override
   void didPush() async {
+    print('Pushed');
     super.didPush();
     readJson();
     Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
@@ -50,11 +51,12 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
 
   @override
   void didPopNext() {
+    print('Poped');
     super.didPopNext();
     readJson();
     Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
     Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
-    Provider.of<SummaryProvider>(context).fetchSummary();
+    Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
   }
 
   @override
@@ -123,6 +125,10 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
             CategoryItem(
               title: getTranselted(context, TIC_ACCOUNTING)!,
               image: IMG_ACCOUNTING,
+            ),
+            CategoryItem(
+              title: getTranselted(context, TIC_CUSTOMER_TICKETS)!,
+              image: IMG_CLIENT_TICKETS,
             ),
           ],
         ),

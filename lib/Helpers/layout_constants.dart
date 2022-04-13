@@ -8,6 +8,7 @@ const Color SHADOW_COLOR = Color(0xff000000);
 const Color BACK_GROUND_COLOR = Color(0xffffffff);
 const Color CONTACTED_COLOR = Color(0xffB5E3AF);
 const Color NOT_CONTACTED_COLOR = Color(0xffF88687);
+const Color ERROR_COLOR = Colors.red;
 const Color ICONS_COLOR = Color(0xffD68D0A);
 const Color GRID_COLOR = Color.fromARGB(255, 231, 224, 217);
 const String IMG_LOGO = 'Assets/Images/rfa_logo_horizontal.png';
@@ -30,6 +31,7 @@ const String IMG_RENT_MACHINE = 'Assets/Images/machine.png';
 const String IMG_TECH_REPORT = 'Assets/Images/technician.png';
 const String IMG_WORKSHO_REPORT = 'Assets/Images/workshop_tickets.png';
 const String IMG_BEANS = 'Assets/Images/beans.png';
+const String IMG_CLIENT_TICKETS = 'Assets/Images/clients_tickets.jpg';
 
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);

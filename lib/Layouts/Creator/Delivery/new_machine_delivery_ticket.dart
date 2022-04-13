@@ -1,11 +1,13 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
 import 'package:customer_service_app/Layouts/Creator/creator_home/creator_home_page.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/customer.dart';
+import 'package:customer_service_app/Models/machine.dart';
 import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -63,10 +65,9 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   Customer? selectedCustomer;
   Map<String, dynamic>? ticketHeader;
   String _selectedCategory = 'N/A';
-  List<String> category = ['N/A', 'Tech', 'Courier'];
-  List<String> status = ['In Dispatch Area', 'In Transit', 'Delivered'];
   String _selectedStatus = 'In Dispatch Area';
   List<String> machineModels = [];
+  List<Machine>? machines;
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -92,6 +93,11 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
         .then((value) {
       machineModels =
           Provider.of<MachinesProvider>(context, listen: false).models;
+    });
+    await Provider.of<MachinesProvider>(context, listen: false)
+        .fetchWSMachines(DB_DISPATCH_LINE)
+        .then((value) {
+      machines = Provider.of<MachinesProvider>(context, listen: false).machines;
       setState(() {
         _isLoading = false;
       });
@@ -243,7 +249,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: category
+                items: transitCategory
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
@@ -258,7 +264,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
               ),
               DropdownButton(
                 hint: Text(getTranselted(context, LBL_DELIVERY_CATEGORY)!),
-                items: status
+                items: deliveryStatus
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
                           value: e,
@@ -298,26 +304,27 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
               const SizedBox(
                 height: 10,
               ),
-              // ListView.builder(
-              //     physics: const ClampingScrollPhysics(),
-              //     shrinkWrap: true,
-              //     itemCount: items.length,
-              //     itemBuilder: (context, i) {
-              //       return items[i];
-              //     }),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // ButtonWidget(
-              //   text: getTranselted(context, LBL_ADD_ITEM)!,
-              //   onTap: () {
-              //     setState(() {
-              //       items.add(DeliveryMachineWidget(
-              //         allModels: machineModels,
-              //       ));
-              //     });
-              //   },
-              // ),
+              ListView.builder(
+                  physics: const ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, i) {
+                    return items[i];
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+              ButtonWidget(
+                text: getTranselted(context, LBL_ADD_ITEM)!,
+                onTap: () {
+                  setState(() {
+                    items.add(DeliveryMachineWidget(
+                      allModels: machineModels,
+                      machines: machines,
+                    ));
+                  });
+                },
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -404,22 +411,22 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   }
 
   Map<String, dynamic>? getTicketHeader() {
-    // Map<String, dynamic> map = {};
-    // items.forEach((element) {
-    //   if (element is DeliveryMachineWidget) {
-    //     if (map.containsKey(element.machineNumber.text)) {
-    //       double qty = double.parse(map[element.machineNumber.text][1]);
-    //       qty += double.parse(element.qty.text);
-    //       map[element.machineNumber.text][1] = qty;
-    //     } else {
-    //       map.update(
-    //         element.machineNumber.text,
-    //         (value) => [element.machineModel.text, element.qty.text],
-    //         ifAbsent: () => [element.machineModel.text, element.qty.text],
-    //       );
-    //     }
-    //   }
-    // });
+    Map<String, dynamic> map = {};
+    items.forEach((element) {
+      if (element is DeliveryMachineWidget) {
+        if (map.containsKey(element.machineNumber.text)) {
+          double qty = double.parse(map[element.machineNumber.text][1]);
+          qty += double.parse(element.qty.text);
+          map[element.machineNumber.text][1] = qty;
+        } else {
+          map.update(
+            element.machineNumber.text,
+            (value) => [element.machineModel.text, element.qty.text],
+            ifAbsent: () => [element.machineModel.text, element.qty.text],
+          );
+        }
+      }
+    });
     return {
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
@@ -440,7 +447,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),
       Ticket.VISIT_START_TIME: from!.text.trim(),
       Ticket.VISIT_END_TIME: to!.text.trim(),
-      // Ticket.DELIVERY_ITEMS: map,
+      Ticket.DELIVERY_ITEMS: map,
       Ticket.SO_NUMBER: so!.text.trim(),
       Ticket.STATUS: _selectedStatus,
       Ticket.MACHINE_MODEL: NA,

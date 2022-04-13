@@ -1,9 +1,12 @@
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
+import 'package:customer_service_app/Widgets/Creator/custom_list_dialgo.dart';
 import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,8 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
   bool _search = false;
+  CustomListDialog? dialog;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -99,18 +104,41 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                               : 1.2),
                   itemCount: _showedTickets.length,
                   itemBuilder: (context, i) {
-                    return OpenTicketWidget(
-                      cafeName: _showedTickets[i].cafeName,
-                      city: _showedTickets[i].city,
-                      customerMobile: _showedTickets[i].extraContactNumber,
-                      customerName: _showedTickets[i].customerName,
-                      date: _showedTickets[i].creationDate,
-                      didContact: _showedTickets[i].didContact,
-                      machineNumber: _showedTickets[i].machineNumber,
-                      onTap: () {
-                        Navigator.pushNamed(context, sanremoEditTicketRoute,
-                            arguments: _showedTickets[i]);
+                    return Dismissible(
+                      key: UniqueKey(),
+                      direction: DismissDirection.horizontal,
+                      onDismissed: (direction) async {
+                        if (dialog != null) {
+                          Provider.of<TicketProvider>(context, listen: false)
+                              .archiveTicket(_showedTickets[i], dialog!.value)
+                              .then((value) async {
+                            if (value == SC_SUCCESS_RESPONSE) {
+                              _showedTickets.remove(_showedTickets[i]);
+                            } else {}
+                          });
+                        }
                       },
+                      confirmDismiss: (direction) async {
+                        dialog = CustomListDialog(
+                          msg: 'Archive Ticket',
+                          items: archiveReasons,
+                        );
+                        return await showDialog(
+                            context: context, builder: (_) => dialog!);
+                      },
+                      child: OpenTicketWidget(
+                        cafeName: _showedTickets[i].cafeName,
+                        city: _showedTickets[i].city,
+                        customerMobile: _showedTickets[i].extraContactNumber,
+                        customerName: _showedTickets[i].customerName,
+                        date: _showedTickets[i].creationDate,
+                        didContact: _showedTickets[i].didContact,
+                        machineNumber: _showedTickets[i].machineNumber,
+                        onTap: () {
+                          Navigator.pushNamed(context, sanremoEditTicketRoute,
+                              arguments: _showedTickets[i]);
+                        },
+                      ),
                     );
                   });
             }),
