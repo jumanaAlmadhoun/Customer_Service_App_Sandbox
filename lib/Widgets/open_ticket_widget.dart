@@ -36,47 +36,59 @@ class OpenTicketWidget extends StatelessWidget {
               border: Border.all(color: APP_BAR_COLOR, width: 1),
               borderRadius: BorderRadius.circular(15),
               color: didContact! ? CONTACTED_COLOR : NOT_CONTACTED_COLOR),
-          child: Center(
-            child: Wrap(
-              spacing: 8,
-              direction: Axis.vertical,
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(
-                  getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
-                Text(
-                  getTranselted(context, LBL_NAME)! + ': ' + customerName!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
-                Text(
-                  getTranselted(context, LBL_MACHINE_NUMBER)! +
-                      ': ' +
-                      machineNumber!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
-                Text(
-                  getTranselted(context, LBL_PHONE)! + ': ' + customerMobile!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
-                Text(
-                  getTranselted(context, LBL_CITY)! + ': ' + city!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
-                Text(
-                  getTranselted(context, LBL_DATE)! + ': ' + date!,
-                  textAlign: TextAlign.left,
-                  style: TICKET_TEXT_STYLE,
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              Text(
+                getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                getTranselted(context, LBL_NAME)! + ': ' + customerName!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                getTranselted(context, LBL_MACHINE_NUMBER)! +
+                    ': ' +
+                    machineNumber!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                getTranselted(context, LBL_PHONE)! + ': ' + customerMobile!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                getTranselted(context, LBL_CITY)! + ': ' + city!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                getTranselted(context, LBL_DATE)! + ': ' + date!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
           ),
         ),
       ),
