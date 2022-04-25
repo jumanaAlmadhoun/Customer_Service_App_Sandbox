@@ -82,38 +82,25 @@ class _PickupTicketsPageState extends State<PickupTicketsPage> with RouteAware {
           ? const SpinKitRipple(
               color: APP_BAR_COLOR,
             )
-          : LayoutBuilder(
-              builder: (context, constraints) => GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: constraints.maxWidth < mobileWidth
-                        ? 1
-                        : constraints.maxWidth > ipadWidth
-                            ? 3
-                            : 2,
-                    childAspectRatio: constraints.maxWidth < mobileWidth
-                        ? 2.3
-                        : constraints.maxWidth < ipadWidth
-                            ? 1.3
-                            : 1.2),
-                itemCount: _tickets.length,
-                itemBuilder: (context, i) {
-                  return DeliveryTicketWidget(
-                    cafeName: _tickets[i].cafeName,
-                    city: _tickets[i].city,
-                    customerMobile: _tickets[i].extraContactNumber,
-                    customerName: _tickets[i].customerName,
-                    date: _tickets[i].creationDate,
-                    didContact: _tickets[i].didContact,
-                    techName: _tickets[i].techName,
-                    type: _tickets[i].subCategory,
-                    deliveryType: _tickets[i].status,
-                    onTap: () {
-                      Navigator.pushNamed(context, creatorEditPickupTicketRoute,
-                          arguments: _tickets[i]);
-                    },
-                  );
-                },
-              ),
+          : ListView.builder(
+              itemCount: _tickets.length,
+              itemBuilder: (context, i) {
+                return DeliveryTicketWidget(
+                  cafeName: _tickets[i].cafeName,
+                  city: _tickets[i].city,
+                  customerMobile: _tickets[i].extraContactNumber,
+                  customerName: _tickets[i].customerName,
+                  date: _tickets[i].creationDate,
+                  didContact: _tickets[i].didContact,
+                  techName: _tickets[i].techName,
+                  type: _tickets[i].subCategory,
+                  deliveryType: _tickets[i].status,
+                  onTap: () {
+                    Navigator.pushNamed(context, creatorEditPickupTicketRoute,
+                        arguments: _tickets[i]);
+                  },
+                );
+              },
             ),
     );
   }
