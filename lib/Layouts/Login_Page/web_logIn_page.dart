@@ -41,7 +41,7 @@ class _WebLogInPageState extends State<WebLogInPage> {
           Container(
             height: double.infinity,
             width: size.width / 2,
-            padding: EdgeInsets.only(left: 10.0, right: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 245, 232, 161),
             ),
@@ -67,13 +67,14 @@ class _WebLogInPageState extends State<WebLogInPage> {
                           getTranselted(context, LOGIN_TXT)!,
                           style: const TextStyle(
                             color: APP_BAR_COLOR,
-                            fontSize: 30,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
                           ),
                         ),
                         LanguageWidget(
                           color: APP_BAR_COLOR,
+                          backgroundolor: Colors.white,
                         )
                       ],
                     ),
