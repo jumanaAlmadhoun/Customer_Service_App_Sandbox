@@ -74,7 +74,6 @@ class _WebLogInPageState extends State<WebLogInPage> {
                         ),
                         LanguageWidget(
                           color: APP_BAR_COLOR,
-                          backgroundolor: Colors.white,
                         )
                       ],
                     ),
