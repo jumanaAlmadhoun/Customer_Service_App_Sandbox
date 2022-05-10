@@ -123,7 +123,7 @@ class _DownloadPageState extends State<DownloadPage> {
     final dir = await _getDownloadDirectory();
     final isPermissionStatusGranted = await _requestPermissions();
     if (isPermissionStatusGranted) {
-      final savePath = path.getDownloadsDirectory().toString();
+      final savePath = path.getExternalStorageDirectory().toString();
       await _startDownload(savePath, link);
     } else {
       // handle the scenario when user declines the permissions

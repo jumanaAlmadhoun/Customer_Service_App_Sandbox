@@ -175,9 +175,6 @@ class TicketProvider with ChangeNotifier {
           '$TECH_FILL_SCRIPT?url=$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
       data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
-        response = await http.get(Uri.parse(
-            '$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
-        data = jsonDecode(response.body) as Map<String, dynamic>;
         invoiceName = data['invName'];
         invoiceUrl = data['invLink'];
         reportName = data['name'];
