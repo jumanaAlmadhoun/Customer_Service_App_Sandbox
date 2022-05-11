@@ -99,7 +99,9 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
                           }
                         },
                       );
-                    } catch (e) {} //add throw statement
+                    } catch (e) {
+                      throw Exception(e);
+                    } //add throw statement
                   })))),
     );
   }
