@@ -47,29 +47,45 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
       backgroundColor: const Color(0xffE9EBE9),
       appBar: AppBar(
         backgroundColor: const Color(0xffDFE0DF),
-        title: Text(
-          getTranselted(context, HOME_PAGE_TITLE)!,
-          style: const TextStyle(color: Color(0xff512100)),
-        ),
-        leading: IconButton(
-          icon: Image.asset(
+        title: Padding(
+          padding: const EdgeInsets.only(right: 30.0),
+          child: Image.asset(
             'Assets/Images/rfa_logo.png',
+            width: 110,
+            height: 110,
           ),
-          onPressed: () {},
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 150.0),
+            child: Center(
+              child: Text(
+                getTranselted(context, HOME_PAGE_TITLE)!,
+                style: const TextStyle(
+                  color: Color(0xff512100),
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('COFFEbEANS.png'), fit: BoxFit.fill)),
+                image: AssetImage('Assets/Images/COFFEbEANS.png'),
+                fit: BoxFit.fill)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(children: [
             //  Image.asset(IMG_LOGO),
-            const SizedBox(
-              height: 50,
-            ),
-            /* ButtonWidget(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                /* ButtonWidget(
               text: getTranselted(context, VIEW_OPEN_TICKETS)!,
               onTap: () {
                 Navigator.pushNamed(context, techOpenTicketRoute);
@@ -106,37 +122,110 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                 }
               },
             ),*/
-            InkWell(
-              onTap: () {},
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  height: size.height * 0.1,
-                  width: size.width * 0.8,
-                  padding: const EdgeInsets.all(0.0),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    color: Colors.white,
-                    border: Border.all(color: Color(0xffD68D0A), width: 3.0),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 8.0,
-                          offset: Offset(0.0, 10.0))
-                    ],
-                  ),
-                  child: Text(
-                    getTranselted(context, VIEW_OPEN_TICKETS)!,
-                    style: const TextStyle(
-                        fontFamily: 'Signika Negative',
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xff512100)),
+                InkWell(
+                  onTap: () {},
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: size.height * 0.1,
+                      width: size.width * 0.8,
+                      padding: const EdgeInsets.all(0.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: Colors.white,
+                        border:
+                            Border.all(color: Color(0xffD68D0A), width: 3.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 8.0,
+                              offset: Offset(0.0, 10.0))
+                        ],
+                      ),
+                      child: Text(
+                        getTranselted(context, VIEW_OPEN_TICKETS)!,
+                        style: const TextStyle(
+                            fontFamily: 'Signika Negative',
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff512100)),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+                const SizedBox(
+                  height: 30,
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: size.height * 0.1,
+                      width: size.width * 0.8,
+                      padding: const EdgeInsets.all(0.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: Colors.white,
+                        border:
+                            Border.all(color: Color(0xffD68D0A), width: 3.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 8.0,
+                              offset: Offset(0.0, 10.0))
+                        ],
+                      ),
+                      child: Text(
+                        getTranselted(context, VIEW_OPEN_TICKETS)!,
+                        style: const TextStyle(
+                            fontFamily: 'Signika Negative',
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff512100)),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: size.height * 0.1,
+                      width: size.width * 0.8,
+                      padding: const EdgeInsets.all(0.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: Colors.white,
+                        border:
+                            Border.all(color: Color(0xffD68D0A), width: 3.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 8.0,
+                              offset: Offset(0.0, 10.0))
+                        ],
+                      ),
+                      child: Text(
+                        getTranselted(context, VIEW_OPEN_TICKETS)!,
+                        style: const TextStyle(
+                            fontFamily: 'Signika Negative',
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff512100)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ]),
         ),
       ),
