@@ -19,6 +19,7 @@ import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'Localization/localization_constants.dart';
 import 'Services/login_provider.dart';
@@ -79,6 +80,14 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         title: 'Customer Service App',
+        builder: (context, widget) => ResponsiveWrapper.builder(
+            ClampingScrollWrapper.builder(context, widget),
+            breakpoints: const [
+              ResponsiveBreakpoint.resize(350, name: MOBILE),
+              ResponsiveBreakpoint.autoScale(600, name: TABLET),
+              ResponsiveBreakpoint.resize(800, name: DESKTOP),
+              ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
+            ]),
         theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
             canvasColor: BACK_GROUND_COLOR,
