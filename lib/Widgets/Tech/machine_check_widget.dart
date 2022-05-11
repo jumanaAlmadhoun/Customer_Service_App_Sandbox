@@ -6,7 +6,7 @@ class MachineChekWidget extends StatefulWidget {
   MachineChekWidget({this.title, this.keyJson, this.validate});
   TextEditingController? controller = TextEditingController();
   String? pass = '';
-  bool? isPass = false;
+  bool? isPass = null;
   String? title;
   String? keyJson;
   String? Function(String?)? validate;
