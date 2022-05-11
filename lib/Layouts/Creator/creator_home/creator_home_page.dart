@@ -102,15 +102,15 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                       Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
                     },
                   ),
-            exchangeTickets == -1
-                ? const SpinKitDancingSquare(
-                    color: APP_BAR_COLOR,
-                  )
-                : CategoryItem(
-                    title: getTranselted(context, TIC_EXCHANGE)!,
-                    image: IMG_EXCHANGE,
-                    number: exchangeTickets,
-                  ),
+            // exchangeTickets == -1
+            //     ? const SpinKitDancingSquare(
+            //         color: APP_BAR_COLOR,
+            //       )
+            //     : CategoryItem(
+            //         title: getTranselted(context, TIC_EXCHANGE)!,
+            //         image: IMG_EXCHANGE,
+            //         number: exchangeTickets,
+            //       ),
             pickupTickets == -1
                 ? const SpinKitDancingSquare(
                     color: APP_BAR_COLOR,
@@ -122,10 +122,10 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                     onTap: () {
                       Navigator.pushNamed(context, creatorPickupTicketsRoute);
                     }),
-            CategoryItem(
-              title: getTranselted(context, TIC_ACCOUNTING)!,
-              image: IMG_ACCOUNTING,
-            ),
+            // CategoryItem(
+            //   title: getTranselted(context, TIC_ACCOUNTING)!,
+            //   image: IMG_ACCOUNTING,
+            // ),
             CategoryItem(
               title: getTranselted(context, TIC_CUSTOMER_TICKETS)!,
               image: IMG_CLIENT_TICKETS,

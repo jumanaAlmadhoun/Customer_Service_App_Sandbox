@@ -94,59 +94,44 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
             ? const SpinKitRipple(
                 color: APP_BAR_COLOR,
               )
-            : LayoutBuilder(
-                builder: (context, constraints) {
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: constraints.maxWidth < mobileWidth
-                            ? 1
-                            : constraints.maxWidth > ipadWidth
-                                ? 3
-                                : 2,
-                        childAspectRatio: constraints.maxWidth < mobileWidth
-                            ? 2.5
-                            : constraints.maxWidth < ipadWidth
-                                ? 1.3
-                                : 1.2),
-                    itemCount: _showedTickets.length,
-                    itemBuilder: (context, i) {
-                      return Dismissible(
-                        key: UniqueKey(),
-                        direction: DismissDirection.horizontal,
-                        onDismissed: (direction) async {
-                          if (dialog != null) {
-                            Provider.of<TicketProvider>(context, listen: false)
-                                .archiveTicket(_showedTickets[i], dialog!.value)
-                                .then((value) async {
-                              if (value == SC_SUCCESS_RESPONSE) {
-                                _showedTickets.remove(_showedTickets[i]);
-                              } else {}
-                            });
-                          }
-                        },
-                        confirmDismiss: (direction) async {
-                          dialog = CustomListDialog(
-                            msg: 'Archive Ticket',
-                            items: archiveReasons,
-                          );
-                          return await showDialog(
-                              context: context, builder: (_) => dialog!);
-                        },
-                        child: OpenTicketWidget(
-                          cafeName: _showedTickets[i].cafeName,
-                          city: _showedTickets[i].city,
-                          customerMobile: _showedTickets[i].extraContactNumber,
-                          customerName: _showedTickets[i].customerName,
-                          date: _showedTickets[i].creationDate,
-                          didContact: _showedTickets[i].didContact,
-                          machineNumber: _showedTickets[i].machineNumber,
-                          onTap: () {
-                            Navigator.pushNamed(context, sanremoEditTicketRoute,
-                                arguments: _showedTickets[i]);
-                          },
-                        ),
-                      );
+            : ListView.builder(
+                itemCount: _showedTickets.length,
+                itemBuilder: (context, i) {
+                  return Dismissible(
+                    key: UniqueKey(),
+                    direction: DismissDirection.horizontal,
+                    onDismissed: (direction) async {
+                      if (dialog != null) {
+                        Provider.of<TicketProvider>(context, listen: false)
+                            .archiveTicket(_showedTickets[i], dialog!.value)
+                            .then((value) async {
+                          if (value == SC_SUCCESS_RESPONSE) {
+                            _showedTickets.remove(_showedTickets[i]);
+                          } else {}
+                        });
+                      }
                     },
+                    confirmDismiss: (direction) async {
+                      dialog = CustomListDialog(
+                        msg: 'Archive Ticket',
+                        items: archiveReasons,
+                      );
+                      return await showDialog(
+                          context: context, builder: (_) => dialog!);
+                    },
+                    child: OpenTicketWidget(
+                      cafeName: _showedTickets[i].cafeName,
+                      city: _showedTickets[i].city,
+                      customerMobile: _showedTickets[i].customerMobile,
+                      customerName: _showedTickets[i].customerName,
+                      date: _showedTickets[i].creationDate,
+                      didContact: _showedTickets[i].didContact,
+                      machineNumber: _showedTickets[i].machineNumber,
+                      onTap: () {
+                        Navigator.pushNamed(context, sanremoEditTicketRoute,
+                            arguments: _showedTickets[i]);
+                      },
+                    ),
                   );
                 },
               ));

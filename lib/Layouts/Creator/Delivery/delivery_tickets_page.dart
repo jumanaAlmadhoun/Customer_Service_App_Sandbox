@@ -97,47 +97,33 @@ class _DeliveryTicketsPageState extends State<DeliveryTicketsPage>
           ? const SpinKitRipple(
               color: APP_BAR_COLOR,
             )
-          : LayoutBuilder(
-              builder: (context, constraints) => GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: constraints.maxWidth < mobileWidth
-                      ? 1
-                      : constraints.maxWidth < ipadWidth
-                          ? 2
-                          : 3,
-                  childAspectRatio: constraints.maxWidth < mobileWidth
-                      ? 2.3
-                      : constraints.maxWidth < ipadWidth
-                          ? 1.4
-                          : 1.3,
-                ),
-                itemCount: _showedTickets.length,
-                itemBuilder: (context, i) {
-                  return DeliveryTicketWidget(
-                    cafeName: _showedTickets[i].cafeName,
-                    city: _showedTickets[i].city,
-                    customerMobile: _showedTickets[i].extraContactNumber,
-                    customerName: _showedTickets[i].customerName,
-                    date: _showedTickets[i].creationDate,
-                    didContact: _showedTickets[i].didContact,
-                    techName: _showedTickets[i].techName,
-                    type: _showedTickets[i].subCategory,
-                    deliveryType: _showedTickets[i].status,
-                    onTap: () {
-                      if (_showedTickets[i].subCategory ==
-                          Ticket.PARTS_DELIVERY) {
-                        Navigator.pushNamed(
-                            context, creatorEditPartsDeliveryRoute,
-                            arguments: _showedTickets[i]);
-                      } else {
-                        Navigator.pushNamed(
-                            context, creatorEditNewMachineDeliveryRoute,
-                            arguments: _showedTickets[i]);
-                      }
-                    },
-                  );
-                },
-              ),
+          : ListView.builder(
+              itemCount: _showedTickets.length,
+              itemBuilder: (context, i) {
+                return DeliveryTicketWidget(
+                  cafeName: _showedTickets[i].cafeName,
+                  city: _showedTickets[i].city,
+                  customerMobile: _showedTickets[i].extraContactNumber,
+                  customerName: _showedTickets[i].customerName,
+                  date: _showedTickets[i].creationDate,
+                  didContact: _showedTickets[i].didContact,
+                  techName: _showedTickets[i].techName,
+                  type: _showedTickets[i].subCategory,
+                  deliveryType: _showedTickets[i].status,
+                  onTap: () {
+                    if (_showedTickets[i].subCategory ==
+                        Ticket.PARTS_DELIVERY) {
+                      Navigator.pushNamed(
+                          context, creatorEditPartsDeliveryRoute,
+                          arguments: _showedTickets[i]);
+                    } else {
+                      Navigator.pushNamed(
+                          context, creatorEditNewMachineDeliveryRoute,
+                          arguments: _showedTickets[i]);
+                    }
+                  },
+                );
+              },
             ),
     );
   }
