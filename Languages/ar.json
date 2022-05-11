@@ -1,6 +1,6 @@
 {
     "login_page": "Login",
-    "home_page": "Home",
+    "home_page": "الصفحة الرئيسية",
     "site_visit_tickets": "Site Visit Tickets",
     "delivery_tickets": "Delivery Tickets",
     "pick_up_tickets": "Pick Up Tickets",
@@ -16,5 +16,8 @@
     "pending_tickets":"Pending Tickets",
     "brand_selection": "Brand Selection",
     "password": "Password",
-    "phone_number":"Phone Number"
+    "phone_number":"Phone Number",
+    "view_open_tickets": "عرض التذاكر المفتوحة",
+    "view_closed_tickets": "عرض التذاكر المغلقة",
+    "logout": "تسجيل خروج"
 }

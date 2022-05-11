@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const Color APP_BAR_COLOR = Color(0xff261204);
+const Color APP_BAR_COLOR = Color(0xff005248);
 const Color APP_BAR_TEXT_COLOR = Color(0xffffffff);
 const Color ICON_COLOR = Color(0xff512100);
 const Color SHADOW_COLOR = Color(0xff000000);

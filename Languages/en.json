@@ -74,5 +74,8 @@
   "send":"Send",
   "cancel":"Cancel",
   "choose_archive":"Please Select Reason",
-  "client_ticket":"Customer's Tickets"
+  "client_ticket":"Customer's Tickets",
+  "view_open_tickets": "View Open Tickets",
+  "view_closed_tickets": "View Closed Tickets",
+  "logout": "Logout"
 }

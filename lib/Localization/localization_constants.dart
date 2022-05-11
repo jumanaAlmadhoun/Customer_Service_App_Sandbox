@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:customer_service_app/Localization/demo_localization.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -87,6 +89,9 @@ const String BTN_SEND = 'send';
 const String BTN_CANCEL = 'cancel';
 const String LBL_CHOOSE_REASON = 'choose_archive';
 const String TIC_CUSTOMER_TICKETS = 'client_ticket';
+const String VIEW_OPEN_TICKETS = 'view_open_tickets';
+const String VIEW_CLOSED_TICKETS = 'view_closed_tickets';
+const String LOGOUT = 'logout';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
