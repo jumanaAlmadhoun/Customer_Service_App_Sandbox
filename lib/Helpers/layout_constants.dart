@@ -1,11 +1,12 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
-const Color APP_BAR_COLOR = Color(0xff005248);
+const Color APP_BAR_COLOR = Color(0xffDFE0DF);
 const Color APP_BAR_TEXT_COLOR = Color(0xffffffff);
-const Color ICON_COLOR = Color(0xff512100);
+const Color ICON_TEX_COLOR = Color(0xff512100);
 const Color SHADOW_COLOR = Color(0xff000000);
-const Color BACK_GROUND_COLOR = Color(0xffffffff);
+const Color BACK_GROUND_COLOR = Color(0xffE9EBE9);
 const Color CONTACTED_COLOR = Color(0xffB5E3AF);
 const Color NOT_CONTACTED_COLOR = Color(0xffF88687);
 const Color ERROR_COLOR = Colors.red;
@@ -32,8 +33,13 @@ const String IMG_TECH_REPORT = 'Assets/Images/technician.png';
 const String IMG_WORKSHO_REPORT = 'Assets/Images/workshop_tickets.png';
 const String IMG_BEANS = 'Assets/Images/beans.png';
 const String IMG_CLIENT_TICKETS = 'Assets/Images/clients_tickets.jpg';
-
+const String WEB_BACKGROUND = 'Assets/Images/web_backgroun.png';
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);
+
+const TextStyle APPBAR_TEXT_STYLE = TextStyle(
+  color: ICON_TEX_COLOR,
+  fontSize: 20.0,
+);
 const mobileWidth = 635;
 const ipadWidth = 850;

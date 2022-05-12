@@ -1,8 +1,9 @@
-import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Helpers/layout_constants.dart';
 
 class LogoutWidget extends StatelessWidget {
   const LogoutWidget({Key? key}) : super(key: key);
@@ -25,6 +26,9 @@ class LogoutWidget extends StatelessWidget {
             print(ex);
           }
         },
-        icon: const Icon(Icons.logout));
+        icon: const Icon(
+          Icons.logout,
+          color: ICONS_COLOR,
+        ));
   }
 }
