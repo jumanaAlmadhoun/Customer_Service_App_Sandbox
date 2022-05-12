@@ -5,6 +5,8 @@ import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/logout_widget.dart';
 import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 class TechTicketInfoPage extends StatefulWidget {
   TechTicketInfoPage(this.ticket);
@@ -128,7 +130,17 @@ class TicketInfoCard extends StatelessWidget {
           ),
         ),
       ),
-      onTap: isURL! ? () {} : () {},
+      onTap: isURL!
+          ? () async {
+              String url = content!.trim();
+              if (await canLaunch(url)) {
+                await launch(url);
+              }
+            }
+          : () {},
+      onLongPress: () {
+        Clipboard.setData(ClipboardData(text: content));
+      },
     );
   }
 }

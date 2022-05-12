@@ -1,3 +1,4 @@
+import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Models/ticket.dart';
@@ -124,8 +125,16 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
                 ButtonWidget(
                   text: 'التالي',
                   onTap: () {
-                    Navigator.pushNamed(context, techVisitSummaryRoute,
-                        arguments: [widget.ticket, _machineCheckDesign]);
+                    String title = validateTechInput();
+                    if (title != NA) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(' الرجاء تعبئة $title'),
+                        backgroundColor: ERROR_COLOR,
+                      ));
+                    } else {
+                      Navigator.pushNamed(context, techVisitSummaryRoute,
+                          arguments: [widget.ticket, _machineCheckDesign]);
+                    }
                   },
                 ),
               ],
@@ -239,7 +248,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       CommentWidget(title: 'توصيل ثنائي القطبية 110'),
       CommentWidget(title: 'توصيل غير صحيح من قبل المستخدم'),
       CommentWidget(title: 'مصدر الماء غير مطابق للمعايير و التوصيات'),
-      CommentWidget(title: 'تدفق مصدر الماء متغير/ضعيف مما يؤثر على المكينة'),
+      CommentWidget(title: 'تدفق مصدر الماء متغير/ضعيف\n مما يؤثر على المكينة'),
       CommentWidget(title: 'نسبة قاعدية الماء غير مطابقة للمعايير'),
       CommentWidget(title: 'نسبة المواد الصلبة المذابة غير مطابقة للمعايير'),
       CommentWidget(title: 'تكلسات املاح مرئية داخل المكينة'),
@@ -254,7 +263,27 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       CommentWidget(title: 'يوجد فرق كميات لايمكن حله في الموقع'),
       CommentWidget(title: 'يوجد تكلسات لايمكن تنظيفها في الموقع'),
       CommentWidget(title: 'نوصي بنقل المكينة لمركز الصيانة'),
-      CommentWidget(title: 'نوصي بتعديل التوصيلات والملاحظات حسب توصيات الشركة')
+      CommentWidget(
+          title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة')
     ];
+  }
+
+  String validateTechInput() {
+    String title = NA;
+    for (int i = 0; i < _machineCheckDesign.length; i++) {
+      var entery = _machineCheckDesign[i];
+      if (entery is MachineChekWidget) {
+        if (entery.isPass == null) {
+          title = entery.title!;
+          break;
+        }
+      } else if (entery is TextWidget) {
+        if (entery.controller.text.isEmpty) {
+          title = entery.title!;
+          break;
+        }
+      }
+    }
+    return title;
   }
 }
