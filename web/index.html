@@ -30,41 +30,55 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+ 
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers --> 
-       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
        <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js"></script>
        <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
        <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
-     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
-     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
-     <script>const firebaseConfig = {
+       <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore-compat.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/9.8.1/firebase-auth-compat.js"></script>
+
      
-       apiKey: "AIzaSyBLL2y-UfzpE3PrISzAOnonnj-_Qfd9sv0",
+       <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+         const firebaseConfig = {
      
-       authDomain: "sanremov2.firebaseapp.com",
-     
-       databaseURL: "https://sanremov2-default-rtdb.firebaseio.com",
-     
-       projectId: "sanremov2",
-     
-       storageBucket: "sanremov2.appspot.com",
-     
-       messagingSenderId: "883503481041",
-     
-       appId: "1:883503481041:web:c6c8c2049ca34a682185f0",
-     
-       measurementId: "G-BHX62ER2LF"
-     
-     };
-     
-     
-     // Initialize Firebase
-     var app =firebase.initializeApp(firebaseConfig);
-     const firestore = getFirestore(app);
-     const auth = getAuth(app);
-  </script>
+     apiKey: "AIzaSyBLL2y-UfzpE3PrISzAOnonnj-_Qfd9sv0",
+   
+     authDomain: "sanremov2.firebaseapp.com",
+   
+     databaseURL: "https://sanremov2-default-rtdb.firebaseio.com",
+   
+     projectId: "sanremov2",
+   
+     storageBucket: "sanremov2.appspot.com",
+   
+     messagingSenderId: "883503481041",
+   
+     appId: "1:883503481041:web:c6c8c2049ca34a682185f0",
+   
+     measurementId: "G-BHX62ER2LF"
+   
+   };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = firebaseApp.firestore(app);
+      const auth = firebaseApp.auth(app);
+      </script>
+   
+   
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;

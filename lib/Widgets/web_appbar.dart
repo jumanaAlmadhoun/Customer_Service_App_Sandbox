@@ -11,13 +11,13 @@ class WebAppBar extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
         color: APP_BAR_COLOR,
-        height: size.height * 0.1,
+        height: size.height * 0.12,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
               IMG_LOGO,
-              height: size.height * 0.08,
+              height: size.height * 0.1,
             ),
             Row(children: navItem),
           ],

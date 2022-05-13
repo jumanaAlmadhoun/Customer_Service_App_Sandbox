@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
           }
           return supportedLocales.first;
         },
-        initialRoute: techHomeRoute,
+        initialRoute: adminHomeRoute,
         onGenerateRoute: CustomRouter.allRoutes,
         debugShowCheckedModeBanner: false,
         navigatorObservers: [routeObserver],

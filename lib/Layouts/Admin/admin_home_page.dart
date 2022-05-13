@@ -5,10 +5,13 @@ import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/rfa_machines_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/Widgets/logout_widget.dart';
-import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
+import '../../Widgets/appBar.dart';
+import '../../main.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({Key? key}) : super(key: key);
@@ -36,10 +39,15 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranselted(context, HOME_PAGE_TITLE)!),
-        actions: const [LogoutWidget()],
-      ),
+      appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+          ? CustomeAppBar(
+              action: const [LogoutWidget()],
+              title: Text(
+                getTranselted(context, HOME_PAGE_TITLE)!,
+                style: APPBAR_TEXT_STYLE,
+              ),
+            )
+          : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
           return GridView.count(
