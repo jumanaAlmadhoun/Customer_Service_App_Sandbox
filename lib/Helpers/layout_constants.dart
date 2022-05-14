@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 const Color APP_BAR_COLOR = Color(0xffDFE0DF);
-const Color APP_BAR_TEXT_COLOR = Color(0xffffffff);
+const Color APP_BAR_TEXT_COLOR = Color(0xff512100);
 const Color ICON_TEX_COLOR = Color(0xff512100);
 const Color SHADOW_COLOR = Color(0xff000000);
 const Color BACK_GROUND_COLOR = Color(0xffE9EBE9);
@@ -11,6 +11,7 @@ const Color CONTACTED_COLOR = Color(0xffB5E3AF);
 const Color NOT_CONTACTED_COLOR = Color(0xffF88687);
 const Color ERROR_COLOR = Colors.red;
 const Color ICONS_COLOR = Color(0xffD68D0A);
+const Color BACK_ICON_COLOR = Color(0xff005248);
 const Color GRID_COLOR = Color.fromARGB(255, 231, 224, 217);
 const String IMG_LOGO = 'Assets/Images/rfa_logo_horizontal.png';
 const String IMG_LOGO_SANREMO = 'Assets/Images/sanremo.png';

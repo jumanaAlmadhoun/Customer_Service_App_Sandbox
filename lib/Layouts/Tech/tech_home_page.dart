@@ -15,7 +15,7 @@ import '../../../main.dart';
 import '../../Localization/localization_constants.dart';
 import '../../Widgets/appBar.dart';
 import '../../Widgets/logout_widget.dart';
-import '../../Widgets/web_appbar.dart';
+import '../../Widgets/web_layout.dart';
 
 class TechHomePage extends StatefulWidget {
   const TechHomePage({Key? key}) : super(key: key);
@@ -60,121 +60,105 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
               style: APPBAR_TEXT_STYLE,
             ))
           : null,
-      body: Container(
-        decoration: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-            ? null
-            : const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                      WEB_BACKGROUND,
-                    ),
-                    fit: BoxFit.fill)),
-        child: ListView(children: [
-          ResponsiveVisibility(
-            visible: false,
-            visibleWhen: const [Condition.largerThan(name: TABLET)],
-            child: WebAppBar(
-              navItem: [
-                InkWell(
-                  onTap: () => Navigator.pushNamedAndRemoveUntil(
-                      context, techHomeRoute, (route) {
-                    ModalRoute.withName(techHomeRoute);
-                    return false;
-                  }),
-                  child: Text(
-                    getTranselted(context, HOME_PAGE_TITLE)!,
-                    style: APPBAR_TEXT_STYLE,
-                  ),
-                ),
-                const SizedBox(
-                  width: 50,
-                ),
-                const LogoutWidget(),
-              ],
-            ),
-          ),
-          ResponsiveVisibility(
-              hiddenWhen: const [Condition.largerThan(name: TABLET)],
-              child: Image.asset(IMG_LOGO)),
-          SizedBox(
-            height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-                ? 0.0
-                : 150,
-          ),
-          ResponsiveRowColumn(
-            rowMainAxisAlignment: MainAxisAlignment.center,
-            rowPadding: const EdgeInsets.all(30),
-            columnPadding: const EdgeInsets.all(30),
-            columnSpacing: 20,
-            rowSpacing: 20,
-            layout: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-                ? ResponsiveRowColumnType.COLUMN
-                : ResponsiveRowColumnType.ROW,
-            children: [
-              ResponsiveRowColumnItem(
-                rowFlex: 1,
-                child: ButtonWidget(
-                  text: getTranselted(context, VIEW_OPEN_TICKETS)!,
-                  height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-                      ? size.height * 0.13
-                      : size.height * 0.20,
-                  width: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-                      ? size.width * 0.70
-                      : size.width * 0.30,
-                  onTap: () {
-                    Navigator.pushNamed(context, techOpenTicketRoute);
-                  },
+      body: SingleChildScrollView(
+        child: WebLayout(
+            navItem: [
+              InkWell(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, techHomeRoute, (route) {
+                  ModalRoute.withName(techHomeRoute);
+                  return false;
+                }),
+                child: Text(
+                  getTranselted(context, HOME_PAGE_TITLE)!,
+                  style: APPBAR_TEXT_STYLE,
                 ),
               ),
-              ResponsiveRowColumnItem(
-                rowFlex: 1,
-                child: ButtonWidget(
-                  height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-                      ? size.height * 0.13
-                      : size.height * 0.20,
-                  width: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-                      ? size.width * 0.70
-                      : size.width * 0.30,
-                  text: getTranselted(context, VIEW_CLOSED_TICKETS)!,
-                  onTap: () async {
-                    // Navigator.pushNamed(context, TechClosedTicketsScreen.id);
-                  },
-                ),
+              const SizedBox(
+                width: 50,
               ),
-              ResponsiveRowColumnItem(
-                rowFlex: 1,
-                child: ResponsiveVisibility(
-                  hiddenWhen: const [Condition.largerThan(name: TABLET)],
+              const LogoutWidget(),
+            ],
+            widget: ResponsiveRowColumn(
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              rowPadding: const EdgeInsets.all(30),
+              columnPadding: const EdgeInsets.all(30),
+              columnSpacing: 20,
+              rowSpacing: 20,
+              layout: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                  ? ResponsiveRowColumnType.COLUMN
+                  : ResponsiveRowColumnType.ROW,
+              children: [
+                ResponsiveRowColumnItem(
+                  child: ResponsiveVisibility(
+                      hiddenWhen: const [Condition.largerThan(name: TABLET)],
+                      child: Image.asset(IMG_LOGO)),
+                ),
+                ResponsiveRowColumnItem(
+                  rowFlex: 1,
                   child: ButtonWidget(
-                    text: getTranselted(context, LOGOUT)!,
+                    text: getTranselted(context, VIEW_OPEN_TICKETS)!,
                     height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
                         ? size.height * 0.13
                         : size.height * 0.20,
                     width: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
                         ? size.width * 0.70
                         : size.width * 0.30,
-                    onTap: () async {
-                      try {
-                        var pref = await SharedPreferences.getInstance();
-                        pref.remove(LoginHandeler.PHONE_NUMBER);
-                        pref.remove(LoginHandeler.PASSWORD);
-                        pref.remove(LoginHandeler.NAME);
-                        pref.remove(LoginHandeler.ROLE);
-                        Navigator.pushNamedAndRemoveUntil(context, loginRoute,
-                            (route) {
-                          ModalRoute.withName(loginRoute);
-                          return false;
-                        });
-                      } catch (ex) {
-                        throw Exception(ex);
-                      }
+                    onTap: () {
+                      Navigator.pushNamed(context, techOpenTicketRoute);
                     },
                   ),
                 ),
-              ),
-            ],
-          )
-        ]),
+                ResponsiveRowColumnItem(
+                  rowFlex: 1,
+                  child: ButtonWidget(
+                    height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                        ? size.height * 0.13
+                        : size.height * 0.20,
+                    width: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                        ? size.width * 0.70
+                        : size.width * 0.30,
+                    text: getTranselted(context, VIEW_CLOSED_TICKETS)!,
+                    onTap: () async {
+                      // Navigator.pushNamed(context, TechClosedTicketsScreen.id);
+                    },
+                  ),
+                ),
+                ResponsiveRowColumnItem(
+                  rowFlex: 1,
+                  child: ResponsiveVisibility(
+                    hiddenWhen: const [Condition.largerThan(name: TABLET)],
+                    child: ButtonWidget(
+                      text: getTranselted(context, LOGOUT)!,
+                      height:
+                          ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                              ? size.height * 0.13
+                              : size.height * 0.20,
+                      width:
+                          ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                              ? size.width * 0.70
+                              : size.width * 0.30,
+                      onTap: () async {
+                        try {
+                          var pref = await SharedPreferences.getInstance();
+                          pref.remove(LoginHandeler.PHONE_NUMBER);
+                          pref.remove(LoginHandeler.PASSWORD);
+                          pref.remove(LoginHandeler.NAME);
+                          pref.remove(LoginHandeler.ROLE);
+                          Navigator.pushNamedAndRemoveUntil(context, loginRoute,
+                              (route) {
+                            ModalRoute.withName(loginRoute);
+                            return false;
+                          });
+                        } catch (ex) {
+                          throw Exception(ex);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

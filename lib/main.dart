@@ -92,12 +92,12 @@ class _MyAppState extends State<MyApp> {
             visualDensity: VisualDensity.adaptivePlatformDensity,
             canvasColor: BACK_GROUND_COLOR,
             primarySwatch: Colors.brown,
-            iconTheme: const IconThemeData(color: ICON_TEX_COLOR),
             appBarTheme: const AppBarTheme(
+              iconTheme: IconThemeData(color: BACK_ICON_COLOR),
               backgroundColor: APP_BAR_COLOR,
               centerTitle: true,
               titleTextStyle: TextStyle(
-                  color: APP_BAR_TEXT_COLOR,
+                  color: ICON_TEX_COLOR,
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
             )),

@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:customer_service_app/Config/size_config.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
@@ -8,6 +10,12 @@ import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
+import '../../Routes/route_names.dart';
+import '../../Widgets/appBar.dart';
+import '../../Widgets/logout_widget.dart';
+import '../../Widgets/web_layout.dart';
 
 class TechReportPage extends StatefulWidget {
   const TechReportPage({Key? key}) : super(key: key);
@@ -27,14 +35,12 @@ class _TechReportPageState extends State<TechReportPage> with RouteAware {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPush() {
-    // TODO: implement didPush
     super.didPush();
     setState(() {
       _isLoading = true;
@@ -54,46 +60,84 @@ class _TechReportPageState extends State<TechReportPage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranselted(context, STA_TECHS_REPORT)!),
-      ),
+      appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+          ? CustomeAppBar(
+              action: const [LogoutWidget()],
+              title: Text(
+                getTranselted(context, STA_TECHS_REPORT)!,
+                style: APPBAR_TEXT_STYLE,
+              ),
+            )
+          : null,
       body: _isLoading
           ? const SpinKitChasingDots(
               color: APP_BAR_COLOR,
             )
-          : ListView(
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              children: [
-                Container(
-                  height: 50,
-                  child: Center(
-                    child: Text(
-                      currDate,
-                      style: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
+          : WebLayout(
+              navItem: [
+                InkWell(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, adminHomeRoute, (route) {
+                    ModalRoute.withName(adminHomeRoute);
+                    return false;
+                  }),
+                  child: Text(
+                    getTranselted(context, HOME_PAGE_TITLE)!,
+                    style: APPBAR_TEXT_STYLE,
                   ),
                 ),
-                Row(
-                  children: [
-                    InfoCard(
-                      label: 'Total Closed Today',
-                      amount: totalDayClosed.toString(),
-                    ),
-                    InfoCard(
-                      label: 'Total Closed This Month',
-                      amount: totalMonthClosed.toString(),
-                    ),
-                  ],
+                const SizedBox(
+                  width: 50,
                 ),
-                ScrollableWidget(child: buildDataTable())
+                const LogoutWidget(),
               ],
+              widget: ListView(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Container(
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          currDate,
+                          style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: BACK_ICON_COLOR),
+                        ),
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 226, 219, 212),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      InfoCard(
+                        label: 'Total Closed Today',
+                        amount: totalDayClosed.toString(),
+                      ),
+                      InfoCard(
+                        label: 'Total Closed This Month',
+                        amount: totalMonthClosed.toString(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.015,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ScrollableWidget(child: buildDataTable()),
+                  )
+                ],
+              ),
             ),
     );
   }
@@ -101,18 +145,27 @@ class _TechReportPageState extends State<TechReportPage> with RouteAware {
   Widget buildDataTable() {
     final columns = ['Tech Name', 'Today\'s Tickets', 'Month Tickets'];
     double space = MediaQuery.of(context).size.width * 0.07;
-    return DataTable(
-      columnSpacing: space,
-      sortAscending: isAscending,
-      sortColumnIndex: sortColumnIndex,
-      columns: getColumns(columns),
-      rows: getRows(techsTickets),
+
+    return Container(
+      color: const Color.fromARGB(255, 226, 219, 212),
+      width: MediaQuery.of(context).size.width,
+      child: DataTable(
+        columnSpacing: space,
+        sortAscending: isAscending,
+        sortColumnIndex: sortColumnIndex,
+        columns: getColumns(columns),
+        rows: getRows(techsTickets),
+      ),
     );
   }
 
   List<DataColumn> getColumns(List<String> columns) => columns
       .map((String column) => DataColumn(
-            label: Text(column),
+            label: Text(
+              column,
+              style: TextStyle(
+                  fontSize: 9), // TODO: implement responsive font size
+            ),
             onSort: onSort,
           ))
       .toList();

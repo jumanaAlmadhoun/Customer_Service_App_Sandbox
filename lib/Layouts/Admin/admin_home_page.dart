@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../Widgets/appBar.dart';
+import '../../Widgets/gridview_count_widget.dart';
+import '../../Widgets/web_layout.dart';
 import '../../main.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -48,55 +50,62 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
               ),
             )
           : null,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return GridView.count(
-            crossAxisCount: constraints.maxWidth < mobileWidth
-                ? 2
-                : constraints.maxWidth < mobileWidth
-                    ? 2
-                    : constraints.maxWidth > ipadWidth
-                        ? 4
-                        : 3,
-            childAspectRatio: constraints.maxWidth < mobileWidth ? 0.70 : 0.9,
-            children: [
-              totalRfaMachines == -1
-                  ? const SpinKitDancingSquare(
-                      color: APP_BAR_COLOR,
-                    )
-                  : CategoryItem(
-                      title: getTranselted(context, STA_RENT_MACHINES)!,
-                      image: IMG_RENT_MACHINE,
-                      number: totalRfaMachines,
-                      onTap: () {
-                        Navigator.pushNamed(context, adminRentMachineRoute);
-                      },
-                    ),
-              totalRfaMachines == -1
-                  ? const SpinKitDancingSquare(
-                      color: APP_BAR_COLOR,
-                    )
-                  : CategoryItem(
-                      title: getTranselted(context, STA_TECHS_REPORT)!,
-                      image: IMG_TECH_REPORT,
-                      onTap: () {
-                        Navigator.pushNamed(context, adminTechReportRoute);
-                      },
-                    ),
-              totalRfaMachines == -1
-                  ? const SpinKitDancingSquare(
-                      color: APP_BAR_COLOR,
-                    )
-                  : CategoryItem(
-                      title: getTranselted(context, STA_TECHS_REPORT)!,
-                      image: IMG_WORKSHO_REPORT,
-                      onTap: () {
-                        Navigator.pushNamed(context, adminTechReportRoute);
-                      },
-                    ),
-            ],
-          );
-        },
+      body: WebLayout(
+        navItem: [
+          InkWell(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, adminHomeRoute, (route) {
+              ModalRoute.withName(adminHomeRoute);
+              return false;
+            }),
+            child: Text(
+              getTranselted(context, HOME_PAGE_TITLE)!,
+              style: APPBAR_TEXT_STYLE,
+            ),
+          ),
+          const SizedBox(
+            width: 50,
+          ),
+          const LogoutWidget(),
+        ],
+        widget: GridViewCountWidget(
+          widgets: [
+            totalRfaMachines == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, STA_RENT_MACHINES)!,
+                    image: IMG_RENT_MACHINE,
+                    number: totalRfaMachines,
+                    onTap: () {
+                      Navigator.pushNamed(context, adminRentMachineRoute);
+                    },
+                  ),
+            totalRfaMachines == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, STA_TECHS_REPORT)!,
+                    image: IMG_TECH_REPORT,
+                    onTap: () {
+                      Navigator.pushNamed(context, adminTechReportRoute);
+                    },
+                  ),
+            totalRfaMachines == -1
+                ? const SpinKitDancingSquare(
+                    color: APP_BAR_COLOR,
+                  )
+                : CategoryItem(
+                    title: getTranselted(context, STA_TECHS_REPORT)!,
+                    image: IMG_WORKSHO_REPORT,
+                    onTap: () {
+                      Navigator.pushNamed(context, adminTechReportRoute);
+                    },
+                  ),
+          ],
+        ),
       ),
     );
   }
