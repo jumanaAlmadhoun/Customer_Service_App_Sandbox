@@ -163,7 +163,7 @@ class _TechReportPageState extends State<TechReportPage> with RouteAware {
       .map((String column) => DataColumn(
             label: Text(
               column,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 9), // TODO: implement responsive font size
             ),
             onSort: onSort,

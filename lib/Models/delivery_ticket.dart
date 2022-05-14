@@ -1,5 +1,6 @@
+// ignore_for_file: constant_identifier_names, overridden_fields, annotate_overrides
+
 import 'package:customer_service_app/Models/ticket.dart';
-import 'package:flutter/cupertino.dart';
 
 class DeliveryTicket extends Ticket {
   static const String FIREBASE_ID = 'firebaseID';

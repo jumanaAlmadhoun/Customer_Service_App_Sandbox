@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:flutter/cupertino.dart';
 

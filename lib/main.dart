@@ -1,6 +1,5 @@
 // @dart=2.9
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Localization/demo_localization.dart';
 import 'package:customer_service_app/Models/customer.dart';
 import 'package:customer_service_app/Models/machine.dart';

@@ -1,5 +1,6 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class TechTicketWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(color: APP_BAR_COLOR, width: 1),
                 borderRadius: BorderRadius.circular(15),
-                color: CONTACTED_COLOR),
+                color: BACK_ICON_COLOR),
             child: Column(
               children: [
                 Text(

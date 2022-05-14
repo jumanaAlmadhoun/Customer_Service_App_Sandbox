@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -9,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
 class TechTicketInfoPage extends StatefulWidget {
-  TechTicketInfoPage(this.ticket);
+  TechTicketInfoPage(this.ticket, {Key? key}) : super(key: key);
   Ticket? ticket;
   @override
   _TechTicketInfoPageState createState() => _TechTicketInfoPageState();
@@ -98,7 +100,8 @@ class _TechTicketInfoPageState extends State<TechTicketInfoPage> {
 }
 
 class TicketInfoCard extends StatelessWidget {
-  TicketInfoCard({this.content, this.isURL = false, this.title});
+  const TicketInfoCard({Key? key, this.content, this.isURL = false, this.title})
+      : super(key: key);
   final String? title;
   final String? content;
   final bool? isURL;

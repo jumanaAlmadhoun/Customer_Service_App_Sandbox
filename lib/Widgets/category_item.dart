@@ -42,6 +42,14 @@ class CategoryItem extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.bold)),
               ),
+              Text(
+                '${number ?? ''}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.white),
+              ),
               Transform.translate(
                 offset: const Offset(50, -50),
               ),

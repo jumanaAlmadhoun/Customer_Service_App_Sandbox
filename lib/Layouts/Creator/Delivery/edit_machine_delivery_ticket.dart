@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, must_be_immutable, unused_field, prefer_final_fields
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/global_vars.dart';
@@ -14,23 +16,20 @@ import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
-import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
 import 'package:customer_service_app/Widgets/Delivery/delivery_machine_widget.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
-import 'package:customer_service_app/Widgets/Delivery/delivery_item_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
 class EditMachineDeliveryTicket extends StatefulWidget {
-  EditMachineDeliveryTicket(this.argTicket);
+  EditMachineDeliveryTicket(this.argTicket, {Key? key}) : super(key: key);
   Ticket? argTicket;
 
   @override

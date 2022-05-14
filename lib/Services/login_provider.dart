@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, avoid_print
+
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, unused_field, prefer_final_fields
+
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/spare_parts.dart';
@@ -12,14 +14,12 @@ import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
-import 'package:searchfield/searchfield.dart';
 
 import '../../Widgets/Tech/text_widget.dart';
 
 class TechFillTicketPage extends StatefulWidget {
-  TechFillTicketPage(this.ticket);
+  const TechFillTicketPage(this.ticket, {Key? key}) : super(key: key);
   final Ticket? ticket;
   @override
   _TechFillTicketPageState createState() => _TechFillTicketPageState();

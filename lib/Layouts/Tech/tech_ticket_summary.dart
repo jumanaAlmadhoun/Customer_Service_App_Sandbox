@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, must_be_immutable, prefer_final_fields, avoid_print, prefer_is_empty, avoid_function_literals_in_foreach_calls, unused_local_variable
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -12,7 +14,6 @@ import 'package:customer_service_app/Widgets/Tech/machine_check_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/spare_part_widget.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
-import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -20,7 +21,6 @@ import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
 
 import '../../Widgets/Tech/text_widget.dart';
-import 'tech_fill_sitevisit_page.dart';
 
 String invoiceUrl = 'N/A';
 String reportUrl = 'N/A';
@@ -28,7 +28,7 @@ String reportName = 'N/A';
 String invoiceName = 'N/A';
 
 class TechTicketSummary extends StatefulWidget {
-  TechTicketSummary(this.args);
+  TechTicketSummary(this.args, {Key? key}) : super(key: key);
   List<dynamic>? args;
   double? totalAmount = 0;
   @override
@@ -73,7 +73,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ملخص الزيارة'),
+        title: const Text('ملخص الزيارة'),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isLoading,
@@ -103,21 +103,21 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(laborCharges.toStringAsFixed(2)),
-                          Text('رسوم الزيارة'),
+                          const Text('رسوم الزيارة'),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(partAmount.toStringAsFixed(2)),
-                          Text('قطع الغيار'),
+                          const Text('قطع الغيار'),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(totalAmount.toStringAsFixed(2)),
-                          Text('المجموع'),
+                          const Text('المجموع'),
                         ],
                       ),
                     ],
@@ -151,7 +151,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                               }
                             });
                           }),
-                      Text('الدفع كاش'),
+                      const Text('الدفع كاش'),
                     ],
                   ),
                 ),
@@ -164,7 +164,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Text('توقيع العميل'),
+                  const Text('توقيع العميل'),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: APP_BAR_COLOR),
@@ -180,7 +180,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                     height: 5,
                   ),
                   MaterialButton(
-                      child: Text('مسح التوقيع'),
+                      child: const Text('مسح التوقيع'),
                       onPressed: () {
                         signatureController!.clear();
                       })
@@ -405,7 +405,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
 }
 
 class CommentSummaryWidget extends StatelessWidget {
-  CommentSummaryWidget(this.element);
+  CommentSummaryWidget(this.element, {Key? key}) : super(key: key);
   CommentWidget? element;
   @override
   Widget build(BuildContext context) {
@@ -431,7 +431,7 @@ class CommentSummaryWidget extends StatelessWidget {
 }
 
 class SparePartSummaryWidget extends StatelessWidget {
-  SparePartSummaryWidget(this.element);
+  SparePartSummaryWidget(this.element, {Key? key}) : super(key: key);
   SparePartWidget? element;
 
   @override
@@ -460,7 +460,7 @@ class SparePartSummaryWidget extends StatelessWidget {
 }
 
 class GroupCheckSummaryWidget extends StatelessWidget {
-  GroupCheckSummaryWidget(this.element);
+  GroupCheckSummaryWidget(this.element, {Key? key}) : super(key: key);
   GroupCheckWidget? element;
   @override
   Widget build(BuildContext context) {
@@ -520,7 +520,7 @@ class GroupCheckSummaryWidget extends StatelessWidget {
 }
 
 class MachineCheckSummaryWidget extends StatelessWidget {
-  MachineCheckSummaryWidget(this.element);
+  const MachineCheckSummaryWidget(this.element, {Key? key}) : super(key: key);
   final MachineChekWidget? element;
 
   @override

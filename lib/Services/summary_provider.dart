@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, avoid_print
+
 import 'dart:convert';
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
