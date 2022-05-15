@@ -23,7 +23,7 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-import '../creator_home/creator_home_page.dart';
+import '../creator_home_page.dart';
 
 class NewPickupTicket extends StatefulWidget {
   const NewPickupTicket({Key? key}) : super(key: key);

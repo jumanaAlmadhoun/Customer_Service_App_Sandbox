@@ -26,7 +26,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-import '../creator_home/creator_home_page.dart';
+import '../creator_home_page.dart';
 
 class NewPickupTicket extends StatefulWidget {
   const NewPickupTicket({Key? key}) : super(key: key);

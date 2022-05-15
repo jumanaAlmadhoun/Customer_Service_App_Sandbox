@@ -12,6 +12,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../Widgets/appBar.dart';
 import '../../Widgets/gridview_count_widget.dart';
+import '../../Widgets/navigation_bar_item.dart';
 import '../../Widgets/web_layout.dart';
 import '../../main.dart';
 
@@ -52,16 +53,13 @@ class _AdminHomePageState extends State<AdminHomePage> with RouteAware {
           : null,
       body: WebLayout(
         navItem: [
-          InkWell(
+          NavigationBarItem(
             onTap: () => Navigator.pushNamedAndRemoveUntil(
                 context, adminHomeRoute, (route) {
               ModalRoute.withName(adminHomeRoute);
               return false;
             }),
-            child: Text(
-              getTranselted(context, HOME_PAGE_TITLE)!,
-              style: APPBAR_TEXT_STYLE,
-            ),
+            text: getTranselted(context, HOME_PAGE_TITLE)!,
           ),
           const SizedBox(
             width: 50,

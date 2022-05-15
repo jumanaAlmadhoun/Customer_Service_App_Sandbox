@@ -28,7 +28,7 @@ import '../Layouts/Creator/Site Visits/edit_sanremo_ticket.dart';
 import '../Layouts/Creator/Site Visits/open_tickets_page.dart';
 import '../Layouts/Creator/Site Visits/ready_to_assign_tickets_page.dart';
 import '../Layouts/Creator/Site Visits/sanremo_new_ticket_page.dart';
-import '../Layouts/Creator/creator_home/creator_home_page.dart';
+import '../Layouts/Creator/creator_home_page.dart';
 import '../Layouts/Tech/download_page.dart';
 import '../Layouts/Tech/tech_fill_sitevisit_page.dart';
 import '../Layouts/Tech/tech_home_page.dart';

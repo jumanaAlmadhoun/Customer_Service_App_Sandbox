@@ -10,6 +10,15 @@ import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
+import '../../../Widgets/action_button.dart';
+import '../../../Widgets/appBar.dart';
+import '../../../Widgets/expandable_floating_button.dart';
+import '../../../Widgets/gridview_count_widget.dart';
+import '../../../Widgets/logout_widget.dart';
+import '../../../Widgets/navigation_bar_item.dart';
+import '../../../Widgets/web_layout.dart';
 
 class CreatorSiteVisitPage extends StatefulWidget {
   const CreatorSiteVisitPage({Key? key}) : super(key: key);
@@ -37,17 +46,121 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(getTranselted(context, TIC_SITE_VISIT)!),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, brandSelectionRoute);
-                },
-                icon: const Icon(Icons.add))
+        appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+            ? CustomeAppBar(
+                action: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, brandSelectionRoute);
+                      },
+                      icon: const Icon(Icons.add))
+                ],
+                title: Text(
+                  getTranselted(context, TIC_SITE_VISIT)!,
+                  style: APPBAR_TEXT_STYLE,
+                ),
+              )
+            : null,
+        floatingActionButton: ResponsiveWrapper.of(context).isLargerThan(TABLET)
+            ? ExpandableFab(
+                distance: 160,
+                children: [
+                  ActionButton(
+                    icon: IMG_LOGO_SIPRESSO,
+                    onPressed: () {},
+                  ),
+                  ActionButton(
+                    icon: IMG_LOGO_CEADO,
+                    onPressed: () {},
+                  ),
+                  ActionButton(
+                    icon: IMG_LOGO_PM,
+                    onPressed: () {},
+                  ),
+                  ActionButton(
+                    icon: IMG_LOGO_SANREMO,
+                    onPressed: () => Navigator.pushNamed(
+                        context, sanremoNewTicketRoute,
+                        arguments: TEMP_SANREMO),
+                  ),
+                ],
+              )
+            : null,
+        body: WebLayout(
+          navItem: [
+            NavigationBarItem(
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, creatorHomeRoute, (route) {
+                ModalRoute.withName(creatorHomeRoute);
+                return false;
+              }),
+              text: getTranselted(context, HOME_PAGE_TITLE)!,
+            ),
+            NavigationBarItem(
+              onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
+              text: 'Dashboard',
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, TODAY_TICKETS)!,
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, CUSTOMER_MGMT)!,
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, SETTINGS)!,
+            ),
+            const LogoutWidget(),
           ],
-        ),
-        body: LayoutBuilder(
+          widget: GridViewCountWidget(
+            widgets: [
+              CategoryItem(
+                image: IMG_OPEN_TICKETS,
+                title: getTranselted(context, STA_OPEN)!,
+                number: openTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorOpenTicketsRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_WAITING_TICKETS,
+                title: getTranselted(context, STA_WAITING)!,
+                number: readyToAssignTickets,
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, creatorReadyToAssignTicketsRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_QUEUE_TICKETS,
+                title: getTranselted(context, STA_QUEUE)!,
+                number: queueTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorQueueTicketsRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_ASSIGNED_TICKETS,
+                title: getTranselted(context, STA_ASSIGNED)!,
+                number: assignedTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorAssignedTicketRoute);
+                },
+              ),
+              CategoryItem(
+                image: IMG_PENDING_TICKETS,
+                title: getTranselted(context, STA_PENDING)!,
+                number: pendingTickets,
+              ),
+              CategoryItem(
+                image: IMG_WORKSHO_REPORT,
+                title: getTranselted(context, STA_WORKSHOP)!,
+                number: pendingTickets,
+              ),
+            ],
+          ), /*LayoutBuilder(
           builder: (context, constraints) => GridView.count(
             crossAxisCount: constraints.maxWidth < mobileWidth
                 ? 2
@@ -102,7 +215,7 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
                 number: pendingTickets,
               ),
             ],
-          ),
+          ),*/
         ));
   }
 }

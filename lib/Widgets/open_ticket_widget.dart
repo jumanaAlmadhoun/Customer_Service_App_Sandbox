@@ -1,5 +1,4 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -33,10 +32,11 @@ class OpenTicketWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-              border: Border.all(color: APP_BAR_COLOR, width: 1),
+              border: Border.all(color: ICONS_COLOR, width: 2),
               borderRadius: BorderRadius.circular(15),
               color: didContact! ? CONTACTED_COLOR : NOT_CONTACTED_COLOR),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,

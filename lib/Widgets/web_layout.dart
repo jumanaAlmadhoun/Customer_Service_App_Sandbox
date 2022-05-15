@@ -26,7 +26,7 @@ class WebLayout extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
-                          IMG_LOGO,
+                          'Assets/Images/rfa_logo.png',
                           height: size.height * 0.1,
                         ),
                         Row(children: navItem),

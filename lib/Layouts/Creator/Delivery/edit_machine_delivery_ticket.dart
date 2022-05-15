@@ -6,7 +6,7 @@ import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
-import 'package:customer_service_app/Layouts/Creator/creator_home/creator_home_page.dart';
+import 'package:customer_service_app/Layouts/Creator/creator_home_page.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/customer.dart';
 import 'package:customer_service_app/Models/machine.dart';

@@ -6,16 +6,21 @@ import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../../main.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import '../../Widgets/appBar.dart';
+import '../../Widgets/gridview_count_widget.dart';
+import '../../Widgets/navigation_bar_item.dart';
+import '../../Widgets/web_layout.dart';
+import '../../main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../../../Helpers/layout_constants.dart';
-import '../../../../Localization/localization_constants.dart';
-import '../../../../Routes/route_names.dart';
-import '../../../../Services/summary_provider.dart';
-import '../../../../Widgets/category_item.dart';
-import '../../../../Widgets/creator_nav_bar.dart';
-import '../../../../Widgets/logout_widget.dart';
+import '../../../Helpers/layout_constants.dart';
+import '../../../Localization/localization_constants.dart';
+import '../../../Routes/route_names.dart';
+import '../../../Services/summary_provider.dart';
+import '../../../Widgets/category_item.dart';
+import '../../../Widgets/creator_nav_bar.dart';
+import '../../../Widgets/logout_widget.dart';
 import 'package:customer_service_app/Config/responsive.dart';
 
 class CreatorHomePage extends StatefulWidget {
@@ -62,22 +67,46 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranselted(context, HOME_PAGE_TITLE)!),
-        actions: const [LogoutWidget()],
-      ),
+      appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+          ? CustomeAppBar(
+              action: const [LogoutWidget()],
+              title: Text(
+                getTranselted(context, HOME_PAGE_TITLE)!,
+                style: APPBAR_TEXT_STYLE,
+              ),
+            )
+          : null,
       drawer: const CreatorDrawerWidget(),
-      body: LayoutBuilder(
-        builder: (context, constraints) => GridView.count(
-          crossAxisCount: constraints.maxWidth < mobileWidth
-              ? 2
-              : constraints.maxWidth > ipadWidth
-                  ? 4
-                  : 3,
-          childAspectRatio: constraints.maxWidth < mobileWidth ? 0.99 : 1.0,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-          children: [
+      body: WebLayout(
+        navItem: [
+          NavigationBarItem(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, creatorHomeRoute, (route) {
+              ModalRoute.withName(creatorHomeRoute);
+              return false;
+            }),
+            text: getTranselted(context, HOME_PAGE_TITLE)!,
+          ),
+          NavigationBarItem(
+            onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
+            text: 'Dashboard',
+          ),
+          NavigationBarItem(
+            onTap: () {},
+            text: getTranselted(context, TODAY_TICKETS)!,
+          ),
+          NavigationBarItem(
+            onTap: () {},
+            text: getTranselted(context, CUSTOMER_MGMT)!,
+          ),
+          NavigationBarItem(
+            onTap: () {},
+            text: getTranselted(context, SETTINGS)!,
+          ),
+          const LogoutWidget(),
+        ],
+        widget: GridViewCountWidget(
+          widgets: [
             siteVisitTickets == -1
                 ? const SpinKitDancingSquare(
                     color: APP_BAR_COLOR,
