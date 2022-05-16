@@ -66,19 +66,19 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
                 distance: 160,
                 children: [
                   ActionButton(
-                    icon: IMG_LOGO_SIPRESSO,
+                    image: IMG_LOGO_SIPRESSO,
                     onPressed: () {},
                   ),
                   ActionButton(
-                    icon: IMG_LOGO_CEADO,
+                    image: IMG_LOGO_CEADO,
                     onPressed: () {},
                   ),
                   ActionButton(
-                    icon: IMG_LOGO_PM,
+                    image: IMG_LOGO_PM,
                     onPressed: () {},
                   ),
                   ActionButton(
-                    icon: IMG_LOGO_SANREMO,
+                    image: IMG_LOGO_SANREMO,
                     onPressed: () => Navigator.pushNamed(
                         context, sanremoNewTicketRoute,
                         arguments: TEMP_SANREMO),
