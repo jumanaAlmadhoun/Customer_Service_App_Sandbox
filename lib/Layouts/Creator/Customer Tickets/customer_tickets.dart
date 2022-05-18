@@ -15,7 +15,6 @@ class _CustomerTicketsPageState extends State<CustomerTicketsPage>
     with RouteAware {
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }

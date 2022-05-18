@@ -14,7 +14,7 @@ import 'custom_list_dialgo.dart';
 class GridViewBuilderCreator extends StatelessWidget {
   List list;
   CustomListDialog? dialog;
-  GridViewBuilderCreator({Key? key, required this.list, required this.dialog})
+  GridViewBuilderCreator({Key? key, required this.list, this.dialog})
       : super(key: key);
 
   @override

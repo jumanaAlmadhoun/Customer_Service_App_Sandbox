@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+// ignore_for_file: import_of_legacy_library_into_null_safe
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
@@ -8,10 +7,8 @@ import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
 import '../../../Widgets/action_button.dart';
 import '../../../Widgets/appBar.dart';
 import '../../../Widgets/expandable_floating_button.dart';
@@ -31,14 +28,12 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
     with RouteAware {
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPopNext() {
-    // TODO: implement didPopNext
     super.didPopNext();
     Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
   }

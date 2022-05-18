@@ -1,10 +1,13 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:flutter/material.dart';
 
 class OpenTicketWidget extends StatelessWidget {
-  OpenTicketWidget(
-      {this.cafeName,
+  const OpenTicketWidget(
+      {Key? key,
+      this.cafeName,
       this.city,
       this.customerMobile,
       this.customerName,
@@ -12,7 +15,8 @@ class OpenTicketWidget extends StatelessWidget {
       this.didContact,
       this.onTap,
       this.machineNumber,
-      this.onLongTap});
+      this.onLongTap})
+      : super(key: key);
 
   final String? customerName;
   final String? customerMobile;

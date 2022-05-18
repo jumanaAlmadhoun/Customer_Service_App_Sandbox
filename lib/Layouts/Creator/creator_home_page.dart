@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
@@ -12,7 +14,6 @@ import '../../Widgets/gridview_count_widget.dart';
 import '../../Widgets/navigation_bar_item.dart';
 import '../../Widgets/web_layout.dart';
 import '../../main.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../Helpers/layout_constants.dart';
 import '../../../Localization/localization_constants.dart';
@@ -21,7 +22,6 @@ import '../../../Services/summary_provider.dart';
 import '../../../Widgets/category_item.dart';
 import '../../../Widgets/creator_nav_bar.dart';
 import '../../../Widgets/logout_widget.dart';
-import 'package:customer_service_app/Config/responsive.dart';
 
 class CreatorHomePage extends StatefulWidget {
   const CreatorHomePage({Key? key}) : super(key: key);

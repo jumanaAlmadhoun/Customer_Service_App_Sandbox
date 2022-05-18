@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
 import '../../../Widgets/Creator/gridviewbuilder_creator.dart';
 import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
@@ -125,7 +124,6 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                   color: APP_BAR_COLOR,
                 )
               : Column(children: [
-                  //TODO: seperate widget in diffrent class
                   ResponsiveWrapper.of(context).isLargerThan(TABLET)
                       ? Padding(
                           padding: const EdgeInsets.all(15),
@@ -171,15 +169,16 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                         )
                       : Container(),
                   Expanded(
-                    child: GridViewBuilderCreator(
-                      dialog: dialog,
-                      list: _showedTickets,
-                    ),
+                    child: _isLoading
+                        ? const SpinKitRipple(
+                            color: APP_BAR_COLOR,
+                          )
+                        : GridViewBuilderCreator(
+                            dialog: dialog,
+                            list: _showedTickets,
+                          ),
                   ),
-                ])), /* _isLoading
-          ? const SpinKitRipple(
-              color: APP_BAR_COLOR,
-            )
+                ])), /* 
           : LayoutBuilder(builder: (context, constraints) {
               return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

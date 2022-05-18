@@ -1,19 +1,15 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/tech.dart';
-import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
-import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
-
 import '../../../Helpers/layout_constants.dart';
 
 class TechQueueTicketPage extends StatefulWidget {
-  TechQueueTicketPage(this.tech);
+  const TechQueueTicketPage(this.tech, {Key? key}) : super(key: key);
   final Tech? tech;
 
   @override
@@ -101,7 +97,7 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
                       );
                     } catch (e) {
                       throw Exception(e);
-                    } //add throw statement
+                    }
                   })))),
     );
   }

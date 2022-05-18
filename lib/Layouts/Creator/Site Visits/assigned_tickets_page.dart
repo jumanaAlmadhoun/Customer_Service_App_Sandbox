@@ -1,12 +1,13 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
 import '../../../Widgets/appBar.dart';
-import '../../../Widgets/assigned_ticket_gridview_widget.dart';
+import '../../../Widgets/tech_ticket_gridview_widget.dart';
 import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
 import '../../../Widgets/web_layout.dart';
@@ -58,10 +59,15 @@ class _AssignedTikcketsPageState extends State<AssignedTikcketsPage> {
             ),
             const LogoutWidget(),
           ],
-          widget: AssignedTicketWidget(
-            list: techs,
-            routeName: creatorTechAssignedTicketRoute,
-          ),
+          widget: techs == null
+              ? Container(
+                  alignment: Alignment.center,
+                  child: const Text('Empty'),
+                )
+              : TeckTicketGridView(
+                  list: techs,
+                  routeName: creatorTechAssignedTicketRoute,
+                ),
         ));
   }
 }

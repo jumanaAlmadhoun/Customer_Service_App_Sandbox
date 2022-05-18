@@ -25,7 +25,7 @@ class GridViewBuilder extends StatelessWidget {
               : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
                       ResponsiveWrapper.of(context).isSmallerThan(DESKTOP))
                   ? 2
-                  : 4),
+                  : 1.5),
       itemCount: list.length,
       itemBuilder: (context, i) {
         return Padding(
