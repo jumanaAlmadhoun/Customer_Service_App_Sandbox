@@ -336,4 +336,23 @@ class TicketProvider with ChangeNotifier {
       data.forEach((key, value) {});
     } catch (ex) {}
   }
+
+  Future<String> rejectTicket(Ticket ticket) async {
+    print('Enter Reject Func');
+    try {
+      var url =
+          '$DB_URL$DB_ASSIGNED_TICKETS/${ticket.techName}/${ticket.firebaseID}.json';
+      var response = await http.get(Uri.parse(
+          '$REJECT_TICKET_SCRIPT?url=$url&techName=${ticket.techName}'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        return Future.value(SC_SUCCESS_RESPONSE);
+      }
+      return Future.value(SC_FAILED_RESPONSE);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
 }

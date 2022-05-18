@@ -11,7 +11,7 @@ class PrimaryText extends StatelessWidget {
   const PrimaryText({
     this.text,
     this.fontWeight = FontWeight.w400,
-    this.color = APP_BAR_COLOR,
+    this.color = Colors.black,
     this.size = 20,
     this.height = 1.3,
   });
