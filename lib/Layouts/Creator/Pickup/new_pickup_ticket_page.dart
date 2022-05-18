@@ -1,7 +1,8 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, prefer_final_fields, unused_field, avoid_print, unused_local_variable
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/global_vars.dart';
-import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Helpers/validators.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
@@ -20,8 +21,6 @@ import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/main.dart';
 //import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:group_radio_button/group_radio_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
@@ -75,7 +74,6 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }

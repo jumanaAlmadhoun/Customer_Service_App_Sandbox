@@ -1,12 +1,11 @@
-import 'package:customer_service_app/Config/responsive.dart';
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:customer_service_app/Config/size_config.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Admin/info_card.dart';
-import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

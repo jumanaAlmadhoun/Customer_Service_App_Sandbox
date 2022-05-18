@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, import_of_legacy_library_into_null_safe
+
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';

@@ -7,9 +7,9 @@ import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import '../../../Widgets/appBar.dart';
-import '../../../Widgets/tech_ticket_gridview_widget.dart';
 import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
+import '../../../Widgets/teckt_ticket_number.dart';
 import '../../../Widgets/web_layout.dart';
 
 class AssignedTikcketsPage extends StatefulWidget {
@@ -59,15 +59,56 @@ class _AssignedTikcketsPageState extends State<AssignedTikcketsPage> {
             ),
             const LogoutWidget(),
           ],
-          widget: techs == null
-              ? Container(
-                  alignment: Alignment.center,
-                  child: const Text('Empty'),
-                )
-              : TeckTicketGridView(
+          widget: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                    ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+                        ? 1
+                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+                                ResponsiveWrapper.of(context)
+                                    .isSmallerThan(DESKTOP))
+                            ? 3
+                            : 4,
+                childAspectRatio:
+                    ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+                        ? 7
+                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+                                ResponsiveWrapper.of(context)
+                                    .isSmallerThan(DESKTOP))
+                            ? 2.5
+                            : 3),
+            itemCount: techs.length,
+            itemBuilder: (context, i) {
+              return techs[i].assignedTickets != null
+                  ? TeckTicketNumber(
+                      techName: techs[i].name!,
+                      ticketsNumber:
+                          techs[i].assignedTickets!.length.toString(),
+                      routeName: creatorTechAssignedTicketRoute,
+                      argument: techs[i],
+                    )
+                  : Container(); /*Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: ListTile(
+                    leading: Text(techs[i].name!),
+                    trailing: Text(techs[i].assignedTickets!.length.toString()),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, creatorTechAssignedTicketRoute,
+                          arguments: techs[i]);
+                    },
+                  ),
+                ),
+              );*/
+            },
+          ), /*TeckTicketGridView(
                   list: techs,
                   routeName: creatorTechAssignedTicketRoute,
-                ),
+                ),*/
         ));
   }
 }

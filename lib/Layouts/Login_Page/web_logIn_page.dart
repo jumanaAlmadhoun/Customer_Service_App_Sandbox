@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 import '../../Helpers/layout_constants.dart';
@@ -32,7 +34,7 @@ class _WebLogInPageState extends State<WebLogInPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height,
       width: size.width,
       child: Row(

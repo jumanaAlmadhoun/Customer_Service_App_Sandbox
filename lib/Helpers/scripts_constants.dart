@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 const String SC_STATUS_KEY = 'status';
 const String SC_SHEET_ID_KEY = 'sheetID';
 const String SC_SHEET_URL_KEY = 'sheetURL';

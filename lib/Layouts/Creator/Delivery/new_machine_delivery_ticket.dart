@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, import_of_legacy_library_into_null_safe, prefer_final_fields, unused_field, avoid_print, avoid_function_literals_in_foreach_calls
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/global_vars.dart';
@@ -70,7 +72,6 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
   List<Machine>? machines;
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
@@ -8,8 +10,12 @@ import 'package:customer_service_app/Widgets/Tech/tech_ticket_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../main.dart';
+import '../../Localization/localization_constants.dart';
+import '../../Widgets/logout_widget.dart';
+import '../../Widgets/web_layout.dart';
 
 class TechOpenTicketPage extends StatefulWidget {
   const TechOpenTicketPage({Key? key}) : super(key: key);
@@ -48,40 +54,78 @@ class _TechOpenTicketPageState extends State<TechOpenTicketPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('التذاكر المسندة'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _search = !_search;
-              });
-            },
-            icon: const Icon(Icons.search),
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? const SpinKitRipple(
-              color: APP_BAR_COLOR,
-            )
-          : ListView.builder(
-              itemCount: _tickets.length,
-              itemBuilder: (context, i) {
-                return TechTicketWidget(
-                  cafeName: _tickets[i].cafeName,
-                  city: _tickets[i].city,
-                  customerMobile: _tickets[i].extraContactNumber,
-                  customerName: _tickets[i].customerName,
-                  date: _tickets[i].creationDate,
-                  didContact: _tickets[i].didContact,
-                  onTap: () {
-                    Navigator.pushNamed(context, techTicketInfoRoute,
-                        arguments: _tickets[i]);
+      appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+          ? AppBar(
+              title: const Text('التذاكر المسندة'),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _search = !_search;
+                    });
                   },
-                );
-              },
+                  icon: const Icon(Icons.search),
+                ),
+              ],
+            )
+          : null,
+      body: WebLayout(
+        navItem: [
+          InkWell(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, techHomeRoute, (route) {
+              ModalRoute.withName(techHomeRoute);
+              return false;
+            }),
+            child: Text(
+              getTranselted(context, HOME_PAGE_TITLE)!,
+              style: APPBAR_TEXT_STYLE,
             ),
+          ),
+          const SizedBox(
+            width: 50,
+          ),
+          const LogoutWidget(),
+        ],
+        widget: _isLoading
+            ? const SpinKitRipple(
+                color: APP_BAR_COLOR,
+              )
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: ResponsiveWrapper.of(context)
+                            .isSmallerThan(TABLET)
+                        ? 1
+                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+                                ResponsiveWrapper.of(context)
+                                    .isSmallerThan(DESKTOP))
+                            ? 3
+                            : 4,
+                    childAspectRatio: ResponsiveWrapper.of(context)
+                            .isSmallerThan(TABLET)
+                        ? 2
+                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+                                ResponsiveWrapper.of(context)
+                                    .isSmallerThan(DESKTOP))
+                            ? 1.2
+                            : 1.2),
+                itemCount: _tickets.length,
+                itemBuilder: (context, i) {
+                  return TechTicketWidget(
+                    cafeName: _tickets[i].cafeName,
+                    city: _tickets[i].city,
+                    customerMobile: _tickets[i].extraContactNumber,
+                    customerName: _tickets[i].customerName,
+                    date: _tickets[i].creationDate,
+                    didContact: _tickets[i].didContact,
+                    onTap: () {
+                      Navigator.pushNamed(context, techTicketInfoRoute,
+                          arguments: _tickets[i]);
+                    },
+                  );
+                },
+              ),
+      ),
     );
   }
 }

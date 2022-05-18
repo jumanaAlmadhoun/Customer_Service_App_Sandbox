@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// ignore_for_file: must_be_immutable
 
+import 'package:flutter/material.dart';
 import '../../Helpers/layout_constants.dart';
 import '../../Localization/localization_constants.dart';
-import '../../Services/login_provider.dart';
 import '../../Widgets/button_widget.dart';
 
 class MobileLogInPage extends StatefulWidget {
@@ -39,7 +38,7 @@ class _MobileLogInPageState extends State<MobileLogInPage> with RouteAware {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(height: 150, child: Image.asset(IMG_LOGO)),
+            SizedBox(height: 150, child: Image.asset(IMG_LOGO)),
             const SizedBox(
               height: 20,
             ),

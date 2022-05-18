@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, unused_import
+
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/main.dart';

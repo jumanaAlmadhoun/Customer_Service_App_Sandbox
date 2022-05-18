@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, empty_catches, unused_local_variable
 
 import 'dart:convert';
 import 'dart:io';

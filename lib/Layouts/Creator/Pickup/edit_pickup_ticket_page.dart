@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, prefer_final_fields, avoid_print, import_of_legacy_library_into_null_safe, unused_local_variable
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/global_vars.dart';
@@ -25,7 +27,7 @@ import 'package:searchfield/searchfield.dart';
 import '../creator_home_page.dart';
 
 class EditPickupTicketPage extends StatefulWidget {
-  EditPickupTicketPage(this.argTicket);
+  const EditPickupTicketPage(this.argTicket, {Key? key}) : super(key: key);
   final Ticket? argTicket;
 
   @override
@@ -73,7 +75,6 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }

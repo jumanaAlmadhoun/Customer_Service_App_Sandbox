@@ -7,7 +7,7 @@ import '../../../Helpers/layout_constants.dart';
 import '../../../Widgets/appBar.dart';
 import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
-import '../../../Widgets/tech_ticket_gridview_widget.dart';
+import '../../../Widgets/teckt_ticket_number.dart';
 import '../../../Widgets/web_layout.dart';
 
 class QueueTikcketsPage extends StatefulWidget {
@@ -31,38 +31,83 @@ class _QueueTikcketsPageState extends State<QueueTikcketsPage> {
             )
           : null,
       body: WebLayout(
-        navItem: [
-          NavigationBarItem(
-            onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context, creatorHomeRoute, (route) {
-              ModalRoute.withName(creatorHomeRoute);
-              return false;
-            }),
-            text: getTranselted(context, HOME_PAGE_TITLE)!,
-          ),
-          NavigationBarItem(
-            onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
-            text: 'Dashboard',
-          ),
-          NavigationBarItem(
-            onTap: () {},
-            text: getTranselted(context, TODAY_TICKETS)!,
-          ),
-          NavigationBarItem(
-            onTap: () {},
-            text: getTranselted(context, CUSTOMER_MGMT)!,
-          ),
-          NavigationBarItem(
-            onTap: () {},
-            text: getTranselted(context, SETTINGS)!,
-          ),
-          const LogoutWidget(),
-        ],
-        widget: TeckTicketGridView(
+          navItem: [
+            NavigationBarItem(
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, creatorHomeRoute, (route) {
+                ModalRoute.withName(creatorHomeRoute);
+                return false;
+              }),
+              text: getTranselted(context, HOME_PAGE_TITLE)!,
+            ),
+            NavigationBarItem(
+              onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
+              text: 'Dashboard',
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, TODAY_TICKETS)!,
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, CUSTOMER_MGMT)!,
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, SETTINGS)!,
+            ),
+            const LogoutWidget(),
+          ],
+          widget: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: ResponsiveWrapper.of(context)
+                          .isSmallerThan(TABLET)
+                      ? 1
+                      : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+                              ResponsiveWrapper.of(context)
+                                  .isSmallerThan(DESKTOP))
+                          ? 3
+                          : 4,
+                  childAspectRatio: ResponsiveWrapper.of(context)
+                          .isSmallerThan(TABLET)
+                      ? 7
+                      : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+                              ResponsiveWrapper.of(context)
+                                  .isSmallerThan(DESKTOP))
+                          ? 2.5
+                          : 3),
+              itemCount: techs.length,
+              itemBuilder: (context, i) {
+                return techs[i].queueTicket != null
+                    ? TeckTicketNumber(
+                        techName: techs[i].name!,
+                        ticketsNumber: techs[i].queueTicket!.length.toString(),
+                        routeName: creatorTechQueueTicketRoute,
+                        argument: techs[i],
+                      )
+                    /*  Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 1),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ListTile(
+                              leading: Text(techs[i].name!),
+                              trailing:
+                                  Text(techs[i].queueTicket!.length.toString()),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, creatorTechQueueTicketRoute,
+                                    arguments: techs[i]);
+                              },
+                            )),
+                      )*/
+                    : Container();
+              }) /*TeckTicketGridView(
           list: techs,
           routeName: creatorTechQueueTicketRoute,
-        ),
-      ),
+        ),*/
+          ),
     );
   }
 }

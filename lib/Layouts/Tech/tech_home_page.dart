@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unnecessary_overrides
 
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -35,14 +35,11 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
 
   @override
   void didChangeDependencies() {
-    // ignore: todo
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
-  // ignore: unnecessary_overrides
   void didPush() {
     // Provider.of<SparePartsProvider>(context, listen: false).fetchSpareParts();
     super.didPush();
@@ -60,26 +57,26 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
               style: APPBAR_TEXT_STYLE,
             ))
           : null,
-      body: SingleChildScrollView(
-        child: WebLayout(
-            navItem: [
-              InkWell(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, techHomeRoute, (route) {
-                  ModalRoute.withName(techHomeRoute);
-                  return false;
-                }),
-                child: Text(
-                  getTranselted(context, HOME_PAGE_TITLE)!,
-                  style: APPBAR_TEXT_STYLE,
-                ),
+      body: WebLayout(
+          navItem: [
+            InkWell(
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, techHomeRoute, (route) {
+                ModalRoute.withName(techHomeRoute);
+                return false;
+              }),
+              child: Text(
+                getTranselted(context, HOME_PAGE_TITLE)!,
+                style: APPBAR_TEXT_STYLE,
               ),
-              const SizedBox(
-                width: 50,
-              ),
-              const LogoutWidget(),
-            ],
-            widget: ResponsiveRowColumn(
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            const LogoutWidget(),
+          ],
+          widget: SingleChildScrollView(
+            child: ResponsiveRowColumn(
               rowMainAxisAlignment: MainAxisAlignment.center,
               rowPadding: const EdgeInsets.all(30),
               columnPadding: const EdgeInsets.all(30),
@@ -158,8 +155,8 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                   ),
                 ),
               ],
-            )),
-      ),
+            ),
+          )),
     );
   }
 }

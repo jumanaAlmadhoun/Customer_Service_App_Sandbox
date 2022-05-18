@@ -1,13 +1,13 @@
+// ignore_for_file: use_key_in_widget_constructors, import_of_legacy_library_into_null_safe, unused_element
+
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
-import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/language_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Helpers/layout_constants.dart';
 import '../../main.dart';
 import 'mobile_logIn_page.dart';
@@ -53,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth < mobileWidth) {
