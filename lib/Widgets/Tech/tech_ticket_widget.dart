@@ -34,7 +34,7 @@ class TechTicketWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(color: APP_BAR_COLOR, width: 1),
                 borderRadius: BorderRadius.circular(15),
-                color: BACK_ICON_COLOR),
+                color: CONTACTED_COLOR),
             child: Column(
               children: [
                 Text(
