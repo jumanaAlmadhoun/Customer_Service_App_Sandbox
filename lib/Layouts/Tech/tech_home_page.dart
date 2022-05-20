@@ -94,7 +94,7 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                 ResponsiveRowColumnItem(
                   rowFlex: 1,
                   child: ButtonWidget(
-                    text: getTranselted(context, VIEW_OPEN_TICKETS)!,
+                    text: 'عرض التذاكر المفتوحة',
                     height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
                         ? size.height * 0.13
                         : size.height * 0.20,
@@ -115,9 +115,9 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                     width: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
                         ? size.width * 0.70
                         : size.width * 0.30,
-                    text: getTranselted(context, VIEW_CLOSED_TICKETS)!,
+                    text: 'عرض التذاكر المغلقة',
                     onTap: () async {
-                      // Navigator.pushNamed(context, TechClosedTicketsScreen.id);
+                      Navigator.pushNamed(context, techCloseTicketsRoute);
                     },
                   ),
                 ),
@@ -126,7 +126,7 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                   child: ResponsiveVisibility(
                     hiddenWhen: const [Condition.largerThan(name: TABLET)],
                     child: ButtonWidget(
-                      text: getTranselted(context, LOGOUT)!,
+                      text: 'تسجيل خروج',
                       height:
                           ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
                               ? size.height * 0.13

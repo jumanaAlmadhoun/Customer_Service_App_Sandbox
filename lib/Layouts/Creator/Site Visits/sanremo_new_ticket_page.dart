@@ -100,6 +100,10 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     });
     allMachines =
         Provider.of<MachinesProvider>(context, listen: false).machines;
+    allMachines!.forEach((element) {
+      print(element.machineNumber);
+      print(element.customerNumber);
+    });
 
     allCustomers =
         Provider.of<CustomerProvider>(context, listen: false).customers;
@@ -152,7 +156,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   label: Text(getTranselted(context, LBL_MACHINE_NUMBER)!),
                 ),
                 onChanged: (value) {
+                  print(value);
                   selectedMachines = findMachine(value);
+                  print(selectedMachines);
                   if (selectedMachines != null) {
                     fetchCustomerInfo(context, selectedMachines!);
                   } else {
@@ -507,9 +513,10 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   Machine? findMachine(String machineNumber) {
     try {
       return allMachines!.firstWhere((element) =>
-          (element.machineNumber!.toUpperCase().trim() ==
+          (element.machineNumber!.toString().toUpperCase().trim() ==
               machineNumber.toUpperCase().trim()));
     } catch (ex) {
+      print(ex);
       return null;
     }
   }
@@ -547,11 +554,13 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
 
   void fetchCustomerByNumber(BuildContext? context, Customer customer) {
     try {
-      customerName!.text = selectedCustomer!.customerName!;
-      cafeName!.text = selectedCustomer!.companyName!;
-      customerMobile!.text = selectedCustomer!.mobile!;
-      customerBalance!.text = selectedCustomer!.balance!.abs().toString();
-      customerNumber!.text = selectedCustomer!.customerNumber!;
+      setState(() {
+        customerName!.text = selectedCustomer!.customerName!;
+        cafeName!.text = selectedCustomer!.companyName!;
+        customerMobile!.text = selectedCustomer!.mobile!;
+        customerBalance!.text = selectedCustomer!.balance!.abs().toString();
+        customerNumber!.text = selectedCustomer!.customerNumber!;
+      });
     } catch (ex) {
       print(ex);
     }

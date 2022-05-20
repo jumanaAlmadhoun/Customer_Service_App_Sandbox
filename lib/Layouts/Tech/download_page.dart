@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:customer_service_app/Models/ticket.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -16,6 +17,8 @@ import 'tech_ticket_summary.dart';
 
 class DownloadPage extends StatefulWidget {
   static const String id = 'download_page';
+  DownloadPage(Ticket ticket);
+  Ticket? ticket;
 
   @override
   _DownloadPageState createState() => _DownloadPageState();

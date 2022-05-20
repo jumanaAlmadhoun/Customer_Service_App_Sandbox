@@ -21,9 +21,9 @@ class _MachineChekWidgetState extends State<MachineChekWidget> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: APP_BAR_COLOR),
-          borderRadius: BorderRadius.circular(10),
-        ),
+            border: Border.all(color: APP_BAR_COLOR),
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

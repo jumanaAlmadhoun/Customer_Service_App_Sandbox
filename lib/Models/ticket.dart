@@ -16,6 +16,7 @@ class Ticket with ChangeNotifier {
   static const String REGION = 'region';
   static const String CREATION_INFO = 'creatorInfo';
   static const String TECH_INFO = 'techInfo';
+  static const String TECH_INFO_FIREBASE = 'techInfoFirebase';
   static const String CUSTOMER_NAME = 'customerName';
   static const String CUSTOMER_MOBILE = 'customerMobile';
   static const String CAFE_NAME = 'cafeName';
@@ -80,6 +81,8 @@ class Ticket with ChangeNotifier {
   static const String CLI_TICKET_NUMBER = 'ticketNumber';
   static const String CLI_MACHINE_NUMBER = 'machineNumber';
   static const String CLI_MACHINE_MODEL = 'machineModel';
+  static const String REPORT_LINK = 'pdfReport';
+  static const String INVOICE_LINK = 'invURL';
 
   Ticket(
       {this.assignDate,
@@ -119,7 +122,11 @@ class Ticket with ChangeNotifier {
       this.deliveryType,
       this.isUrgent,
       this.searchText,
-      this.soNumber});
+      this.soNumber,
+      this.invoiceLink,
+      this.invoiceName,
+      this.reportLink,
+      this.reportName});
 
   String? machineModel;
   String? assignDate;
@@ -161,4 +168,8 @@ class Ticket with ChangeNotifier {
   String? soNumber;
   String? machineImage;
   String? video;
+  String? reportName;
+  String? reportLink;
+  String? invoiceName;
+  String? invoiceLink;
 }

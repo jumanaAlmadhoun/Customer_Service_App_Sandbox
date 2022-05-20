@@ -33,6 +33,7 @@ const String techTicketInfoRoute = 'techTicketInfoRoute';
 const String techFillSiteVisitRoute = 'techFillSiteVisitRoute';
 const String techVisitSummaryRoute = 'techVisitSummaryRoute';
 const String techDownloadRoute = 'techDownloadRoute';
+const String techCloseTicketsRoute = 'techCloseTicketsRoute';
 
 const String adminHomeRoute = 'adminHomeRoute';
 const String adminRentMachineRoute = 'adminRentMachineRoute';

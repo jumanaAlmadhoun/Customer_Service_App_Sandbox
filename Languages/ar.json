@@ -1,5 +1,5 @@
 {
-    "login_page": "Login",
+    "login_page": "تسجيل الدخول",
     "home_page": "الصفحة الرئيسية",
     "site_visit_tickets": "Site Visit Tickets",
     "delivery_tickets": "Delivery Tickets",
@@ -15,8 +15,8 @@
     "assigned_tickets":"Assigned Tickets" ,
     "pending_tickets":"Pending Tickets",
     "brand_selection": "Brand Selection",
-    "password": "Password",
-    "phone_number":"Phone Number",
+    "password": "كلمة المرور",
+    "phone_number":"رقم الجوال",
     "view_open_tickets": "عرض التذاكر المفتوحة",
     "view_closed_tickets": "عرض التذاكر المغلقة",
     "logout": "تسجيل خروج"

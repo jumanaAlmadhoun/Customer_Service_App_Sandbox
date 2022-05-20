@@ -23,6 +23,7 @@ class MachinesProvider with ChangeNotifier {
             machineNumber: value[Machine.SERIAL_NUMBER],
             customerNumber: value[Machine.CUSTOMER_NUMBER]));
       });
+
       _machines = machines;
       notifyListeners();
     } catch (ex) {

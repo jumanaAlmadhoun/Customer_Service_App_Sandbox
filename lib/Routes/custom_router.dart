@@ -14,6 +14,7 @@ import 'package:customer_service_app/Layouts/Creator/Site%20Visits/queue_tickets
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned_tickets.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
+import 'package:customer_service_app/Layouts/Tech/tech_close_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
 import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Models/ticket.dart';
@@ -85,7 +86,10 @@ class CustomRouter {
       case adminTechReportRoute:
         return MaterialPageRoute(builder: (_) => const TechReportPage());
       case techDownloadRoute:
-        return MaterialPageRoute(builder: (_) => DownloadPage());
+        return MaterialPageRoute(
+            builder: (_) => DownloadPage(settings.arguments as Ticket));
+      case techCloseTicketsRoute:
+        return MaterialPageRoute(builder: (_) => TechCloseTicketsPage());
       case techTicketInfoRoute:
         return MaterialPageRoute(
             builder: (_) => TechTicketInfoPage(settings.arguments as Ticket));
