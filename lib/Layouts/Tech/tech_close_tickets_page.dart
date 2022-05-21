@@ -1,5 +1,6 @@
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Layouts/Tech/tech_ticket_summary.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -10,10 +11,12 @@ import 'package:customer_service_app/Widgets/logout_widget.dart';
 import 'package:customer_service_app/Widgets/web_layout.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
 class TechCloseTicketsPage extends StatefulWidget {
   const TechCloseTicketsPage({Key? key}) : super(key: key);
@@ -54,7 +57,7 @@ class _TechCloseTicketsPageState extends State<TechCloseTicketsPage>
     return Scaffold(
       appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
           ? AppBar(
-              title: const Text('التذاكر المسندة'),
+              title: const Text('التذاكر المغلقة'),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -117,9 +120,13 @@ class _TechCloseTicketsPageState extends State<TechCloseTicketsPage>
                     date: _tickets[i].creationDate,
                     didContact: _tickets[i].didContact,
                     onTap: () async {
-                      if (await canLaunch(_tickets[i].reportLink!)) {
-                        await launch(_tickets[i].reportLink!);
-                      }
+                      Navigator.pushNamed(context, techDownloadRoute,
+                          arguments: <String>[
+                            _tickets[i].invoiceName!,
+                            _tickets[i].invoiceLink!,
+                            _tickets[i].reportName!,
+                            _tickets[i].reportLink!,
+                          ]);
                     },
                   );
                 },

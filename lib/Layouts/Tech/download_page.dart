@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,12 @@ import 'tech_ticket_summary.dart';
 
 class DownloadPage extends StatefulWidget {
   static const String id = 'download_page';
-  DownloadPage(Ticket ticket);
-  Ticket? ticket;
+  DownloadPage(
+      {this.invoiceName, this.invoiceURL, this.reportName, this.reportUrl});
+  String? invoiceName;
+  String? invoiceURL;
+  String? reportName;
+  String? reportUrl;
 
   @override
   _DownloadPageState createState() => _DownloadPageState();
@@ -92,19 +97,23 @@ class _DownloadPageState extends State<DownloadPage> {
                 child: ButtonWidget(
                   text: 'تنزيل التقرير ',
                   onTap: () async {
+                    print(reportUrl);
                     try {
                       setState(() {
+                        print(widget.reportName);
                         _isLoading = true;
                       });
-                      _download(reportName, reportUrl);
-                    } catch (ex) {}
+                      _download(widget.reportName, widget.reportUrl);
+                    } catch (ex) {
+                      print(ex);
+                    }
                   },
                 ),
               ),
               SizedBox(
                 height: 15,
               ),
-              invoiceUrl != 'N/A'
+              widget.invoiceName != NA
                   ? Center(
                       child: ButtonWidget(
                         text: 'تنزيل الفاتورة ',
@@ -113,7 +122,7 @@ class _DownloadPageState extends State<DownloadPage> {
                             setState(() {
                               _isLoading = true;
                             });
-                            _download(invoiceName, invoiceUrl);
+                            _download(widget.invoiceName, widget.invoiceURL);
                           } catch (ex) {}
                         },
                       ),
@@ -128,7 +137,7 @@ class _DownloadPageState extends State<DownloadPage> {
     final dir = await _getDownloadDirectory();
     final isPermissionStatusGranted = await _requestPermissions();
     if (isPermissionStatusGranted) {
-      final savePath = path.getExternalStorageDirectory().toString();
+      final savePath = dir!.path.toString() + '/' + docName;
       await _startDownload(savePath, link);
     } else {
       // handle the scenario when user declines the permissions
@@ -156,10 +165,12 @@ class _DownloadPageState extends State<DownloadPage> {
         savePath,
         onReceiveProgress: _onReceiveProgress,
       );
+      print(response.statusCode);
       result['isSuccess'] = response.statusCode == 200;
       result['filePath'] = savePath;
     } catch (ex) {
       result['error'] = ex.toString();
+      print(ex);
     } finally {
       await _showNotification(result);
     }

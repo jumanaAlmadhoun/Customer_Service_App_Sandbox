@@ -86,8 +86,14 @@ class CustomRouter {
       case adminTechReportRoute:
         return MaterialPageRoute(builder: (_) => const TechReportPage());
       case techDownloadRoute:
+        var args = settings.arguments as List<String>;
         return MaterialPageRoute(
-            builder: (_) => DownloadPage(settings.arguments as Ticket));
+            builder: (_) => DownloadPage(
+                  invoiceName: args[0],
+                  invoiceURL: args[1],
+                  reportName: args[2],
+                  reportUrl: args[3],
+                ));
       case techCloseTicketsRoute:
         return MaterialPageRoute(builder: (_) => TechCloseTicketsPage());
       case techTicketInfoRoute:

@@ -124,7 +124,6 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -514,7 +513,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     try {
       return allMachines!.firstWhere((element) =>
           (element.machineNumber!.toString().toUpperCase().trim() ==
-              machineNumber.toUpperCase().trim()));
+              machineNumber.toString().toUpperCase().trim()));
     } catch (ex) {
       print(ex);
       return null;

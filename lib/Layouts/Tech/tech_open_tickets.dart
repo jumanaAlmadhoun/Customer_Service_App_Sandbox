@@ -6,6 +6,7 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
+import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:customer_service_app/Widgets/Tech/tech_ticket_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -91,40 +92,44 @@ class _TechOpenTicketPageState extends State<TechOpenTicketPage>
             ? const SpinKitRipple(
                 color: APP_BAR_COLOR,
               )
-            : GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: ResponsiveWrapper.of(context)
-                            .isSmallerThan(TABLET)
-                        ? 1
-                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                                ResponsiveWrapper.of(context)
-                                    .isSmallerThan(DESKTOP))
-                            ? 3
-                            : 4,
-                    childAspectRatio: ResponsiveWrapper.of(context)
-                            .isSmallerThan(TABLET)
-                        ? 2
-                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                                ResponsiveWrapper.of(context)
-                                    .isSmallerThan(DESKTOP))
-                            ? 1.2
-                            : 1.2),
-                itemCount: _tickets.length,
-                itemBuilder: (context, i) {
-                  return TechTicketWidget(
-                    cafeName: _tickets[i].cafeName,
-                    city: _tickets[i].city,
-                    customerMobile: _tickets[i].extraContactNumber,
-                    customerName: _tickets[i].customerName,
-                    date: _tickets[i].creationDate,
-                    didContact: _tickets[i].didContact,
-                    onTap: () {
-                      Navigator.pushNamed(context, techTicketInfoRoute,
-                          arguments: _tickets[i]);
+            : _tickets.isNotEmpty
+                ? GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: ResponsiveWrapper.of(context)
+                                .isSmallerThan(TABLET)
+                            ? 1
+                            : (ResponsiveWrapper.of(context)
+                                        .isLargerThan(MOBILE) &&
+                                    ResponsiveWrapper.of(context)
+                                        .isSmallerThan(DESKTOP))
+                                ? 3
+                                : 4,
+                        childAspectRatio:
+                            ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+                                ? 2
+                                : (ResponsiveWrapper.of(context)
+                                            .isLargerThan(MOBILE) &&
+                                        ResponsiveWrapper.of(context)
+                                            .isSmallerThan(DESKTOP))
+                                    ? 1.2
+                                    : 1.2),
+                    itemCount: _tickets.length,
+                    itemBuilder: (context, i) {
+                      return TechTicketWidget(
+                        cafeName: _tickets[i].cafeName,
+                        city: _tickets[i].city,
+                        customerMobile: _tickets[i].extraContactNumber,
+                        customerName: _tickets[i].customerName,
+                        date: _tickets[i].creationDate,
+                        didContact: _tickets[i].didContact,
+                        onTap: () {
+                          Navigator.pushNamed(context, techTicketInfoRoute,
+                              arguments: _tickets[i]);
+                        },
+                      );
                     },
-                  );
-                },
-              ),
+                  )
+                : Center(child: PrimaryText(text: 'لا توجد تذاكر')),
       ),
     );
   }

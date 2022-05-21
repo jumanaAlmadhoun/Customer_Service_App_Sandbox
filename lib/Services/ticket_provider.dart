@@ -417,7 +417,10 @@ class TicketProvider with ChangeNotifier {
                   value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
               deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
               soNumber: value[Ticket.SO_NUMBER] ?? '',
-              reportLink: value[Ticket.REPORT_LINK] ?? ''));
+              reportLink: value[Ticket.REPORT_LINK] ?? NA,
+              invoiceLink: value[Ticket.INVOICE_LINK] ?? NA,
+              invoiceName: value[Ticket.INVOICE_NAME] ?? NA,
+              reportName: value[Ticket.REPORT_NAME] ?? NA));
         });
       });
       tickets.sort((a, b) => b.assignDate!.compareTo(a.assignDate!));

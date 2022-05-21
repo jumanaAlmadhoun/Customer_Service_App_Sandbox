@@ -227,7 +227,13 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                         text: 'تم إغلاق التذكرة بنجاح',
                         title: 'نجاح',
                         onConfirmBtnTap: () {
-                          Navigator.pushNamed(context, techDownloadRoute);
+                          Navigator.pushNamed(context, techDownloadRoute,
+                              arguments: <String>[
+                                invoiceName,
+                                invoiceUrl,
+                                reportName,
+                                reportUrl
+                              ]);
                         });
                   }
                 });
