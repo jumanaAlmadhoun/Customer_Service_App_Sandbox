@@ -66,6 +66,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
           ? CustomeAppBar(
@@ -105,60 +106,216 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
           ),
           const LogoutWidget(),
         ],
-        widget: GridViewCountWidget(
-          widgets: [
-            siteVisitTickets == -1
-                ? const SpinKitDancingSquare(
-                    color: APP_BAR_COLOR,
-                  )
-                : CategoryItem(
-                    title: getTranselted(context, TIC_SITE_VISIT)!,
-                    image: IMG_SITE_VISIT,
-                    number: siteVisitTickets,
-                    onTap: () {
-                      Navigator.pushNamed(context, creatorSiteVisitRoute);
-                    },
+        widget: ListView(children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(children: [
+                  siteVisitTickets == -1
+                      ? const SpinKitDancingSquare(
+                          color: APP_BAR_COLOR,
+                        )
+                      :
+                      // : CategoryItem(
+                      //     title: getTranselted(context, TIC_SITE_VISIT)!,
+                      //     image: IMG_SITE_VISIT,
+                      //     number: siteVisitTickets,
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, creatorSiteVisitRoute);
+                      //     },
+                      //   ),
+                      _cardGroup(
+                          _width / 2.2,
+                          200,
+                          getTranselted(context, TIC_SITE_VISIT)!,
+                          siteVisitTickets.toString(),
+                          IMG_SITE_VISIT, () {
+                          Navigator.pushNamed(context, creatorSiteVisitRoute);
+                        }),
+                  const SizedBox(
+                    height: 10,
                   ),
-            deliveryTickets == -1
-                ? const SpinKitDancingSquare(
-                    color: APP_BAR_COLOR,
-                  )
-                : CategoryItem(
-                    title: getTranselted(context, TIC_DELIVERY)!,
-                    image: IMG_DELIVERY,
-                    number: deliveryTickets,
-                    onTap: () {
-                      Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
-                    },
+                  deliveryTickets == -1
+                      ? const SpinKitDancingSquare(
+                          color: APP_BAR_COLOR,
+                        )
+                      // : CategoryItem(
+                      //     title: getTranselted(context, TIC_DELIVERY)!,
+                      //     image: IMG_DELIVERY,
+                      //     number: deliveryTickets,
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
+                      //     },
+                      //   ),
+                      : _cardGroup(
+                          _width / 2.2,
+                          260,
+                          getTranselted(context, TIC_DELIVERY)!,
+                          deliveryTickets.toString(),
+                          IMG_DELIVERY, () {
+                          Navigator.pushNamed(
+                              context, creatorDeliveryTicketsRoute);
+                        }),
+                ]),
+                const Spacer(),
+                Column(children: [
+                  pickupTickets == -1
+                      ? const SpinKitDancingSquare(
+                          color: APP_BAR_COLOR,
+                        )
+                      :
+                      // : CategoryItem(
+                      //     title: getTranselted(context, TIC_SITE_VISIT)!,
+                      //     image: IMG_SITE_VISIT,
+                      //     number: siteVisitTickets,
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, creatorSiteVisitRoute);
+                      //     },
+                      //   ),
+                      _cardGroup(
+                          _width / 2.2,
+                          250,
+                          getTranselted(context, TIC_PICK_UP)!,
+                          pickupTickets.toString(),
+                          IMG_PICKUP, () {
+                          Navigator.pushNamed(
+                              context, creatorPickupTicketsRoute);
+                        }),
+                  const SizedBox(
+                    height: 10,
                   ),
-            // exchangeTickets == -1
-            //     ? const SpinKitDancingSquare(
-            //         color: APP_BAR_COLOR,
-            //       )
-            //     : CategoryItem(
-            //         title: getTranselted(context, TIC_EXCHANGE)!,
-            //         image: IMG_EXCHANGE,
-            //         number: exchangeTickets,
-            //       ),
-            pickupTickets == -1
-                ? const SpinKitDancingSquare(
-                    color: APP_BAR_COLOR,
-                  )
-                : CategoryItem(
-                    title: getTranselted(context, TIC_PICK_UP)!,
-                    image: IMG_PICKUP,
-                    number: pickupTickets,
-                    onTap: () {
-                      Navigator.pushNamed(context, creatorPickupTicketsRoute);
-                    }),
-            // CategoryItem(
-            //   title: getTranselted(context, TIC_ACCOUNTING)!,
-            //   image: IMG_ACCOUNTING,
-            // ),
-            CategoryItem(
-              title: getTranselted(context, TIC_CUSTOMER_TICKETS)!,
-              image: IMG_CLIENT_TICKETS,
+                  deliveryTickets == -1
+                      ? const SpinKitDancingSquare(
+                          color: APP_BAR_COLOR,
+                        )
+                      // : CategoryItem(
+                      //     title: getTranselted(context, TIC_DELIVERY)!,
+                      //     image: IMG_DELIVERY,
+                      //     number: deliveryTickets,
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
+                      //     },
+                      //   ),
+                      : _cardGroup(
+                          _width / 2.2,
+                          200,
+                          getTranselted(context, TIC_CUSTOMER_TICKETS)!,
+                          0.toString(),
+                          IMG_CLIENT_TICKETS,
+                          () {}),
+                ]),
+                // exchangeTickets == -1
+                //     ? const SpinKitDancingSquare(
+                //         color: APP_BAR_COLOR,
+                //       )
+                //     : CategoryItem(
+                //         title: getTranselted(context, TIC_EXCHANGE)!,
+                //         image: IMG_EXCHANGE,
+                //         number: exchangeTickets,
+                //       ),
+                // pickupTickets == -1
+                //     ? const SpinKitDancingSquare(
+                //         color: APP_BAR_COLOR,
+                //       )
+                //     : CategoryItem(
+                //         title: getTranselted(context, TIC_PICK_UP)!,
+                //         image: IMG_PICKUP,
+                //         number: pickupTickets,
+                //         onTap: () {
+                //           Navigator.pushNamed(
+                //               context, creatorPickupTicketsRoute);
+                //         }),
+                // // CategoryItem(
+                // //   title: getTranselted(context, TIC_ACCOUNTING)!,
+                // //   image: IMG_ACCOUNTING,
+                // // ),
+                // CategoryItem(
+                //   title: getTranselted(context, TIC_CUSTOMER_TICKETS)!,
+                //   image: IMG_CLIENT_TICKETS,
+                // ),
+              ],
             ),
+          ),
+        ]),
+      ),
+    );
+  }
+
+  Widget _cardGroup(double _width, double _height, String _title,
+      String _person, String _image, onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: _height,
+        width: _width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                  _image,
+                ),
+                fit: BoxFit.cover),
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              left: 10.0,
+              bottom: 10.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    _title,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Sofia",
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18.0,
+                        shadows: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 4.0,
+                              spreadRadius: 10.0)
+                        ]),
+                  ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            _person + " Ticket",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Sofia",
+                                fontWeight: FontWeight.w700,
+                                shadows: [
+                                  BoxShadow(
+                                      color: Colors.black,
+                                      blurRadius: 4.0,
+                                      spreadRadius: 10.0)
+                                ]),
+                          ),
+                          const SizedBox(
+                            width: 3.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),

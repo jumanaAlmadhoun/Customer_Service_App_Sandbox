@@ -11,7 +11,6 @@ import 'package:customer_service_app/Widgets/logout_widget.dart';
 import 'package:customer_service_app/Widgets/web_layout.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
