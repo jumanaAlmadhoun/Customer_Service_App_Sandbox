@@ -77,16 +77,12 @@ class SummaryProvider with ChangeNotifier {
           data.forEach((key, value) {
             var innerData = value as Map<String, dynamic>;
             queueTickets += innerData.length;
-            if (techs.isNotEmpty) {
-              for (var i = 0; i < techs.length; i++) {
-                if (techs[i].name == key) {
-                  techs[i].queueTicket = parseTickets(innerData);
-                }
+            for (var i = 0; i < techs.length; i++) {
+              if (techs[i].name == key) {
+                techs[i].queueTicket = parseTickets(innerData);
               }
-            } else {
-              print('object');
-              techs.add(Tech(name: key, queueTicket: parseTickets(innerData)));
             }
+            techs.add(Tech(name: key, queueTicket: parseTickets(innerData)));
           });
         }
         notifyListeners();
@@ -97,16 +93,14 @@ class SummaryProvider with ChangeNotifier {
           data.forEach((key, value) {
             var innerData = value as Map<String, dynamic>;
             assignedTickets += innerData.length;
-            if (techs.isNotEmpty) {
-              for (var i = 0; i < techs.length; i++) {
-                if (techs[i].name == key) {
-                  techs[i].assignedTickets = parseTickets(innerData);
-                }
+            for (var i = 0; i < techs.length; i++) {
+              if (techs[i].name == key) {
+                techs[i].assignedTickets = parseTickets(innerData);
               }
-            } else {
-              techs.add(
-                  Tech(name: key, assignedTickets: parseTickets(innerData)));
             }
+            techs
+                .add(Tech(name: key, assignedTickets: parseTickets(innerData)));
+            print(techs.length);
           });
         }
         notifyListeners();

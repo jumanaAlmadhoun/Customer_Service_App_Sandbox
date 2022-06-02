@@ -9,6 +9,7 @@ class MachineChekWidget extends StatefulWidget {
   bool? isPass = null;
   String? title;
   String? keyJson;
+  List<String>? comments;
   String? Function(String?)? validate;
   @override
   _MachineChekWidgetState createState() => _MachineChekWidgetState();
