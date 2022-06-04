@@ -367,11 +367,13 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
     if (_techName != NA) {
       if (_formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+            .submitNewDeliveryTicket(
+                json, '$DB_URL$DB_SITE_VISITS/$DB_DELIVERY_TICKETS.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
-          .submitNewDeliveryTicket(json, '$DB_URL$DB_DELIVERY_TICKETS.json');
+          .submitNewDeliveryTicket(
+              json, '$DB_URL$DB_SITE_VISITS/$DB_DELIVERY_TICKETS.json');
     }
     return SC_FAILED_RESPONSE;
   }

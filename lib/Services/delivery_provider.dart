@@ -9,8 +9,8 @@ class DeliveryProvider with ChangeNotifier {
   Future<void> fetchTickets(String from) async {
     try {
       List<Ticket> tickets = [];
-      var response =
-          await http.get(Uri.parse('$DB_URL$DB_DELIVERY_TICKETS.json'));
+      var response = await http
+          .get(Uri.parse('$DB_URL$DB_SITE_VISITS/$DB_DELIVERY_TICKETS.json'));
     } catch (ex) {
       print(ex);
     }

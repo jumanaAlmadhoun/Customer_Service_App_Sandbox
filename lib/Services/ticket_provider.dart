@@ -18,7 +18,8 @@ class TicketProvider with ChangeNotifier {
     try {
       _tickets.clear();
       List<Ticket> tickets = [];
-      var response = await http.get(Uri.parse('$DB_URL$from.json'));
+      var response =
+          await http.get(Uri.parse('$DB_URL$DB_SITE_VISITS/$from.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {
         String searchText = '';
@@ -55,7 +56,7 @@ class TicketProvider with ChangeNotifier {
               customerName: value[Ticket.CUSTOMER_NAME] ?? '',
               customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
               didContact: value[Ticket.DID_CONTACT] ?? false,
-              extraContactNumber: value[Ticket.CONTACT_NUMBER],
+              extraContactNumber: value[Ticket.CONTACT_NUMBER] ?? '',
               freeParts: value[Ticket.FREE_PARTS] ?? false,
               freeVisit: value[Ticket.FREE_PARTS] ?? false,
               from: value[Ticket.VISIT_START_TIME] ?? '',
@@ -140,7 +141,7 @@ class TicketProvider with ChangeNotifier {
     }
     var json = jsonEncode(ticketHeader);
     var response = await http.get(Uri.parse(
-        '$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$json&firebaseID=${ticket!.firebaseID}&fromTable=${ticket.fromTable}&toTable=$toTable&DB_URL=$DB_URL'));
+        '$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$json&firebaseID=${ticket!.firebaseID}&fromTable=${ticket.fromTable}&toTable=$toTable&DB_URL=$DB_URL$DB_SITE_VISITS/'));
     print(response.body);
     var data = jsonDecode(response.body);
     if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
@@ -152,8 +153,8 @@ class TicketProvider with ChangeNotifier {
   Future<String> techSubmitSiteVisit(Map<String, dynamic> json,
       Map<String, dynamic> partJson, String? firebaseID) async {
     try {
-      var response = await http.get(
-          Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+      var response = await http.get(Uri.parse(
+          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.update(
         Ticket.TECH_INFO,
@@ -178,15 +179,17 @@ class TicketProvider with ChangeNotifier {
         },
       );
       await http.patch(
-        Uri.parse('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'),
+        Uri.parse(
+            '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'),
         body: jsonEncode(data),
       );
-      print('$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json');
+      print(
+          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json');
       var ticketJson = jsonEncode(data);
       var infoJson = jsonEncode(json);
       var partsJson = jsonEncode(partJson);
       response = await http.get(Uri.parse(
-          '$TECH_FILL_SCRIPT?url=$DB_URL$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+          '$TECH_FILL_SCRIPT?url=$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
       data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         invoiceName = data['invName'];
@@ -305,7 +308,9 @@ class TicketProvider with ChangeNotifier {
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         var firebaseTicke = await http.get(Uri.parse(firebaseUrl));
         var ticketData = jsonDecode(firebaseTicke.body) as Map<String, dynamic>;
-        await http.post(Uri.parse('$DB_URL$DB_READY_TO_ASSIGN_TICKETS.json'),
+        await http.post(
+            Uri.parse(
+                '$DB_URL$DB_SITE_VISITS/$DB_READY_TO_ASSIGN_TICKETS.json'),
             body: jsonEncode(ticketData));
         await http.delete(Uri.parse(firebaseUrl));
         return Future.value(SC_SUCCESS_RESPONSE);
@@ -332,7 +337,8 @@ class TicketProvider with ChangeNotifier {
   }
 
   Future<String> archiveTicket(Ticket ticket, String? reason) async {
-    String url = '$DB_URL${ticket.fromTable}/${ticket.firebaseID}.json';
+    String url =
+        '$DB_URL$DB_SITE_VISITS/${ticket.fromTable}/${ticket.firebaseID}.json';
     var response = await http.get(Uri.parse(
         '$ARCHIVE_TICKET_SCRIPT?url=$url&reason=$reason&userName=$userName'));
     print(response.body);
@@ -342,8 +348,8 @@ class TicketProvider with ChangeNotifier {
 
   Future<void> fetchCustomerTickets() async {
     try {
-      var response =
-          await http.get(Uri.parse('$DB_URL$DB_CUSTOMER_TICKETS.json'));
+      var response = await http
+          .get(Uri.parse('$DB_URL$DB_SITE_VISITS/$DB_CUSTOMER_TICKETS.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {});
     } catch (ex) {}
@@ -353,7 +359,7 @@ class TicketProvider with ChangeNotifier {
     print('Enter Reject Func');
     try {
       var url =
-          '$DB_URL$DB_ASSIGNED_TICKETS/${ticket.techName}/${ticket.firebaseID}.json';
+          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/${ticket.techName}/${ticket.firebaseID}.json';
       var response = await http.get(Uri.parse(
           '$REJECT_TICKET_SCRIPT?url=$url&techName=${ticket.techName}'));
       print(response.body);
@@ -371,8 +377,8 @@ class TicketProvider with ChangeNotifier {
   Future<String> fetchClosedTickets() async {
     List<Ticket> tickets = [];
     try {
-      var response = await http
-          .get(Uri.parse('$DB_URL/$DB_CLOSED_TICKETS/$userName.json'));
+      var response = await http.get(Uri.parse(
+          '$DB_URL$DB_SITE_VISITS//$DB_CLOSED_TICKETS/$userName.json'));
       print(response.body);
       var data = jsonDecode(response.body) as Map<dynamic, dynamic>;
       if (data == null) {

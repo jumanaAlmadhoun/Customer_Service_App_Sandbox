@@ -370,13 +370,13 @@ class _EditMachineDeliveryTicketState extends State<EditMachineDeliveryTicket>
     if (_techName != NA) {
       if (_formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .editDeliveryTicket(
-                json, '$DB_URL$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
+            .editDeliveryTicket(json,
+                '$DB_URL$DB_SITE_VISITS/$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
-          .editDeliveryTicket(
-              json, '$DB_URL$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
+          .editDeliveryTicket(json,
+              '$DB_URL$DB_SITE_VISITS/$DB_DELIVERY_TICKETS/${ticket!.firebaseID}.json');
     }
     return SC_FAILED_RESPONSE;
   }

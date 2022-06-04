@@ -16,8 +16,8 @@ class TechProvider with ChangeNotifier {
       String currDate = DateTime.now().toString().split(' ')[0];
       String currMonth = currDate.substring(0, 7);
       print(currMonth);
-      var response =
-          await http.get(Uri.parse('$DB_URL$DB_CLOSED_TICKETS.json'));
+      var response = await http
+          .get(Uri.parse('$DB_URL$DB_SITE_VISITS/$DB_CLOSED_TICKETS.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.forEach((key, value) {
         String techName = key;

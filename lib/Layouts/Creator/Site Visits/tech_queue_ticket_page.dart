@@ -105,7 +105,7 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
                           });
                           Provider.of<TicketProvider>(context, listen: false)
                               .getBackQueueTicket(widget.tech!.queueTicket![i],
-                                  '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
+                                  '$DB_URL$DB_SITE_VISITS/$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
                               .then((value) {
                             if (value == SC_SUCCESS_RESPONSE) {
                               setState(() {
@@ -120,7 +120,7 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
                           });
                           Provider.of<TicketProvider>(context, listen: false)
                               .sendTicketFromQueue(
-                                  '$DB_URL$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
+                                  '$DB_URL$DB_SITE_VISITS/$DB_QUEUE_TICKETS/${widget.tech!.name}/${widget.tech!.queueTicket![i].firebaseID}.json')
                               .then((value) {
                             setState(() {
                               _isLoading = false;

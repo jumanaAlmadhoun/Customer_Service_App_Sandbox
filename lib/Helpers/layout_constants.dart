@@ -20,6 +20,7 @@ const String IMG_LOGO_CEADO = 'Assets/Images/ceado.png';
 const String IMG_LOGO_SIPRESSO = 'Assets/Images/sipresso.png';
 const String IMG_SITE_VISIT = 'Assets/Images/site_visit.jpg';
 const String IMG_DELIVERY = 'Assets/Images/delivery_visit.jpg';
+const String IMG_CUSTOMER_COMP = 'Assets/Images/customer_comp.jpg';
 const String IMG_EXCHANGE = 'Assets/Images/exchange_tickets.jpg';
 const String IMG_PICKUP = 'Assets/Images/pickup_tickets.jpg';
 const String IMG_CUSTOMER_MGMT = 'Assets/Images/management.png';

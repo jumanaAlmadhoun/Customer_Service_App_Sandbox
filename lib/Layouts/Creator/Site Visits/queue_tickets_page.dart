@@ -1,6 +1,8 @@
 import 'package:customer_service_app/Localization/localization_constants.dart';
+import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
+import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import '../../../Helpers/layout_constants.dart';
@@ -17,7 +19,26 @@ class QueueTikcketsPage extends StatefulWidget {
   _QueueTikcketsPageState createState() => _QueueTikcketsPageState();
 }
 
-class _QueueTikcketsPageState extends State<QueueTikcketsPage> {
+class _QueueTikcketsPageState extends State<QueueTikcketsPage> with RouteAware {
+  List<Tech> _techs = [];
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    // TODO: implement didPush
+    super.didPush();
+    _techs = techs
+        .where((element) =>
+            element.queueTicket != null && element.queueTicket!.isNotEmpty)
+        .toList();
+    print(_techs);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,14 +97,14 @@ class _QueueTikcketsPageState extends State<QueueTikcketsPage> {
                                   .isSmallerThan(DESKTOP))
                           ? 2.5
                           : 3),
-              itemCount: techs.length,
+              itemCount: _techs.length,
               itemBuilder: (context, i) {
-                return techs[i].queueTicket != null
+                return _techs[i].queueTicket != null
                     ? TeckTicketNumber(
-                        techName: techs[i].name!,
-                        ticketsNumber: techs[i].queueTicket!.length.toString(),
+                        techName: _techs[i].name!,
+                        ticketsNumber: _techs[i].queueTicket!.length.toString(),
                         routeName: creatorTechQueueTicketRoute,
-                        argument: techs[i],
+                        argument: _techs[i],
                       )
                     /*  Padding(
                         padding: const EdgeInsets.all(8.0),

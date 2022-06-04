@@ -89,6 +89,7 @@ const String BTN_SEND = 'send';
 const String BTN_CANCEL = 'cancel';
 const String LBL_CHOOSE_REASON = 'choose_archive';
 const String TIC_CUSTOMER_TICKETS = 'client_ticket';
+const String TIC_CUSTOMER_COMP_TICKETS = 'customer_comp_tickets';
 const String VIEW_OPEN_TICKETS = 'view_open_tickets';
 const String VIEW_CLOSED_TICKETS = 'view_closed_tickets';
 const String LOGOUT = 'logout';

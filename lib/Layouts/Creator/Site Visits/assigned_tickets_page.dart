@@ -2,8 +2,10 @@
 
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
+import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/summary_provider.dart';
+import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import '../../../Widgets/appBar.dart';
@@ -19,7 +21,27 @@ class AssignedTikcketsPage extends StatefulWidget {
   _AssignedTikcketsPageState createState() => _AssignedTikcketsPageState();
 }
 
-class _AssignedTikcketsPageState extends State<AssignedTikcketsPage> {
+class _AssignedTikcketsPageState extends State<AssignedTikcketsPage>
+    with RouteAware {
+  List<Tech> _techs = [];
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    // TODO: implement didPush
+    super.didPush();
+    _techs = techs
+        .where((element) =>
+            element.assignedTickets != null &&
+            element.assignedTickets!.isNotEmpty)
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,15 +99,15 @@ class _AssignedTikcketsPageState extends State<AssignedTikcketsPage> {
                                     .isSmallerThan(DESKTOP))
                             ? 2.5
                             : 3),
-            itemCount: techs.length,
+            itemCount: _techs.length,
             itemBuilder: (context, i) {
-              return techs[i].assignedTickets != null
+              return _techs[i].assignedTickets != null
                   ? TeckTicketNumber(
-                      techName: techs[i].name!,
+                      techName: _techs[i].name!,
                       ticketsNumber:
-                          techs[i].assignedTickets!.length.toString(),
+                          _techs[i].assignedTickets!.length.toString(),
                       routeName: creatorTechAssignedTicketRoute,
-                      argument: techs[i],
+                      argument: _techs[i],
                     )
                   : Container(); /*Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -579,13 +579,13 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                 ifAbsent: () => date);
             return await Provider.of<TicketProvider>(context, listen: false)
                 .createNewSanremoTicket(ticketHeader,
-                    '$DB_URL$DB_ASSIGNED_TICKETS/$_techName.json');
+                    '$DB_URL$DB_SITE_VISITS//$DB_ASSIGNED_TICKETS/$_techName.json');
           } else {
             ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_QUEUE,
                 ifAbsent: () => Ticket.STA_QUEUE);
             return await Provider.of<TicketProvider>(context, listen: false)
-                .createNewSanremoTicket(
-                    ticketHeader, '$DB_URL$DB_QUEUE_TICKETS/$_techName.json');
+                .createNewSanremoTicket(ticketHeader,
+                    '$DB_URL$DB_SITE_VISITS//$DB_SITE_VISITS/$DB_QUEUE_TICKETS/$_techName.json');
           }
         } else {
           return Future.value('N/A');
@@ -599,23 +599,23 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
             Ticket.STATUS, (value) => Ticket.STA_SOLVED_BY_PHONE,
             ifAbsent: () => Ticket.STA_SOLVED_BY_PHONE);
         return await Provider.of<TicketProvider>(context, listen: false)
-            .createNewSanremoTicket(
-                ticketHeader, '$DB_URL$DB_SOLVED_BY_PHONE_TICKETS.json');
+            .createNewSanremoTicket(ticketHeader,
+                '$DB_URL$DB_SITE_VISITS//$DB_SOLVED_BY_PHONE_TICKETS.json');
       }
       if (_readyToAssign) {
         ticketHeader!.update(
             Ticket.STATUS, (value) => Ticket.STA_READY_TO_ASSIGN,
             ifAbsent: () => Ticket.STA_READY_TO_ASSIGN);
         return await Provider.of<TicketProvider>(context, listen: false)
-            .createNewSanremoTicket(
-                ticketHeader, '$DB_URL$DB_READY_TO_ASSIGN_TICKETS.json');
+            .createNewSanremoTicket(ticketHeader,
+                '$DB_URL$DB_SITE_VISITS//$DB_READY_TO_ASSIGN_TICKETS.json');
       } else {
         if (ticketHeader != null) {
           ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_OPEN,
               ifAbsent: () => Ticket.STA_OPEN);
           return await Provider.of<TicketProvider>(context, listen: false)
-              .createNewSanremoTicket(
-                  ticketHeader, '$DB_URL$DB_OPEN_TICKETS.json');
+              .createNewSanremoTicket(ticketHeader,
+                  '$DB_URL$DB_SITE_VISITS//$DB_OPEN_TICKETS.json');
         } else {
           return Future.value('N/A');
         }

@@ -77,5 +77,6 @@
   "client_ticket":"Customer's Tickets",
   "view_open_tickets": "View Open Tickets",
   "view_closed_tickets": "View Closed Tickets",
-  "logout": "Logout"
+  "logout": "Logout",
+  "customer_comp_tickets":"Customer Complaints"
 }

@@ -484,11 +484,13 @@ class _NewPickupTicketPageState extends State<NewPickupTicket> with RouteAware {
     if (_techName != NA) {
       if (formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .submitNewPickupTicket(json, '$DB_URL$DB_EXCHANGE_TICKETS.json');
+            .submitNewPickupTicket(
+                json, '$DB_URL$DB_SITE_VISITS/$DB_EXCHANGE_TICKETS.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
-          .submitNewPickupTicket(json, '$DB_URL$DB_EXCHANGE_TICKETS.json');
+          .submitNewPickupTicket(
+              json, '$DB_URL$DB_SITE_VISITS/$DB_EXCHANGE_TICKETS.json');
     }
     return SC_FAILED_RESPONSE;
   }

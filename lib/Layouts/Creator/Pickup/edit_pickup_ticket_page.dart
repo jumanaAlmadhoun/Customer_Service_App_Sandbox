@@ -472,13 +472,13 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
     if (_techName != NA) {
       if (formKey.currentState!.validate()) {
         return await Provider.of<TicketProvider>(context, listen: false)
-            .editPickupTicket(
-                json, '$DB_URL$DB_PICKUP_TICKETS/${ticket!.firebaseID}.json');
+            .editPickupTicket(json,
+                '$DB_URL$DB_SITE_VISITS/$DB_PICKUP_TICKETS/${ticket!.firebaseID}.json');
       }
     } else {
       return await Provider.of<TicketProvider>(context, listen: false)
-          .editPickupTicket(
-              json, '$DB_URL$DB_PICKUP_TICKETS/${ticket!.firebaseID}.json');
+          .editPickupTicket(json,
+              '$DB_URL$DB_SITE_VISITS/$DB_PICKUP_TICKETS/${ticket!.firebaseID}.json');
     }
     return SC_FAILED_RESPONSE;
   }
@@ -519,6 +519,7 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
       Ticket.ROW_ADDRESS: ticket!.rowAddress,
       Ticket.MACHINE_MODEL: selectedModel!.text,
       Ticket.SERIAL_NUMBER: machineNumber!.text,
+      Ticket.PROBLEM_DESC: problemDesc!.text
     };
   }
 
@@ -544,6 +545,8 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
       _selectedCity.text = ticket!.city!;
       _techName = ticket!.techName!;
       _selectedReg = ticket!.region!;
+      _didContact = ticket!.didContact!;
+      problemDesc!.text = ticket!.problemDesc!;
     } catch (ex) {
       print(ex);
     }
