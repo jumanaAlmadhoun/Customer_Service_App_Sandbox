@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Models/ticket.dart';
+import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
@@ -23,6 +25,8 @@ int deliveryAssignedTickets = -1;
 int workShopTickets = 0;
 int customerCompTickets = -1;
 List<Tech> techs = [];
+List<OpenTicketWidget> allTicketsWidget = [];
+List<Ticket> allTickets = [];
 
 class SummaryProvider with ChangeNotifier {
   Future<void> fetchSummary() async {
@@ -56,6 +60,10 @@ class SummaryProvider with ChangeNotifier {
           switch (key) {
             case DB_OPEN_TICKETS:
               openTickets = value.length;
+              var innerData = value as Map<String, dynamic>;
+              List<Ticket> tempTickets =
+                  parseTickets(innerData, DB_OPEN_TICKETS);
+              allTickets.addAll(tempTickets);
               break;
             case DB_DELIVERY_TICKETS:
               deliveryTickets = value.length;
@@ -70,11 +78,17 @@ class SummaryProvider with ChangeNotifier {
                 assignedTickets += innerData.length;
                 for (var i = 0; i < techs.length; i++) {
                   if (techs[i].name == key) {
-                    techs[i].assignedTickets = parseTickets(innerData);
+                    techs[i].assignedTickets = parseTickets(
+                        innerData, '$DB_ASSIGNED_TICKETS/${techs[i].name}');
+                    allTickets
+                        .addAll(parseTickets(innerData, DB_ASSIGNED_TICKETS));
                   }
                 }
-                techs.add(
-                    Tech(name: key, assignedTickets: parseTickets(innerData)));
+                techs.add(Tech(
+                    name: key,
+                    assignedTickets:
+                        parseTickets(innerData, '$DB_ASSIGNED_TICKETS/$key')));
+                allTickets.addAll(parseTickets(innerData, DB_ASSIGNED_TICKETS));
               });
               break;
             case DB_QUEUE_TICKETS:
@@ -84,11 +98,17 @@ class SummaryProvider with ChangeNotifier {
                 queueTickets += innerData.length;
                 for (var i = 0; i < techs.length; i++) {
                   if (techs[i].name == key) {
-                    techs[i].queueTicket = parseTickets(innerData);
+                    techs[i].queueTicket = parseTickets(
+                        innerData, '$DB_QUEUE_TICKETS/${techs[i].name}');
+                    allTickets
+                        .addAll(parseTickets(innerData, DB_QUEUE_TICKETS));
                   }
                 }
-                techs
-                    .add(Tech(name: key, queueTicket: parseTickets(innerData)));
+                techs.add(Tech(
+                    name: key,
+                    queueTicket:
+                        parseTickets(innerData, '$DB_QUEUE_TICKETS/$key')));
+                allTickets.addAll(parseTickets(innerData, DB_QUEUE_TICKETS));
               });
               break;
             case DB_PENDING_TICKETS:
@@ -96,6 +116,10 @@ class SummaryProvider with ChangeNotifier {
               break;
             case DB_READY_TO_ASSIGN_TICKETS:
               readyToAssignTickets = value.length;
+              var innerData = value as Map<String, dynamic>;
+              List<Ticket> tempTickets =
+                  parseTickets(innerData, DB_READY_TO_ASSIGN_TICKETS);
+              allTickets.addAll(tempTickets);
               break;
             case DB_WORKSHOP_TICKETS:
               workShopTickets = value.length;
@@ -111,6 +135,17 @@ class SummaryProvider with ChangeNotifier {
             pendingTickets +
             readyToAssignTickets +
             workShopTickets;
+        allTickets.forEach((element) {
+          allTicketsWidget.add(OpenTicketWidget(
+            cafeName: element.cafeName,
+            city: element.city,
+            customerMobile: element.customerMobile,
+            customerName: element.customerName,
+            date: element.creationDate,
+            didContact: element.didContact,
+            machineNumber: element.machineNumber,
+          ));
+        });
         notifyListeners();
       });
       // get(Uri.parse('$DB_URL$DB_EXCHANGE_TICKETS.json')).then((value) {
@@ -187,7 +222,7 @@ class SummaryProvider with ChangeNotifier {
     }
   }
 
-  List<Ticket> parseTickets(Map<String, dynamic> data) {
+  List<Ticket> parseTickets(Map<String, dynamic> data, String fromTable) {
     List<Ticket> tickets = [];
     data.forEach((key, value) {
       tickets.add(Ticket(
@@ -221,6 +256,7 @@ class SummaryProvider with ChangeNotifier {
           techName: value[Ticket.TECH_NAME] ?? '',
           ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
           visitDate: value[Ticket.VISIT_DATE] ?? '',
+          fromTable: fromTable,
           firebaseID: key));
     });
     return tickets;

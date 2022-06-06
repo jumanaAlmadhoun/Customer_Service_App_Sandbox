@@ -12,6 +12,7 @@ import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/customer_provider.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/machines_provider.dart';
+import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Services/user_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
@@ -159,7 +160,13 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   selectedMachines = findMachine(value);
                   print(selectedMachines);
                   if (selectedMachines != null) {
-                    fetchCustomerInfo(context, selectedMachines!);
+                    String check = findOtherTickets(context, selectedMachines!);
+                    if (check != NA) {
+                      CoolAlert.show(
+                          context: context, type: CoolAlertType.warning);
+                    } else {
+                      fetchCustomerInfo(context, selectedMachines!);
+                    }
                   } else {
                     customerNumber!.text = '';
                     clearCustomerValues();
@@ -679,5 +686,15 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
         }
       }
     }
+  }
+
+  String findOtherTickets(BuildContext context, Machine machine) {
+    String found = NA;
+    allTickets.forEach((element) {
+      if (element.machineNumber == machine.machineNumber) {
+        found = element.fromTable!;
+      }
+    });
+    return found;
   }
 }

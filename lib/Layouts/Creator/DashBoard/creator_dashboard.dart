@@ -6,6 +6,7 @@ import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Admin/info_card.dart';
+import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -62,16 +63,14 @@ class _CreatorDashBoardState extends State<CreatorDashBoard> with RouteAware {
           ? const SpinKitChasingDots(
               color: APP_BAR_COLOR,
             )
-          : ListView(children: [
-              Row(
-                children: [
-                  InfoCard(
-                    label: 'Open Tickets',
-                    amount: allOpenTickets.length.toString(),
-                  )
-                ],
-              )
-            ]),
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(children: [
+                PrimaryText(
+                  text: 'Late Tickets',
+                )
+              ]),
+            ),
     );
   }
 }
