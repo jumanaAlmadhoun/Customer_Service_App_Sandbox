@@ -160,10 +160,20 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   selectedMachines = findMachine(value);
                   print(selectedMachines);
                   if (selectedMachines != null) {
-                    String check = findOtherTickets(context, selectedMachines!);
-                    if (check != NA) {
+                    Ticket? check =
+                        findOtherTickets(context, selectedMachines!);
+                    if (check != null) {
                       CoolAlert.show(
-                          context: context, type: CoolAlertType.warning);
+                          context: context,
+                          type: CoolAlertType.warning,
+                          text: 'Machine Number Found In ${check.label}',
+                          onConfirmBtnTap: () {
+                            if (check.routeName != null) {
+                              Navigator.pushReplacementNamed(
+                                  context, check.routeName!,
+                                  arguments: check);
+                            }
+                          });
                     } else {
                       fetchCustomerInfo(context, selectedMachines!);
                     }
@@ -688,11 +698,11 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     }
   }
 
-  String findOtherTickets(BuildContext context, Machine machine) {
-    String found = NA;
+  Ticket? findOtherTickets(BuildContext context, Machine machine) {
+    Ticket? found = null;
     allTickets.forEach((element) {
       if (element.machineNumber == machine.machineNumber) {
-        found = element.fromTable!;
+        found = element;
       }
     });
     return found;

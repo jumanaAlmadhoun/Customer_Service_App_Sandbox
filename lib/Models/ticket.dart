@@ -31,6 +31,7 @@ class Ticket with ChangeNotifier {
   static const String LABOR_CHRGES = 'laborCharges';
   static const String CHARGES_PRICE = 'priceBefore';
   static const String SO_NUMBER = 'soNumber';
+  static const String IS_LATE = 'isLate';
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
   static const String RECOMMENDATION = 'recomendation';
@@ -86,50 +87,52 @@ class Ticket with ChangeNotifier {
   static const String INVOICE_NAME = 'pdfInvName';
   static const String REPORT_NAME = 'pdfReportName';
 
-  Ticket({
-    this.assignDate,
-    this.cafeLocation,
-    this.cafeName,
-    this.city,
-    this.createdBy,
-    this.creationDate,
-    this.customerMobile,
-    this.customerName,
-    this.customerNumber,
-    this.didContact,
-    this.extraContactNumber,
-    this.freeParts,
-    this.freeVisit,
-    this.from,
-    this.lastEditBy,
-    this.machineModel,
-    this.machineNumber,
-    this.mainCategory,
-    this.problemDesc,
-    this.recomendation,
-    this.region,
-    this.rowAddress,
-    this.sheetID,
-    this.sheetURL,
-    this.status,
-    this.subCategory,
-    this.techName,
-    this.ticketNumber,
-    this.to,
-    this.visitDate,
-    this.firebaseID,
-    this.fromTable,
-    this.laborCharges,
-    this.deliveryItems,
-    this.deliveryType,
-    this.isUrgent,
-    this.searchText,
-    this.soNumber,
-    this.invoiceLink,
-    this.invoiceName,
-    this.reportLink,
-    this.reportName,
-  });
+  Ticket(
+      {this.assignDate,
+      this.cafeLocation,
+      this.cafeName,
+      this.city,
+      this.createdBy,
+      this.creationDate,
+      this.customerMobile,
+      this.customerName,
+      this.customerNumber,
+      this.didContact,
+      this.extraContactNumber,
+      this.freeParts,
+      this.freeVisit,
+      this.from,
+      this.lastEditBy,
+      this.machineModel,
+      this.machineNumber,
+      this.mainCategory,
+      this.problemDesc,
+      this.recomendation,
+      this.region,
+      this.rowAddress,
+      this.sheetID,
+      this.sheetURL,
+      this.status,
+      this.subCategory,
+      this.techName,
+      this.ticketNumber,
+      this.to,
+      this.visitDate,
+      this.firebaseID,
+      this.fromTable,
+      this.laborCharges,
+      this.deliveryItems,
+      this.deliveryType,
+      this.isUrgent,
+      this.searchText,
+      this.soNumber,
+      this.invoiceLink,
+      this.invoiceName,
+      this.reportLink,
+      this.reportName,
+      this.label,
+      this.routeName,
+      this.isLate});
 
   String? machineModel;
   String? assignDate;
@@ -175,4 +178,7 @@ class Ticket with ChangeNotifier {
   String? reportLink;
   String? invoiceName;
   String? invoiceLink;
+  String? label;
+  String? routeName;
+  bool? isLate;
 }

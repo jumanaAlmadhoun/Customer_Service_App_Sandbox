@@ -25,7 +25,6 @@ int deliveryAssignedTickets = -1;
 int workShopTickets = 0;
 int customerCompTickets = -1;
 List<Tech> techs = [];
-List<OpenTicketWidget> allTicketsWidget = [];
 List<Ticket> allTickets = [];
 
 class SummaryProvider with ChangeNotifier {
@@ -44,6 +43,7 @@ class SummaryProvider with ChangeNotifier {
     try {
       print('object');
       techs.clear();
+      allTickets.clear();
       get(Uri.parse('$DB_URL$DB_SITE_VISITS.json')).then((value) {
         openTickets = 0;
         readyToAssignTickets = 0;
@@ -61,8 +61,8 @@ class SummaryProvider with ChangeNotifier {
             case DB_OPEN_TICKETS:
               openTickets = value.length;
               var innerData = value as Map<String, dynamic>;
-              List<Ticket> tempTickets =
-                  parseTickets(innerData, DB_OPEN_TICKETS);
+              List<Ticket> tempTickets = parseTickets(innerData,
+                  DB_OPEN_TICKETS, 'Open Tickets', sanremoEditTicketRoute);
               allTickets.addAll(tempTickets);
               break;
             case DB_DELIVERY_TICKETS:
@@ -79,16 +79,23 @@ class SummaryProvider with ChangeNotifier {
                 for (var i = 0; i < techs.length; i++) {
                   if (techs[i].name == key) {
                     techs[i].assignedTickets = parseTickets(
-                        innerData, '$DB_ASSIGNED_TICKETS/${techs[i].name}');
-                    allTickets
-                        .addAll(parseTickets(innerData, DB_ASSIGNED_TICKETS));
+                        innerData,
+                        '$DB_ASSIGNED_TICKETS/${techs[i].name}',
+                        'Assigned Tickets',
+                        null);
+                    allTickets.addAll(parseTickets(innerData,
+                        DB_ASSIGNED_TICKETS, 'Assigned Tickets', null));
                   }
                 }
                 techs.add(Tech(
                     name: key,
-                    assignedTickets:
-                        parseTickets(innerData, '$DB_ASSIGNED_TICKETS/$key')));
-                allTickets.addAll(parseTickets(innerData, DB_ASSIGNED_TICKETS));
+                    assignedTickets: parseTickets(
+                        innerData,
+                        '$DB_ASSIGNED_TICKETS/$key',
+                        'Assigned Tickets',
+                        null)));
+                allTickets.addAll(parseTickets(
+                    innerData, DB_ASSIGNED_TICKETS, 'Assigned Tickets', null));
               });
               break;
             case DB_QUEUE_TICKETS:
@@ -99,16 +106,20 @@ class SummaryProvider with ChangeNotifier {
                 for (var i = 0; i < techs.length; i++) {
                   if (techs[i].name == key) {
                     techs[i].queueTicket = parseTickets(
-                        innerData, '$DB_QUEUE_TICKETS/${techs[i].name}');
-                    allTickets
-                        .addAll(parseTickets(innerData, DB_QUEUE_TICKETS));
+                        innerData,
+                        '$DB_QUEUE_TICKETS/${techs[i].name}',
+                        'Queue Tickets',
+                        null);
+                    allTickets.addAll(parseTickets(
+                        innerData, DB_QUEUE_TICKETS, 'Queue Tickets', null));
                   }
                 }
                 techs.add(Tech(
                     name: key,
-                    queueTicket:
-                        parseTickets(innerData, '$DB_QUEUE_TICKETS/$key')));
-                allTickets.addAll(parseTickets(innerData, DB_QUEUE_TICKETS));
+                    queueTicket: parseTickets(innerData,
+                        '$DB_QUEUE_TICKETS/$key', 'Queue Tickets', null)));
+                allTickets.addAll(parseTickets(
+                    innerData, DB_QUEUE_TICKETS, 'Queue Tickets', null));
               });
               break;
             case DB_PENDING_TICKETS:
@@ -117,8 +128,11 @@ class SummaryProvider with ChangeNotifier {
             case DB_READY_TO_ASSIGN_TICKETS:
               readyToAssignTickets = value.length;
               var innerData = value as Map<String, dynamic>;
-              List<Ticket> tempTickets =
-                  parseTickets(innerData, DB_READY_TO_ASSIGN_TICKETS);
+              List<Ticket> tempTickets = parseTickets(
+                  innerData,
+                  DB_READY_TO_ASSIGN_TICKETS,
+                  'Ready To Assign Tickets',
+                  sanremoEditTicketRoute);
               allTickets.addAll(tempTickets);
               break;
             case DB_WORKSHOP_TICKETS:
@@ -135,17 +149,6 @@ class SummaryProvider with ChangeNotifier {
             pendingTickets +
             readyToAssignTickets +
             workShopTickets;
-        allTickets.forEach((element) {
-          allTicketsWidget.add(OpenTicketWidget(
-            cafeName: element.cafeName,
-            city: element.city,
-            customerMobile: element.customerMobile,
-            customerName: element.customerName,
-            date: element.creationDate,
-            didContact: element.didContact,
-            machineNumber: element.machineNumber,
-          ));
-        });
         notifyListeners();
       });
       // get(Uri.parse('$DB_URL$DB_EXCHANGE_TICKETS.json')).then((value) {
@@ -222,42 +225,73 @@ class SummaryProvider with ChangeNotifier {
     }
   }
 
-  List<Ticket> parseTickets(Map<String, dynamic> data, String fromTable) {
+  List<Ticket> parseTickets(Map<String, dynamic> data, String fromTable,
+      String label, String? routeName) {
     List<Ticket> tickets = [];
     data.forEach((key, value) {
-      tickets.add(Ticket(
-          machineModel: value[Ticket.MACHINE_MODEL] ?? '',
-          assignDate: value[Ticket.ASSIGN_DATE] ?? '',
-          cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
-          cafeName: value[Ticket.CAFE_NAME] ?? '',
-          city: value[Ticket.CITY] ?? '',
-          createdBy: value[Ticket.CREATED_BY] ?? '',
-          creationDate: value[Ticket.CREATION_DATE] ?? '',
-          customerMobile: value[Ticket.CUSTOMER_MOBILE] ?? '',
-          customerName: value[Ticket.CUSTOMER_NAME] ?? '',
-          customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
-          didContact: value[Ticket.DID_CONTACT] ?? false,
-          extraContactNumber: value[Ticket.CONTACT_NUMBER],
-          freeParts: value[Ticket.FREE_PARTS] ?? false,
-          freeVisit: value[Ticket.FREE_PARTS] ?? false,
-          from: value[Ticket.VISIT_START_TIME] ?? '',
-          to: value[Ticket.VISIT_END_TIME] ?? '',
-          lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
-          mainCategory: value[Ticket.MAIN_CATEGORY] ?? '',
-          problemDesc: value[Ticket.PROBLEM_DESC] ?? '',
-          recomendation: value[Ticket.RECOMMENDATION] ?? '',
-          region: value[Ticket.REGION] ?? '',
-          rowAddress: value[Ticket.ROW_ADDRESS] ?? '',
-          machineNumber: value[Ticket.SERIAL_NUMBER] ?? '',
-          sheetID: value[Ticket.SHEET_ID] ?? '',
-          sheetURL: value[Ticket.SHEET_URL] ?? '',
-          status: value[Ticket.STATUS] ?? '',
-          subCategory: value[Ticket.SUB_CATEGORY] ?? '',
-          techName: value[Ticket.TECH_NAME] ?? '',
-          ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
-          visitDate: value[Ticket.VISIT_DATE] ?? '',
-          fromTable: fromTable,
-          firebaseID: key));
+      String searchText = '';
+      searchText += value[Ticket.MACHINE_MODEL] ?? '';
+      searchText += value[Ticket.CAFE_LOCATION] ?? '';
+      searchText += value[Ticket.CAFE_NAME] ?? '';
+      searchText += value[Ticket.CITY] ?? '';
+      searchText += value[Ticket.CREATED_BY] ?? '';
+      searchText += value[Ticket.CUSTOMER_MOBILE] ?? '';
+      searchText += value[Ticket.CONTACT_NUMBER] ?? '';
+      searchText += value[Ticket.TICKET_NUMBER] ?? '';
+      searchText += value[Ticket.SERIAL_NUMBER] ?? '';
+      searchText += value[Ticket.PROBLEM_DESC] ?? '';
+      searchText += value[Ticket.RECOMMENDATION] ?? '';
+      Map<String, dynamic> items =
+          value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>;
+      if (items != null) {
+        items.forEach((key, value) {
+          searchText += key.toUpperCase();
+          searchText += value[0].toString().toUpperCase();
+        });
+      }
+      searchText = searchText.toUpperCase();
+      tickets.add(
+        Ticket(
+            machineModel: value[Ticket.MACHINE_MODEL] ?? '',
+            assignDate: value[Ticket.ASSIGN_DATE] ?? '',
+            cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
+            cafeName: value[Ticket.CAFE_NAME] ?? '',
+            city: value[Ticket.CITY] ?? '',
+            createdBy: value[Ticket.CREATED_BY] ?? '',
+            creationDate: value[Ticket.CREATION_DATE] ?? '',
+            customerMobile: value[Ticket.CUSTOMER_MOBILE] ?? '',
+            customerName: value[Ticket.CUSTOMER_NAME] ?? '',
+            customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
+            didContact: value[Ticket.DID_CONTACT] ?? false,
+            extraContactNumber: value[Ticket.CONTACT_NUMBER] ?? '',
+            freeParts: value[Ticket.FREE_PARTS] ?? false,
+            freeVisit: value[Ticket.FREE_PARTS] ?? false,
+            from: value[Ticket.VISIT_START_TIME] ?? '',
+            to: value[Ticket.VISIT_END_TIME] ?? '',
+            lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
+            mainCategory: value[Ticket.MAIN_CATEGORY] ?? '',
+            problemDesc: value[Ticket.PROBLEM_DESC] ?? '',
+            recomendation: value[Ticket.RECOMMENDATION] ?? '',
+            region: value[Ticket.REGION] ?? '',
+            rowAddress: value[Ticket.ROW_ADDRESS] ?? '',
+            machineNumber: value[Ticket.SERIAL_NUMBER] ?? '',
+            sheetID: value[Ticket.SHEET_ID] ?? '',
+            sheetURL: value[Ticket.SHEET_URL] ?? '',
+            status: value[Ticket.STATUS] ?? '',
+            subCategory: value[Ticket.SUB_CATEGORY] ?? '',
+            techName: value[Ticket.TECH_NAME] ?? '',
+            ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
+            visitDate: value[Ticket.VISIT_DATE] ?? '',
+            firebaseID: key,
+            fromTable: fromTable,
+            laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
+            deliveryItems: value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
+            deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
+            soNumber: value[Ticket.SO_NUMBER] ?? '',
+            searchText: searchText,
+            label: label,
+            routeName: routeName),
+      );
     });
     return tickets;
   }

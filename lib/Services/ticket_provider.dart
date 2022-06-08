@@ -82,7 +82,9 @@ class TicketProvider with ChangeNotifier {
                   value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
               deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
               soNumber: value[Ticket.SO_NUMBER] ?? '',
-              searchText: searchText),
+              searchText: searchText,
+              isUrgent: value[Ticket.IS_URGENT] ?? false,
+              isLate: value[Ticket.IS_LATE] ?? false),
         );
       });
       _tickets = tickets;
