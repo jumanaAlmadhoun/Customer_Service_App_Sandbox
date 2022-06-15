@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
+import 'package:customer_service_app/Models/comment.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ import '../Layouts/Tech/tech_ticket_summary.dart';
 
 class TicketProvider with ChangeNotifier {
   List<Ticket> _tickets = [];
+  List<Comment> _comments = [];
 
   Future<void> fetchTickets(String from) async {
     try {
@@ -439,5 +441,28 @@ class TicketProvider with ChangeNotifier {
       print(ex);
       return Future.value('Error');
     }
+  }
+
+  Future<void> fetchComments() async {
+    try {
+      _comments.clear();
+      List<Comment> comments = [];
+      var response =
+          await http.get(Uri.parse('$DB_URL$DB_SITE_VISITS/$DB_COMMENTS.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      data.forEach((key, value) {
+        comments.add(Comment(
+            comment: value[Comment.COMMENT_BODY] ?? '',
+            commentCategory: value[Comment.COMMENT_CATEGORY] ?? ''));
+      });
+      _comments = comments;
+      notifyListeners();
+    } catch (ex) {
+      print('Comments Fetch ERROR $ex');
+    }
+  }
+
+  List<Comment> get comments {
+    return [..._comments];
   }
 }

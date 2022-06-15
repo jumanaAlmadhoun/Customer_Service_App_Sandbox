@@ -2,6 +2,7 @@
 
 const String DB_URL = 'https://sanremov2-default-rtdb.firebaseio.com/';
 const String DB_USERS = 'CustomerServiceUsers';
+const String DB_COMMENTS = 'Comments';
 const String DB_SITE_VISITS = 'SiteVisits';
 const String DB_OPEN_TICKETS = 'OpenTicketsCS';
 const String DB_COMPLAINT_TICKETS = 'CustomerComplaintsCS';

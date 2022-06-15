@@ -1,6 +1,7 @@
 // @dart=2.9
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/demo_localization.dart';
+import 'package:customer_service_app/Models/comment.dart';
 import 'package:customer_service_app/Models/customer.dart';
 import 'package:customer_service_app/Models/machine.dart';
 import 'package:customer_service_app/Models/rfa_machine.dart';
@@ -79,6 +80,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: TechProvider()),
         ChangeNotifierProvider.value(value: SparePart()),
         ChangeNotifierProvider.value(value: SparePartProvider()),
+        ChangeNotifierProvider.value(value: Comment()),
       ],
       child: MaterialApp(
         title: 'Customer Service App',

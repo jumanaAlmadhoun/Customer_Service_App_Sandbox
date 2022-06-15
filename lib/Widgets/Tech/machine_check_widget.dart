@@ -1,15 +1,16 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 
 class MachineChekWidget extends StatefulWidget {
-  MachineChekWidget({this.title, this.keyJson, this.validate});
+  MachineChekWidget({this.title, this.keyJson, this.validate, this.comments});
   TextEditingController? controller = TextEditingController();
   String? pass = '';
   bool? isPass = null;
   String? title;
   String? keyJson;
-  List<String>? comments;
+  List<CommentWidget>? comments;
   String? Function(String?)? validate;
   @override
   _MachineChekWidgetState createState() => _MachineChekWidgetState();
@@ -53,21 +54,26 @@ class _MachineChekWidgetState extends State<MachineChekWidget> {
                   Text(widget.title!),
                 ],
               ),
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: TextFormField(
-                  controller: widget.controller,
-                  textAlign: TextAlign.right,
-                  minLines: 1,
-                  maxLines: 10,
-                  keyboardType: TextInputType.multiline,
-                  decoration: const InputDecoration(label: Text('ملاحظات')),
-                  validator: widget.validate,
-                ),
-              ),
+              widget.comments != null
+                  ? Column(
+                      children: widget.comments!,
+                    )
+                  : Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: TextFormField(
+                        controller: widget.controller,
+                        textAlign: TextAlign.right,
+                        minLines: 1,
+                        maxLines: 10,
+                        keyboardType: TextInputType.multiline,
+                        decoration:
+                            const InputDecoration(label: Text('ملاحظات')),
+                        validator: widget.validate,
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
-              )
+              ),
             ],
           ),
         ),

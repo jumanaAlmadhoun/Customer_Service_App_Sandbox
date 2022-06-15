@@ -26,8 +26,12 @@ class _CommentWidgetState extends State<CommentWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                widget.title!.trim(),
+              Expanded(
+                child: Text(
+                  widget.title!.trim(),
+                  textAlign: TextAlign.right,
+                  overflow: TextOverflow.visible,
+                ),
               ),
               Checkbox(
                   value: widget.isSelected,

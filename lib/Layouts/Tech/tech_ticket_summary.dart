@@ -193,50 +193,55 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             ButtonWidget(
               text: 'إرسال',
               onTap: () async {
-                setState(() {
-                  _isLoading = true;
-                });
-                Uint8List? bytes = await signatureController!.toPngBytes();
-                String encoded = base64Encode(bytes!);
-                Map<String, dynamic> json = getJson();
-                Map<String, dynamic> partJson = getPartJson();
-                bool hasParts = partJson.length == 0 ? false : true;
-                print(partJson.length);
-                print(partJson);
-                json.update(
-                  'sig',
-                  (value) => encoded,
-                  ifAbsent: () => encoded,
-                );
-                json.update('isCash', (value) => _isCach,
-                    ifAbsent: () => _isCach);
-                json.update('total_amount', (value) => totalAmount,
-                    ifAbsent: () => totalAmount);
-                json.update('has_parts', (value) => hasParts,
-                    ifAbsent: () => hasParts);
-                Provider.of<TicketProvider>(context, listen: false)
-                    .techSubmitSiteVisit(json, partJson, _ticket!.firebaseID)
-                    .then((value) {
+                if (signatureController!.isNotEmpty) {
                   setState(() {
-                    _isLoading = false;
+                    _isLoading = true;
                   });
-                  if (value == SC_SUCCESS_RESPONSE) {
-                    CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.success,
-                        text: 'تم إغلاق التذكرة بنجاح',
-                        title: 'نجاح',
-                        onConfirmBtnTap: () {
-                          Navigator.pushNamed(context, techDownloadRoute,
-                              arguments: <String>[
-                                invoiceName,
-                                invoiceUrl,
-                                reportName,
-                                reportUrl
-                              ]);
-                        });
-                  }
-                });
+                  Uint8List? bytes = await signatureController!.toPngBytes();
+                  String encoded = base64Encode(bytes!);
+                  Map<String, dynamic> json = getJson();
+                  Map<String, dynamic> partJson = getPartJson();
+                  bool hasParts = partJson.length == 0 ? false : true;
+                  print(partJson.length);
+                  print(partJson);
+                  json.update(
+                    'sig',
+                    (value) => encoded,
+                    ifAbsent: () => encoded,
+                  );
+                  json.update('isCash', (value) => _isCach,
+                      ifAbsent: () => _isCach);
+                  json.update('total_amount', (value) => totalAmount,
+                      ifAbsent: () => totalAmount);
+                  json.update('has_parts', (value) => hasParts,
+                      ifAbsent: () => hasParts);
+                  Provider.of<TicketProvider>(context, listen: false)
+                      .techSubmitSiteVisit(json, partJson, _ticket!.firebaseID)
+                      .then((value) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (value == SC_SUCCESS_RESPONSE) {
+                      CoolAlert.show(
+                          context: context,
+                          type: CoolAlertType.success,
+                          text: 'تم إغلاق التذكرة بنجاح',
+                          title: 'نجاح',
+                          onConfirmBtnTap: () {
+                            Navigator.pushNamed(context, techDownloadRoute,
+                                arguments: <String>[
+                                  invoiceName,
+                                  invoiceUrl,
+                                  reportName,
+                                  reportUrl
+                                ]);
+                          });
+                    }
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('لا يمكن ترك التوقيع فارغ')));
+                }
               },
             ),
             const SizedBox(
@@ -280,11 +285,27 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
     int partCounter = 0;
     _report!.forEach((element) {
       if (element is MachineChekWidget) {
-        map.update(
-          '${element.keyJson}_Comment',
-          (value) => element.controller!.text,
-          ifAbsent: () => element.controller!.text,
-        );
+        if (element.comments != null) {
+          String comments = '';
+          element.comments!.forEach((commentElement) {
+            if (commentElement.isSelected) {
+              comments += commentElement.title! + '\n';
+            }
+          });
+
+          print(comments);
+          map.update(
+            '${element.keyJson}_Comment',
+            (value) => comments,
+            ifAbsent: () => comments,
+          );
+        } else {
+          map.update(
+            '${element.keyJson}_Comment',
+            (value) => element.controller!.text,
+            ifAbsent: () => element.controller!.text,
+          );
+        }
         map.update(
           '${element.keyJson}_Pass',
           (value) => element.isPass,
@@ -526,8 +547,9 @@ class GroupCheckSummaryWidget extends StatelessWidget {
 }
 
 class MachineCheckSummaryWidget extends StatelessWidget {
-  const MachineCheckSummaryWidget(this.element, {Key? key}) : super(key: key);
+  MachineCheckSummaryWidget(this.element, {Key? key}) : super(key: key);
   final MachineChekWidget? element;
+  List<Widget> _comments = [];
 
   @override
   Widget build(BuildContext context) {
@@ -550,11 +572,52 @@ class MachineCheckSummaryWidget extends StatelessWidget {
                   Text(element!.title!.trim()),
                 ],
               ),
-              Text(element!.controller!.text)
+              const SizedBox(
+                height: 10,
+              ),
+              element!.comments != null
+                  ? Column(
+                      children: getComments(element!.comments!),
+                    )
+                  : Text(element!.controller!.text)
             ],
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> getComments(List<CommentWidget> comments) {
+    comments.forEach((element) {
+      if (element.isSelected) {
+        _comments.add(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: APP_BAR_COLOR),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        element.title!.trim(),
+                        textAlign: TextAlign.right,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    });
+    return _comments;
   }
 }

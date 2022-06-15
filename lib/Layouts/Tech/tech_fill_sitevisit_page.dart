@@ -2,10 +2,12 @@
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Models/comment.dart';
 import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/spare_parts_provider.dart';
+import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Tech/check_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/machine_check_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/spare_part_widget.dart';
@@ -33,6 +35,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
   List<SparePart> _selectedParts = [];
   List<Widget> _machineCheckDesign = [];
   List<Widget> _spareParts = [];
+  List<Comment> _allComments = [];
   bool _isCash = false;
   List<Ticket> _tickets = [];
   @override
@@ -52,18 +55,23 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         .fetchSpareParts()
         .then((value) {
       _allParts = Provider.of<SparePartProvider>(context, listen: false).parts;
-      setState(() {
-        _isLoading = false;
-      });
+      Provider.of<TicketProvider>(context, listen: false).fetchComments().then(
+        (value) {
+          _allComments =
+              Provider.of<TicketProvider>(context, listen: false).comments;
+          setState(() {
+            _isLoading = false;
+          });
+          initMachineCheckDesign();
+        },
+      );
     });
-
-    initMachineCheckDesign();
   }
 
   final formKey = GlobalKey<FormState>();
   String? validateNote(value) {
     if (value.isEmpty) {
-      return 'required';
+      return 'هذا الحقل الزامي';
     } else {
       return null;
     }
@@ -148,11 +156,13 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         title: 'قطع مكسورة أو مفقودة',
         keyJson: '1',
         validate: validateNote,
+        comments: null,
       ),
       MachineChekWidget(
         title: 'نظافة المكينة العامة',
         keyJson: '2',
         validate: validateNote,
+        comments: getCommentsByCategory(Comment.CLEAN_COMMENTS),
       ),
       MachineChekWidget(
         title: 'فحص وجود تهريبات في المكينة',
@@ -160,19 +170,22 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         validate: validateNote,
       ),
       MachineChekWidget(
-        title: 'فحص العدادات',
+        title: 'فحص عدادات الماء',
         keyJson: '4',
         validate: validateNote,
+        comments: getCommentsByCategory(Comment.FLOWMETER_COMMENTS),
       ),
       MachineChekWidget(
         title: 'فحص مصدر الماء',
         keyJson: '5',
         validate: validateNote,
+        comments: getCommentsByCategory(Comment.WATER_COMMENTS),
       ),
       MachineChekWidget(
-        title: 'فحص جودة تسخين الحليب',
+        title: 'نوع مصدر الماء',
         keyJson: '6',
         validate: validateNote,
+        comments: getCommentsByCategory(Comment.WATER_SRC_COMMENTS),
       ),
       MachineChekWidget(
         title: 'فحص التوصيلات والسلامة العامة',
@@ -180,7 +193,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         validate: validateNote,
       ),
       MachineChekWidget(
-        title: 'فحص ضغط المضخة الرئيسية (بار)',
+        title: 'فحص ضغط المضخة الرئيسية',
         keyJson: '8',
         validate: validateNote,
       ),
@@ -188,6 +201,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         title: 'فحص وحدة التحكم بالبخار',
         keyJson: '9',
         validate: validateNote,
+        comments: getCommentsByCategory(Comment.STEAM_COMMENTS),
       ),
       MachineChekWidget(
         title: 'فحص قوة البخار',
@@ -195,47 +209,57 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         validate: validateNote,
       ),
       MachineChekWidget(
-        title: 'فحص سرعة الفتح والاغلاق للبخار',
+        title: 'فحص مصدر التيار الكهربائي',
         keyJson: '11',
         validate: validateNote,
-      ),
-      TextWidget(
-        title: 'عدد الأكواب',
-        jsonKey: 'total_cups',
-        validate: validateNote,
+        comments: getCommentsByCategory(Comment.ELEC_COMMENTS),
       ),
       TextWidget(
         title: 'إصدار برنامج التشغيل',
         jsonKey: 'os',
         validate: validateNote,
       ),
+      TextWidget(
+        title: 'اجمالي عدد الاكواب Total Cup',
+        jsonKey: 'total_cups',
+        validate: validateNote,
+      ),
+      TextWidget(
+        title: 'اجمالي عدد الاكواب Service',
+        jsonKey: 'total_cups_ser',
+        validate: validateNote,
+      ),
       GroupCheckWidget(
-        title: 'ضغط رأس المجموعة',
+        title: 'قياس الضغط (بار / psi)',
         keyJson: 'G1',
       ),
       GroupCheckWidget(
-        title: 'فحص جودة الاستخلاص',
+        title: 'فحص الاستخلاص الافتراضي',
         keyJson: 'G2',
       ),
       GroupCheckWidget(
-        title: 'فحص البورت فيلتر',
+        title: 'وزن الماء (جرام/10ثواني)',
         keyJson: 'G3',
       ),
       GroupCheckWidget(
-        title: 'جلود ودش المجموعة',
+        title: 'فحص الترطيب (جرام/10ثواني)',
         keyJson: 'G4',
       ),
       GroupCheckWidget(
-        title: 'وزن الاستخلاص (ماء)',
+        title: 'فحص البورتفيلتر',
         keyJson: 'G5',
       ),
       GroupCheckWidget(
-        title: 'TDS = (0-120ppm)',
+        title: 'جلود ودش المجموعة',
         keyJson: 'G6',
       ),
       GroupCheckWidget(
-        title: 'PH = (7.0-7.5)',
+        title: 'TDS = (0-120ppm)',
         keyJson: 'G7',
+      ),
+      GroupCheckWidget(
+        title: 'PH = (7.0-7.5)',
+        keyJson: 'G8',
       ),
       // CommentWidget(
       //   title: 'القاطع الكهربائي غير مطابق لتوصيات السلامة العامة والمعايير',
@@ -285,5 +309,22 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
       }
     }
     return title;
+  }
+
+  List<CommentWidget>? getCommentsByCategory(String category) {
+    try {
+      List<CommentWidget> commentWidgets = [];
+      List<Comment> categoryComments = _allComments
+          .where((element) => element.commentCategory == category)
+          .toList();
+      categoryComments.forEach((element) {
+        commentWidgets.add(CommentWidget(
+          title: element.comment,
+        ));
+      });
+      return commentWidgets;
+    } catch (ex) {
+      print('UI Comments ERROR $ex');
+    }
   }
 }
