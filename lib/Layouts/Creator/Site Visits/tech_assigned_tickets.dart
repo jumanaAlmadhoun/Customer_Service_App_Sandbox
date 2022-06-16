@@ -53,24 +53,24 @@ class TechAssignedTicketPage extends StatelessWidget {
             ),
             const LogoutWidget(),
           ],
-          widget: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:
-                    ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                        ? 1
-                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                                ResponsiveWrapper.of(context)
-                                    .isSmallerThan(DESKTOP))
-                            ? 3
-                            : 4,
-                childAspectRatio:
-                    ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                        ? 2
-                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                                ResponsiveWrapper.of(context)
-                                    .isSmallerThan(DESKTOP))
-                            ? 1
-                            : 1),
+          widget: ListView.builder(
+            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount:
+            //         ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+            //             ? 1
+            //             : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+            //                     ResponsiveWrapper.of(context)
+            //                         .isSmallerThan(DESKTOP))
+            //                 ? 3
+            //                 : 4,
+            //     childAspectRatio:
+            //         ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+            //             ? 2
+            //             : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
+            //                     ResponsiveWrapper.of(context)
+            //                         .isSmallerThan(DESKTOP))
+            //                 ? 1
+            //                 : 1),
             itemCount: tech!.assignedTickets!.length,
             itemBuilder: (context, i) {
               return OpenTicketWidget(

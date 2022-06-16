@@ -10,6 +10,7 @@ import 'package:customer_service_app/Layouts/Creator/Pickup/edit_pickup_ticket_p
 import 'package:customer_service_app/Layouts/Creator/Pickup/new_pickup_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Pickup/pickup_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/assigned_tickets_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/pending_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/queue_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned_tickets.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
@@ -43,6 +44,8 @@ class CustomRouter {
     switch (settings.name) {
       case creatorHomeRoute:
         return MaterialPageRoute(builder: (_) => const CreatorHomePage());
+      case creatorPendingTicketsRoute:
+        return MaterialPageRoute(builder: (_) => const PendingTickets());
       case creatorDashBoardRoute:
         return MaterialPageRoute(builder: (_) => const CreatorDashBoard());
       case creatorQueueTicketsRoute:

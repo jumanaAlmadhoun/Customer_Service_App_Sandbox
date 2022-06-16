@@ -43,7 +43,7 @@ class Ticket with ChangeNotifier {
   static const String CAFE_LOCATION = 'cafeLocation';
   static const String TECH_NAME = 'techName';
   static const String REPORT_URL = 'reportUrl';
-  static const String CLOSE_DATE = 'closeDate';
+  static const String CLOSE_DATE = 'techCloseDate';
   static const String ASSIGN_DATE = 'assignDate';
   static const String TECH_CLOSE_DATE = 'techCloseDate';
   static const String SOLVED = 'solved';
@@ -180,5 +180,6 @@ class Ticket with ChangeNotifier {
   String? invoiceLink;
   String? label;
   String? routeName;
+  String? closeDate;
   bool? isLate;
 }

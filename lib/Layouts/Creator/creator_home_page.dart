@@ -118,7 +118,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                   Column(children: [
                     siteVisitTickets == -1
                         ? const SpinKitDancingSquare(
-                            color: APP_BAR_COLOR,
+                            color: ICON_TEX_COLOR,
                           )
                         :
                         // : CategoryItem(
@@ -135,6 +135,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                             getTranselted(context, TIC_SITE_VISIT)!,
                             siteVisitTickets.toString(),
                             IMG_SITE_VISIT, () {
+                            print('site');
                             Navigator.pushNamed(context, creatorSiteVisitRoute);
                           }),
                     const SizedBox(
@@ -142,7 +143,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                     ),
                     deliveryTickets == -1
                         ? const SpinKitDancingSquare(
-                            color: APP_BAR_COLOR,
+                            color: ICON_TEX_COLOR,
                           )
                         // : CategoryItem(
                         //     title: getTranselted(context, TIC_DELIVERY)!,
@@ -166,7 +167,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                     ),
                     customerCompTickets == -1
                         ? const SpinKitDancingSquare(
-                            color: APP_BAR_COLOR,
+                            color: ICON_TEX_COLOR,
                           )
                         // : CategoryItem(
                         //     title: getTranselted(context, TIC_DELIVERY)!,
@@ -190,7 +191,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                   Column(children: [
                     pickupTickets == -1
                         ? const SpinKitDancingSquare(
-                            color: APP_BAR_COLOR,
+                            color: ICON_TEX_COLOR,
                           )
                         :
                         // : CategoryItem(
@@ -215,7 +216,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                     ),
                     deliveryTickets == -1
                         ? const SpinKitDancingSquare(
-                            color: APP_BAR_COLOR,
+                            color: ICON_TEX_COLOR,
                           )
                         // : CategoryItem(
                         //     title: getTranselted(context, TIC_DELIVERY)!,

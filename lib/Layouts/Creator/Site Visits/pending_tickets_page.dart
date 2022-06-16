@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, avoid_print
+
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
@@ -5,7 +7,8 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Creator/custom_list_dialgo.dart';
-// ignore: import_of_legacy_library_into_null_safe
+import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
+import 'package:customer_service_app/Widgets/pending_ticket_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -16,21 +19,19 @@ import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
 import '../../../Widgets/web_layout.dart';
 
-class ReadyToAssignTickets extends StatefulWidget {
-  const ReadyToAssignTickets({Key? key}) : super(key: key);
+class PendingTickets extends StatefulWidget {
+  const PendingTickets({Key? key}) : super(key: key);
 
   @override
-  _ReadyToAssignTicketsState createState() => _ReadyToAssignTicketsState();
+  _PendingTicketsState createState() => _PendingTicketsState();
 }
 
-class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
-    with RouteAware {
+class _PendingTicketsState extends State<PendingTickets> with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
   bool _search = false;
   CustomListDialog? dialog;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -43,8 +44,9 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
     setState(() {
       _isLoading = true;
     });
+
     Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets(DB_READY_TO_ASSIGN_TICKETS)
+        .fetchTickets(DB_PENDING_TICKETS)
         .then((value) {
       setState(() {
         _isLoading = false;
@@ -68,14 +70,18 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                       style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         setState(() {
-                          _showedTickets = _tickets
-                              .where((element) => element.searchText!
-                                  .contains(value.toUpperCase()))
-                              .toList();
+                          try {
+                            _showedTickets = _tickets
+                                .where((element) => element.searchText!
+                                    .contains(value.toUpperCase()))
+                                .toList();
+                          } catch (ex) {
+                            print(ex);
+                          }
                         });
                       },
                     )
-                  : Text(getTranselted(context, STA_WAITING)!),
+                  : Text(getTranselted(context, STA_PENDING)!),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -84,6 +90,7 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                       if (!_search) {
                         _showedTickets = _tickets;
                       }
+                      print(_search);
                     });
                   },
                   icon: const Icon(Icons.search),
@@ -158,80 +165,47 @@ class _ReadyToAssignTicketsState extends State<ReadyToAssignTickets>
                               style: const TextStyle(color: Colors.black),
                               onChanged: (value) {
                                 setState(() {
-                                  _showedTickets = _tickets
-                                      .where((element) => element.searchText!
-                                          .contains(value.toUpperCase()))
-                                      .toList();
+                                  try {
+                                    _showedTickets = _tickets
+                                        .where((element) => element.searchText!
+                                            .contains(value.toUpperCase()))
+                                        .toList();
+                                  } catch (ex) {
+                                    print(ex);
+                                  }
                                 });
                               },
                             ),
                           ),
                         )
                       : Container(),
-                  Expanded(
-                    child: _isLoading
-                        ? const SpinKitRipple(
-                            color: ICON_TEX_COLOR,
-                          )
-                        : GridViewBuilderCreator(
-                            dialog: dialog,
-                            list: _showedTickets,
-                          ),
+                  ListView.builder(
+                    itemCount: _tickets.length,
+                    itemBuilder: (context, i) {
+                      return PendingTicketWidget(
+                        cafeName: _tickets[i].cafeName,
+                        city:_tickets[i].city,
+                        customerMobile:_tickets[i].customerMobile,
+                        customerName: _tickets[i].customerName,
+                        date: _tickets[i].,
+                        didContact: _tickets[i].didContact,
+                        machineNumber: _tickets[i].machineNumber,
+                        techName: _tickets[i].techName,
+                      );
+                    },
                   ),
-                ])), /* 
-          : LayoutBuilder(builder: (context, constraints) {
-              return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: constraints.maxWidth < mobileWidth
-                          ? 1
-                          : constraints.maxWidth > ipadWidth
-                              ? 3
-                              : 2,
-                      childAspectRatio: constraints.maxWidth < mobileWidth
-                          ? 2.5
-                          : constraints.maxWidth < ipadWidth
-                              ? 1.3
-                              : 1.2),
-                  itemCount: _showedTickets.length,
-                  itemBuilder: (context, i) {
-                    return Dismissible(
-                      key: UniqueKey(),
-                      direction: DismissDirection.horizontal,
-                      onDismissed: (direction) async {
-                        if (dialog != null) {
-                          Provider.of<TicketProvider>(context, listen: false)
-                              .archiveTicket(_showedTickets[i], dialog!.value)
-                              .then((value) async {
-                            if (value == SC_SUCCESS_RESPONSE) {
-                              _showedTickets.remove(_showedTickets[i]);
-                            } else {}
-                          });
-                        }
-                      },
-                      confirmDismiss: (direction) async {
-                        dialog = CustomListDialog(
-                          msg: 'Archive Ticket',
-                          items: archiveReasons,
-                        );
-                        return await showDialog(
-                            context: context, builder: (_) => dialog!);
-                      },
-                      child: OpenTicketWidget(
-                        cafeName: _showedTickets[i].cafeName,
-                        city: _showedTickets[i].city,
-                        customerMobile: _showedTickets[i].extraContactNumber,
-                        customerName: _showedTickets[i].customerName,
-                        date: _showedTickets[i].creationDate,
-                        didContact: _showedTickets[i].didContact,
-                        machineNumber: _showedTickets[i].machineNumber,
-                        onTap: () {
-                          Navigator.pushNamed(context, sanremoEditTicketRoute,
-                              arguments: _showedTickets[i]);
-                        },
-                      ),
-                    );
-                  });
-            }),*/
+                  // Expanded(
+                  //   child: GridViewBuilderCreator(
+                  //     dialog: dialog,
+                  //     list: _showedTickets,
+                  //   ),
+                  // ),
+                ])), /*ListView.builder(
+                itemCount: _showedTickets.length,
+                itemBuilder: (context, i) {
+                  return ;
+                },
+              )*/
     );
   }
 }

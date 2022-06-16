@@ -126,7 +126,7 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
           ],
           widget: _isLoading
               ? const SpinKitRipple(
-                  color: APP_BAR_COLOR,
+                  color: ICON_TEX_COLOR,
                 )
               : Column(children: [
                   ResponsiveWrapper.of(context).isLargerThan(TABLET)

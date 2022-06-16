@@ -292,8 +292,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
               comments += commentElement.title! + '\n';
             }
           });
-
-          print(comments);
+          comments += '\b';
           map.update(
             '${element.keyJson}_Comment',
             (value) => comments,
