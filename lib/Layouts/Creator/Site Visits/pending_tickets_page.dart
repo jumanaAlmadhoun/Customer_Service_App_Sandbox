@@ -180,17 +180,36 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
                         )
                       : Container(),
                   ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
                     itemCount: _tickets.length,
                     itemBuilder: (context, i) {
-                      return PendingTicketWidget(
-                        cafeName: _tickets[i].cafeName,
-                        city:_tickets[i].city,
-                        customerMobile:_tickets[i].customerMobile,
-                        customerName: _tickets[i].customerName,
-                        date: _tickets[i].,
-                        didContact: _tickets[i].didContact,
-                        machineNumber: _tickets[i].machineNumber,
-                        techName: _tickets[i].techName,
+                      return PopupMenuButton(
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            child: Text('Re-Open'),
+                            value: 'Re-Open',
+                          ),
+                          const PopupMenuItem(
+                            child: Text('Close'),
+                            value: 'Close',
+                          ),
+                        ],
+                        onSelected: (String? value) {
+                          if (value == 'Re-Open') {
+                            
+                          }
+                        },
+                        child: PendingTicketWidget(
+                          cafeName: _tickets[i].cafeName,
+                          city: _tickets[i].city,
+                          customerMobile: _tickets[i].customerMobile,
+                          customerName: _tickets[i].customerName,
+                          date: _tickets[i].closeDate,
+                          didContact: _tickets[i].didContact,
+                          machineNumber: _tickets[i].machineNumber,
+                          techName: _tickets[i].techName,
+                        ),
                       );
                     },
                   ),

@@ -86,7 +86,8 @@ class TicketProvider with ChangeNotifier {
               soNumber: value[Ticket.SO_NUMBER] ?? '',
               searchText: searchText,
               isUrgent: value[Ticket.IS_URGENT] ?? false,
-              isLate: value[Ticket.IS_LATE] ?? false),
+              isLate: value[Ticket.IS_LATE] ?? false,
+              closeDate: value[Ticket.TECH_CLOSE_DATE]),
         );
       });
       _tickets = tickets;

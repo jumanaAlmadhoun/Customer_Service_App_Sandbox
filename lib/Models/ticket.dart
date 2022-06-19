@@ -32,6 +32,7 @@ class Ticket with ChangeNotifier {
   static const String CHARGES_PRICE = 'priceBefore';
   static const String SO_NUMBER = 'soNumber';
   static const String IS_LATE = 'isLate';
+  static const String INV_CONF = 'invConf';
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
   static const String RECOMMENDATION = 'recomendation';
@@ -132,7 +133,9 @@ class Ticket with ChangeNotifier {
       this.reportName,
       this.label,
       this.routeName,
-      this.isLate});
+      this.isLate,
+      this.closeDate,
+      this.invConf});
 
   String? machineModel;
   String? assignDate;
@@ -182,4 +185,5 @@ class Ticket with ChangeNotifier {
   String? routeName;
   String? closeDate;
   bool? isLate;
+  bool? invConf;
 }

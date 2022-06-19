@@ -93,6 +93,7 @@ const String TIC_CUSTOMER_COMP_TICKETS = 'customer_comp_tickets';
 const String VIEW_OPEN_TICKETS = 'view_open_tickets';
 const String VIEW_CLOSED_TICKETS = 'view_closed_tickets';
 const String LOGOUT = 'logout';
+const String LBL_CONFIRM_INVOICE = 'inv_confirmation';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

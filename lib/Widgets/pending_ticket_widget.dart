@@ -89,13 +89,13 @@ class PendingTicketWidget extends StatelessWidget {
                 textAlign: TextAlign.left,
                 style: TICKET_TEXT_STYLE,
               ),
-              Text(
-                getTranselted(context, LBL_TECH_NAME)! + ': ' + date!,
-                textAlign: TextAlign.left,
-                style: TICKET_TEXT_STYLE,
-              ),
               const SizedBox(
                 height: 5,
+              ),
+              Text(
+                getTranselted(context, LBL_TECH_NAME)! + ': ' + techName!,
+                textAlign: TextAlign.left,
+                style: TICKET_TEXT_STYLE,
               ),
             ],
           ),

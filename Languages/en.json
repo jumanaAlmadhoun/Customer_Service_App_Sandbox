@@ -78,5 +78,6 @@
   "view_open_tickets": "View Open Tickets",
   "view_closed_tickets": "View Closed Tickets",
   "logout": "Logout",
-  "customer_comp_tickets":"Customer Complaints"
+  "customer_comp_tickets":"Customer Complaints",
+  "inv_confirmation":"Invoice Need's Confirmation"
 }

@@ -44,7 +44,8 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   bool _freeVisit = false;
   bool _freeParts = false;
   bool _readyToAssign = false;
-  bool _isUrgnt = false;
+  bool _isUrgent = false;
+  bool _invConfirmation = false;
 
   List<String> techs = [];
   List<String>? machineModels = [];
@@ -101,11 +102,6 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
     });
     allMachines =
         Provider.of<MachinesProvider>(context, listen: false).machines;
-    allMachines!.forEach((element) {
-      print(element.machineNumber);
-      print(element.customerNumber);
-    });
-
     allCustomers =
         Provider.of<CustomerProvider>(context, listen: false).customers;
     await Provider.of<MachinesProvider>(context, listen: false)
@@ -397,10 +393,10 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                   : Container(),
               CustomCheckBox(
                 title: LBL_URGENT,
-                value: _isUrgnt,
+                value: _isUrgent,
                 onChanged: (value) {
                   setState(() {
-                    _isUrgnt = value!;
+                    _isUrgent = value!;
                   });
                 },
               ),
@@ -439,6 +435,15 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                 onChanged: (value) {
                   setState(() {
                     _freeParts = value!;
+                  });
+                },
+              ),
+              CustomCheckBox(
+                title: LBL_CONFIRM_INVOICE,
+                value: _invConfirmation,
+                onChanged: (value) {
+                  setState(() {
+                    _invConfirmation = value!;
                   });
                 },
               ),
@@ -677,7 +682,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
       Ticket.FREE_PARTS: _freeParts,
       Ticket.FREE_VISIT: _freeVisit,
       Ticket.SOLVED: _solveByPhone,
-      Ticket.IS_URGENT: _isUrgnt
+      Ticket.IS_URGENT: _isUrgent
     };
   }
 
