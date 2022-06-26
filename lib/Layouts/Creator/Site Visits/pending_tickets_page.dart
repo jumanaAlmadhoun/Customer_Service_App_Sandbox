@@ -197,7 +197,11 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
                         ],
                         onSelected: (String? value) {
                           if (value == 'Re-Open') {
-                            
+                            setState(() {
+                              _isLoading = true;
+                              Provider.of<TicketProvider>(context)
+                                  .reOpenTicket(_tickets[i]);
+                            });
                           }
                         },
                         child: PendingTicketWidget(

@@ -466,4 +466,9 @@ class TicketProvider with ChangeNotifier {
   List<Comment> get comments {
     return [..._comments];
   }
+
+  Future<String> reOpenTicket(Ticket ticket) async {
+    String firebaseURL =
+        '$DB_URL$DB_SITE_VISITS/$DB_PENDING_TICKETS/${ticket.firebaseID}.json';
+  }
 }
