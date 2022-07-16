@@ -87,7 +87,11 @@ class TicketProvider with ChangeNotifier {
               searchText: searchText,
               isUrgent: value[Ticket.IS_URGENT] ?? false,
               isLate: value[Ticket.IS_LATE] ?? false,
-              closeDate: value[Ticket.TECH_CLOSE_DATE]),
+              closeDate: value[Ticket.TECH_CLOSE_DATE] ?? '',
+              reportLink: value[Ticket.REPORT_LINK] ?? '',
+              video: value[Ticket.VIDEO] ?? '',
+              machineImage: value[Ticket.IMAGE] ?? '',
+              time: value[Ticket.TIME] ?? ''),
         );
       });
       _tickets = tickets;
@@ -102,20 +106,30 @@ class TicketProvider with ChangeNotifier {
     try {
       var chargeResponse = await http.get(Uri.parse(
           '$DB_URL$DB_CHARGES/${ticketHeader![Ticket.MACHINE_MODEL]}.json'));
-      var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
-      print(chargeData);
-      if (chargeData != null) {
-        String charge = chargeData[Ticket.CHARGES_PRICE].toString();
-        print(charge);
-        ticketHeader.update(
-          Ticket.LABOR_CHRGES,
-          (value) => charge,
-          ifAbsent: () => charge,
-        );
+      String charge;
+      if (ticketHeader[Ticket.FREE_VISIT] == true) {
+        charge = '0';
+      } else {
+        var chargeData =
+            jsonDecode(chargeResponse.body) as Map<String, dynamic>;
+        print(chargeData);
+        if (chargeData != null) {
+          charge = chargeData[Ticket.CHARGES_PRICE].toString();
+          print(charge);
+          ticketHeader.update(
+            Ticket.LABOR_CHRGES,
+            (value) => charge,
+            ifAbsent: () => charge,
+          );
+        } else {
+          //TODO Implement Entering new Charg Data
+        }
       }
       var json = jsonEncode(ticketHeader);
+      var urlEncode = Uri.encodeQueryComponent(json);
+      await http.post(Uri.parse(firebaseURL), body: json);
       var response = await http.get(Uri.parse(
-          '$OPEN_NEW_TICKET_SCRIPT?ticketHeaders=$json&firebaseURL=$firebaseURL'));
+          '$OPEN_NEW_TICKET_SCRIPT?ticketHeaders=$urlEncode&firebaseURL=$firebaseURL'));
       var data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         return Future.value(SC_SUCCESS_RESPONSE);
@@ -136,17 +150,57 @@ class TicketProvider with ChangeNotifier {
     var chargeResponse = await http.get(Uri.parse(
         '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
     var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
-    if (chargeData != null) {
-      String charge = chargeData[Ticket.CHARGES_PRICE].toString();
-      ticketHeader.update(
-        Ticket.LABOR_CHRGES,
-        (value) => charge,
-        ifAbsent: () => charge,
-      );
+    String charge;
+    if (ticketHeader[Ticket.FREE_VISIT] == true) {
+      charge = '0';
+    } else {
+      if (chargeData != null) {
+        charge = chargeData[Ticket.CHARGES_PRICE].toString();
+        ticketHeader.update(
+          Ticket.LABOR_CHRGES,
+          (value) => charge,
+          ifAbsent: () => charge,
+        );
+      } else {
+        //TODO: Impelement Labor Charges
+      }
     }
     var json = jsonEncode(ticketHeader);
+    var urlEncode = Uri.encodeQueryComponent(json);
     var response = await http.get(Uri.parse(
-        '$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$json&firebaseID=${ticket!.firebaseID}&fromTable=${ticket.fromTable}&toTable=$toTable&DB_URL=$DB_URL$DB_SITE_VISITS/'));
+        '$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$urlEncode&firebaseID=${ticket!.firebaseID}&fromTable=${ticket.fromTable}&toTable=$toTable&DB_URL=$DB_URL$DB_SITE_VISITS/'));
+    print(response.body);
+    var data = jsonDecode(response.body);
+    if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+      return Future.value(SC_SUCCESS_RESPONSE);
+    }
+    return Future.value(SC_FAILED_RESPONSE);
+  }
+
+  Future<String> createCustomerTicket(
+      Map<String, dynamic> ticketHeader, Ticket? ticket, String toTable) async {
+    var chargeResponse = await http.get(Uri.parse(
+        '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
+    var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
+    String charge;
+    if (ticketHeader[Ticket.FREE_VISIT] == true) {
+      charge = '0';
+    } else {
+      if (chargeData != null) {
+        charge = chargeData[Ticket.CHARGES_PRICE].toString();
+        ticketHeader.update(
+          Ticket.LABOR_CHRGES,
+          (value) => charge,
+          ifAbsent: () => charge,
+        );
+      } else {
+        //TODO: Impelement Labor Charges
+      }
+    }
+    var json = jsonEncode(ticketHeader);
+    var urlEncode = Uri.encodeQueryComponent(json);
+    var response = await http.get(Uri.parse(
+        '$EDIT_SANREMO_TICKET_SCRIPT?ticketHeaders=$urlEncode&firebaseID=${ticket!.firebaseID}&fromTable=${ticket.fromTable}&toTable=$toTable&DB_URL=$DB_URL$DB_SITE_VISITS/'));
     print(response.body);
     var data = jsonDecode(response.body);
     if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
@@ -190,9 +244,7 @@ class TicketProvider with ChangeNotifier {
       );
       print(
           '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json');
-      var ticketJson = jsonEncode(data);
-      var infoJson = jsonEncode(json);
-      var partsJson = jsonEncode(partJson);
+
       response = await http.get(Uri.parse(
           '$TECH_FILL_SCRIPT?url=$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
       data = jsonDecode(response.body);
@@ -213,8 +265,10 @@ class TicketProvider with ChangeNotifier {
       Map<String, dynamic> json, String firebaseUrl) async {
     try {
       var jsonToSend = jsonEncode(json);
+      var urlEncode = Uri.encodeQueryComponent(jsonToSend);
+
       var response = await http
-          .get(Uri.parse('$OPEN_NEW_DELIVERY_TICKET?json=$jsonToSend'));
+          .get(Uri.parse('$OPEN_NEW_DELIVERY_TICKET?json=$urlEncode'));
       var data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         String rowDataAddress = data[SC_ROW_ADDRESS_KEY].toString();
@@ -243,8 +297,10 @@ class TicketProvider with ChangeNotifier {
       Map<String, dynamic> json, String firebaseUrl) async {
     try {
       var jsonToSend = jsonEncode(json);
+      var urlEncode = Uri.encodeQueryComponent(jsonToSend);
+
       var response = await http
-          .get(Uri.parse('$EDIT_DELIVERY_TICKET_SCRIPT?json=$jsonToSend'));
+          .get(Uri.parse('$EDIT_DELIVERY_TICKET_SCRIPT?json=$urlEncode'));
       var data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         await http.patch(Uri.parse(firebaseUrl), body: jsonEncode(json));
@@ -261,8 +317,10 @@ class TicketProvider with ChangeNotifier {
       Map<String, dynamic> json, String firebaseUrl) async {
     try {
       var jsonToSend = jsonEncode(json);
+      var urlEncode = Uri.encodeQueryComponent(jsonToSend);
+
       var response =
-          await http.get(Uri.parse('$OPEN_NEW_PICUP_TICKET?json=$jsonToSend'));
+          await http.get(Uri.parse('$OPEN_NEW_PICUP_TICKET?json=$urlEncode'));
       var data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         String rowDataAddress = data[SC_ROW_ADDRESS_KEY].toString();
@@ -291,8 +349,10 @@ class TicketProvider with ChangeNotifier {
       Map<String, dynamic> json, String firebaseUrl) async {
     try {
       var jsonToSend = jsonEncode(json);
+      var urlEncode = Uri.encodeQueryComponent(jsonToSend);
+
       var response = await http
-          .get(Uri.parse('$EDIT_PICKUP_TICKET_SCRIPT?json=$jsonToSend'));
+          .get(Uri.parse('$EDIT_PICKUP_TICKET_SCRIPT?json=$urlEncode'));
       var data = jsonDecode(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         await http.patch(Uri.parse(firebaseUrl), body: jsonEncode(json));
@@ -383,7 +443,7 @@ class TicketProvider with ChangeNotifier {
     List<Ticket> tickets = [];
     try {
       var response = await http.get(Uri.parse(
-          '$DB_URL$DB_SITE_VISITS//$DB_CLOSED_TICKETS/$userName.json'));
+          '$DB_URL$DB_SITE_VISITS/$DB_CLOSED_TICKETS/$userName.json'));
       print(response.body);
       var data = jsonDecode(response.body) as Map<dynamic, dynamic>;
       if (data == null) {
@@ -467,8 +527,31 @@ class TicketProvider with ChangeNotifier {
     return [..._comments];
   }
 
-  Future<String> reOpenTicket(Ticket ticket) async {
-    String firebaseURL =
-        '$DB_URL$DB_SITE_VISITS/$DB_PENDING_TICKETS/${ticket.firebaseID}.json';
+  Future<String> reOpenTicket(Ticket ticket, String reason) async {
+    try {
+      String firebaseURL =
+          '$DB_URL$DB_SITE_VISITS/$DB_PENDING_TICKETS/${ticket.firebaseID}.json';
+      var response = await http.get(Uri.parse(
+          '$RE_OPEN_TICKET_SCRIPT?firebaseURL=$firebaseURL&reason=$reason'));
+      var data = jsonDecode(response.body);
+      return Future.value(data[SC_STATUS_KEY]);
+    } catch (ex) {
+      return Future.value('Failed');
+    }
+  }
+
+  Future<String> moveToPickup(Ticket ticket) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WORKSHOP_TICKETS/${ticket.firebaseID}.json';
+      var response = await http.get(Uri.parse(
+          '$MOVE_TO_PICKUP_SCRIPT?firebaseUrl=$firebaseUrl&userName=$userName'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      return Future.value(data[SC_STATUS_KEY]);
+    } catch (ex) {
+      return Future.value('Failed');
+      print(ex);
+    }
   }
 }

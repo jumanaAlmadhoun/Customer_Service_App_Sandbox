@@ -301,8 +301,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
               const SizedBox(
                 height: 10,
               ),
-              DropdownButton(
-                hint: Text(getTranselted(context, LBL_VISIT_CATEGORY)!),
+              DropdownButtonFormField(
+                decoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_VISIT_CATEGORY)!)),
                 items: categorys
                     .map((e) => DropdownMenuItem(
                           child: Text(e),
@@ -325,8 +326,10 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                 },
               ),
               SearchField(
+                searchInputDecoration: InputDecoration(
+                  label: Text(getTranselted(context, LBL_CITY)!),
+                ),
                 controller: selectedCity,
-                hint: getTranselted(context, LBL_CITY),
                 suggestions: cities
                     .map((e) => SearchFieldListItem(e['name_ar'].toString()))
                     .toList(),
@@ -346,7 +349,8 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
               ),
               SearchField(
                 suggestions: techs.map((e) => SearchFieldListItem(e)).toList(),
-                hint: getTranselted(context, LBL_TECH_NAME),
+                searchInputDecoration: InputDecoration(
+                    label: Text(getTranselted(context, LBL_TECH_NAME)!)),
                 controller: _techNameController,
                 onTap: (value) {
                   if (mounted) {

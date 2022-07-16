@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import
 
+import 'package:customer_service_app/Layouts/Creator/Customer%20Tickets/customer_ticket_info.dart';
+import 'package:customer_service_app/Layouts/Creator/Customer%20Tickets/customer_tickets.dart';
 import 'package:customer_service_app/Layouts/Creator/DashBoard/creator_dashboard.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/delivery_type_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Delivery/edit_machine_delivery_ticket.dart';
@@ -14,6 +16,7 @@ import 'package:customer_service_app/Layouts/Creator/Site%20Visits/pending_ticke
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/queue_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned_tickets.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/workshop_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_close_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
@@ -60,6 +63,10 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const PickupTicketsPage());
       case creatorDeliveryTypeSelection:
         return MaterialPageRoute(builder: (_) => const DeliveryTypePage());
+      case creatorWorkshopTicketRoute:
+        return MaterialPageRoute(builder: (_) => const WorkshopTickets());
+      case creatorCustomerTicketsRoute:
+        return MaterialPageRoute(builder: (_) => const CustomerTickets());
       case creatorNewMachineDeliveryRoute:
         return MaterialPageRoute(
             builder: (_) => const NewMachineDeliveryTicket());
@@ -99,6 +106,9 @@ class CustomRouter {
                 ));
       case techCloseTicketsRoute:
         return MaterialPageRoute(builder: (_) => TechCloseTicketsPage());
+      case creatorCustomerTicketInfoRoute:
+        return MaterialPageRoute(
+            builder: (_) => CustomerTicketInfo(settings.arguments as Ticket));
       case techTicketInfoRoute:
         return MaterialPageRoute(
             builder: (_) => TechTicketInfoPage(settings.arguments as Ticket));

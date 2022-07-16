@@ -191,6 +191,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         title: 'فحص التوصيلات والسلامة العامة',
         keyJson: '7',
         validate: validateNote,
+        comments: getCommentsByCategory(Comment.ELEC_COMMENTS),
       ),
       MachineChekWidget(
         title: 'فحص ضغط المضخة الرئيسية',
@@ -207,12 +208,6 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         title: 'فحص قوة البخار',
         keyJson: '10',
         validate: validateNote,
-      ),
-      MachineChekWidget(
-        title: 'فحص مصدر التيار الكهربائي',
-        keyJson: '11',
-        validate: validateNote,
-        comments: getCommentsByCategory(Comment.ELEC_COMMENTS),
       ),
       TextWidget(
         title: 'إصدار برنامج التشغيل',

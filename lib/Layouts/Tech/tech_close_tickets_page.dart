@@ -1,10 +1,7 @@
-import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Layouts/Tech/tech_ticket_summary.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
-import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Tech/tech_ticket_widget.dart';
 import 'package:customer_service_app/Widgets/logout_widget.dart';
@@ -14,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:path_provider/path_provider.dart' as path;
 
 class TechCloseTicketsPage extends StatefulWidget {
   const TechCloseTicketsPage({Key? key}) : super(key: key);

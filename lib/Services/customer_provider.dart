@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Models/customer.dart';
-import 'package:customer_service_app/Models/machine.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';

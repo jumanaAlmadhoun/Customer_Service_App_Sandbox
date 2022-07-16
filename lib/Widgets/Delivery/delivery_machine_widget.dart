@@ -1,7 +1,6 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/machine.dart';
-import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Util/formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';

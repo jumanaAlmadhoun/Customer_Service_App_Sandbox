@@ -71,7 +71,7 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
   String _selectedCategory = 'N/A';
   List<String> category = ['N/A', 'Tech', 'Courier'];
 
-  String _selectedStatus = 'Waiting for customer prep';
+  String _selectedStatus = 'Waiting For Customer Preparation';
 
   @override
   void didChangeDependencies() {

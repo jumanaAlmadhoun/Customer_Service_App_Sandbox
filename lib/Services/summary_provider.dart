@@ -6,7 +6,6 @@ import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
-import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
@@ -24,6 +23,7 @@ int deliveryOpenTickets = -1;
 int deliveryAssignedTickets = -1;
 int workShopTickets = 0;
 int customerCompTickets = -1;
+int customerTickets = -1;
 List<Tech> techs = [];
 List<Ticket> allTickets = [];
 
@@ -76,6 +76,7 @@ class SummaryProvider with ChangeNotifier {
               assignedTable.forEach((key, value) {
                 var innerData = value as Map<String, dynamic>;
                 assignedTickets += innerData.length;
+                print(assignedTickets);
                 for (var i = 0; i < techs.length; i++) {
                   if (techs[i].name == key) {
                     techs[i].assignedTickets = parseTickets(
@@ -141,6 +142,8 @@ class SummaryProvider with ChangeNotifier {
             case DB_COMPLAINT_TICKETS:
               customerCompTickets = value.length;
               break;
+            case DB_CUSTOMER_TICKETS:
+              customerTickets = value.length;
           }
         });
         siteVisitTickets = assignedTickets +

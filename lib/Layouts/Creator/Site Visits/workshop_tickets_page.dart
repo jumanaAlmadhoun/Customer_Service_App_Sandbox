@@ -17,18 +17,19 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
 import '../../../Widgets/web_layout.dart';
 
-class PendingTickets extends StatefulWidget {
-  const PendingTickets({Key? key}) : super(key: key);
+class WorkshopTickets extends StatefulWidget {
+  const WorkshopTickets({Key? key}) : super(key: key);
 
   @override
-  _PendingTicketsState createState() => _PendingTicketsState();
+  _WorkshopTicketsState createState() => _WorkshopTicketsState();
 }
 
-class _PendingTicketsState extends State<PendingTickets> with RouteAware {
+class _WorkshopTicketsState extends State<WorkshopTickets> with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
@@ -48,7 +49,7 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
     });
 
     Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets(DB_PENDING_TICKETS)
+        .fetchTickets(DB_WORKSHOP_TICKETS)
         .then((value) {
       setState(() {
         _isLoading = false;
@@ -83,7 +84,7 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
                         });
                       },
                     )
-                  : Text(getTranselted(context, STA_PENDING)!),
+                  : Text(getTranselted(context, STA_WORKSHOP)!),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -187,8 +188,12 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
                   return PopupMenuButton(
                     itemBuilder: (context) => [
                       const PopupMenuItem(
-                        child: Text('Re-Open'),
-                        value: 'Re-Open',
+                        child: Text('Open Pickup Ticket'),
+                        value: 'Open Pickup Ticket',
+                      ),
+                      const PopupMenuItem(
+                        child: Text('Show Report'),
+                        value: 'Show Report',
                       ),
                       const PopupMenuItem(
                         child: Text('Close'),
@@ -196,33 +201,31 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
                       ),
                     ],
                     onSelected: (String? value) async {
-                      if (value == 'Re-Open') {
-                        dialog = CustomListDialog(
-                          msg: 'Re Open Ticket',
-                          items: reOpenReasons,
-                        );
+                      if (value == 'Open Pickup Ticket') {
                         await showDialog(
-                            context: context, builder: (_) => dialog!);
-                        if (dialog!.value != null) {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          String result = await Provider.of<TicketProvider>(
-                                  context,
-                                  listen: false)
-                              .reOpenTicket(_tickets[i], dialog!.value!);
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          if (result == SC_SUCCESS_RESPONSE) {
-                            await CoolAlert.show(
-                                barrierDismissible: false,
-                                context: context,
-                                type: CoolAlertType.success);
-                          } else {
-                            await CoolAlert.show(
-                                context: context, type: CoolAlertType.error);
-                          }
+                            context: context,
+                            builder: (builder) => AlertDialog(
+                                  content: const Text('Are You Sure '),
+                                  actions: [
+                                    MaterialButton(
+                                        child: const Text('Yes'),
+                                        onPressed: () async {
+                                          String response =
+                                              await Provider.of<TicketProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .moveToPickup(_tickets[i]);
+                                        }),
+                                    MaterialButton(
+                                        child: const Text('No'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        }),
+                                  ],
+                                ));
+                      } else if (value == 'Show Report') {
+                        if (await canLaunch(_tickets[i].reportLink!)) {
+                          launch(_tickets[i].reportLink!);
                         }
                       }
                     },

@@ -5,7 +5,6 @@ import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
-import 'package:customer_service_app/Widgets/Admin/info_card.dart';
 import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +64,7 @@ class _CreatorDashBoardState extends State<CreatorDashBoard> with RouteAware {
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListView(children: [
+              child: ListView(children: const [
                 PrimaryText(
                   text: 'Late Tickets',
                 )

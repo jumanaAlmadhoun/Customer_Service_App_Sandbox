@@ -23,14 +23,12 @@ class _QueueTikcketsPageState extends State<QueueTikcketsPage> with RouteAware {
   List<Tech> _techs = [];
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override
   void didPush() {
-    // TODO: implement didPush
     super.didPush();
     _techs = techs
         .where((element) =>

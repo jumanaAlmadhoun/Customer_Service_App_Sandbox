@@ -155,7 +155,10 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
               CategoryItem(
                 image: IMG_WORKSHO_REPORT,
                 title: getTranselted(context, STA_WORKSHOP)!,
-                number: pendingTickets,
+                number: workShopTickets,
+                onTap: () {
+                  Navigator.pushNamed(context, creatorWorkshopTicketRoute);
+                },
               ),
             ],
           ), /*LayoutBuilder(

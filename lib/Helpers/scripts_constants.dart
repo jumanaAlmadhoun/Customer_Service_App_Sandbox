@@ -32,3 +32,7 @@ const String SEND_TICKET_FROM_QUEUE_SCRIPT =
     'https://script.google.com/macros/s/AKfycbzFY6naLeR_5ERwyBZB3NhaPLto10ubR1HzkohxHYLc9Kro5rBlUSpYVOup-4-6tURJFg/exec';
 const String REJECT_TICKET_SCRIPT =
     'https://script.google.com/macros/s/AKfycbzNeZIOVxUd4afHdYVunNWoncrdXQwXZITLlQdUNuPnyMaDZOYkPkq71uvGai5kQwUq/exec';
+const String RE_OPEN_TICKET_SCRIPT =
+    'https://script.google.com/macros/s/AKfycbwKyoIYcbXZv2N0AQzSTrd-g1sXqxXZekV5L2eWnBzNJtYhun9SyHur178YxaVJwNFp/exec';
+const String MOVE_TO_PICKUP_SCRIPT =
+    'https://script.google.com/macros/s/AKfycbzXpSkbWTCFvA3LK1gKaAelHyuxOV9EC9Gk3tsn6V5zbLHtoxA0VSmESWtx1Efn8Fo/exec';

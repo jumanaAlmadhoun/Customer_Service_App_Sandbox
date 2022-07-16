@@ -8,12 +8,15 @@ const String creatorOpenTicketsRoute = 'creatorOpenTicketsRoute';
 const String creatorReadyToAssignTicketsRoute =
     'creatorReadyToAssignTicketsRoute';
 const String creatorDeliveryTicketsRoute = 'creatorDeliveryTicketsRoute';
+const String creatorWorkshopTicketRoute = 'creatorWorkshopTicketRoute';
 const String creatorDeliveryTypeSelection = 'creatorDeliveryTypeSelection';
 const String creatorPartsDeliveryRoute = 'creatorPartsDeliveryRoute';
 const String creatorNewMachineDeliveryRoute = 'creatorNewMachineDeliveryRoute';
 const String creatorEditPartsDeliveryRoute = 'creatorEditPartsDeliveryRoute';
 const String creatorEditNewMachineDeliveryRoute =
     'creatorEditNewMachineDeliveryRoute';
+const String creatorCustomerTicketsRoute = 'creatorCustomerTicketsRoute';
+const String creatorCustomerTicketInfoRoute = 'creatorCustomerTicketInfoRoute';
 const String creatorDashBoardRoute = 'creatorDashBoardRoute';
 const String creatorPendingTicketsRoute = 'creatorPendingTicketsRoute';
 

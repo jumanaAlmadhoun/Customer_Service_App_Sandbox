@@ -223,12 +223,16 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                     });
                     if (value == SC_SUCCESS_RESPONSE) {
                       CoolAlert.show(
+                          barrierDismissible: false,
                           context: context,
                           type: CoolAlertType.success,
                           text: 'تم إغلاق التذكرة بنجاح',
                           title: 'نجاح',
                           onConfirmBtnTap: () {
-                            Navigator.pushNamed(context, techDownloadRoute,
+                            Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                techDownloadRoute,
+                                ModalRoute.withName(techHomeRoute),
                                 arguments: <String>[
                                   invoiceName,
                                   invoiceUrl,
@@ -292,7 +296,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
               comments += commentElement.title! + '\n';
             }
           });
-          comments += '\b';
+          comments = comments.trim();
           map.update(
             '${element.keyJson}_Comment',
             (value) => comments,

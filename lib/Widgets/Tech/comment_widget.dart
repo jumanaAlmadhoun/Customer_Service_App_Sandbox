@@ -1,5 +1,4 @@
 import 'package:customer_service_app/Helpers/layout_constants.dart';
-import 'package:customer_service_app/Widgets/Admin/primary_text.dart';
 import 'package:flutter/material.dart';
 
 class CommentWidget extends StatefulWidget {

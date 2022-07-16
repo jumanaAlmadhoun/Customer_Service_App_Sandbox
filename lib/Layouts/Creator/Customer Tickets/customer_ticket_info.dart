@@ -23,18 +23,18 @@ import 'package:group_radio_button/group_radio_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../creator_home_page.dart';
 
-class EditSanremoNewTicketPage extends StatefulWidget {
-  EditSanremoNewTicketPage(this.argTicket, {Key? key}) : super(key: key);
+class CustomerTicketInfo extends StatefulWidget {
+  CustomerTicketInfo(this.argTicket, {Key? key}) : super(key: key);
   Ticket? argTicket;
   @override
-  _EditSanremoNewTicketPageState createState() =>
-      _EditSanremoNewTicketPageState();
+  _CustomerTicketInfoState createState() => _CustomerTicketInfoState();
 }
 
-class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
+class _CustomerTicketInfoState extends State<CustomerTicketInfo>
     with RouteAware {
   final formKey = GlobalKey<FormState>();
   bool _isLoading = false;
@@ -93,6 +93,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
 
   @override
   void didPush() async {
+    print(selectedCategory);
     super.didPush();
     allMachines =
         Provider.of<MachinesProvider>(context, listen: false).machines;
@@ -123,7 +124,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTranselted(context, EDIT_SANREMO_TICKET)!),
+        title: Text(getTranselted(context, TIC_CUSTOMER_TICKETS)!),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isLoading,
@@ -133,10 +134,13 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
             padding: const EdgeInsets.all(8.0),
             child: ListView(
               children: [
+                const SizedBox(
+                  height: 10,
+                ),
                 SearchField(
-                  searchInputDecoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
+                  searchInputDecoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      label: Text(getTranselted(context, LBL_MACHINE_MODEL)!)),
                   controller: selectedModel,
                   hint: getTranselted(context, LBL_MACHINE_MODEL),
                   suggestions: machineModels!
@@ -286,6 +290,43 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     border: const OutlineInputBorder(),
                   ),
                   onChanged: (value) {},
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            if (await canLaunch(ticket!.machineImage!)) {
+                              launch(ticket!.machineImage!);
+                            }
+                          },
+                          icon: Icon(Icons.image),
+                        ),
+                        const Text('Machine Number')
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            if (await canLaunch(ticket!.video!)) {
+                              launch(ticket!.video!);
+                            }
+                          },
+                          icon: const Icon(Icons.video_file),
+                        ),
+                        const Text('Machine Issue')
+                      ],
+                    )
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
@@ -754,7 +795,6 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       customerMobile!.text = ticket!.customerMobile!;
       customerName!.text = ticket!.customerName!;
       extraNumber!.text = ticket!.extraContactNumber!;
-      selectedCategory = ticket!.subCategory!;
       city!.text = ticket!.city!;
       _selectedReg = ticket!.region!;
       selectedModel!.text = ticket!.machineModel!;
@@ -763,7 +803,6 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       _selectedCity.text = ticket!.city!;
       _readyToAssign = ticket!.fromTable == DB_READY_TO_ASSIGN_TICKETS;
       _selectedCity.text = ticket!.city!;
-      selectedCategory = ticket!.subCategory!;
       _freeParts = ticket!.freeParts!;
       _freeVisit = ticket!.freeVisit!;
       _didContact = ticket!.didContact!;

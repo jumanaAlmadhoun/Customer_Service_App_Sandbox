@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import '../../Widgets/appBar.dart';
-import '../../Widgets/gridview_count_widget.dart';
 import '../../Widgets/navigation_bar_item.dart';
 import '../../Widgets/web_layout.dart';
 import '../../main.dart';
@@ -19,7 +18,6 @@ import '../../../Helpers/layout_constants.dart';
 import '../../../Localization/localization_constants.dart';
 import '../../../Routes/route_names.dart';
 import '../../../Services/summary_provider.dart';
-import '../../../Widgets/category_item.dart';
 import '../../../Widgets/creator_nav_bar.dart';
 import '../../../Widgets/logout_widget.dart';
 
@@ -214,7 +212,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                     const SizedBox(
                       height: 10,
                     ),
-                    deliveryTickets == -1
+                    customerTickets == -1
                         ? const SpinKitDancingSquare(
                             color: ICON_TEX_COLOR,
                           )
@@ -230,9 +228,11 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                             _width / 2.2,
                             200,
                             getTranselted(context, TIC_CUSTOMER_TICKETS)!,
-                            0.toString(),
-                            IMG_CLIENT_TICKETS,
-                            () {}),
+                            customerTickets.toString(),
+                            IMG_CLIENT_TICKETS, () {
+                            Navigator.pushNamed(
+                                context, creatorCustomerTicketsRoute);
+                          }),
                   ]),
                   // exchangeTickets == -1
                   //     ? const SpinKitDancingSquare(
@@ -285,7 +285,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                   _image,
                 ),
                 fit: BoxFit.cover),
-            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            borderRadius: const BorderRadius.all(Radius.circular(15.0))),
         child: Stack(
           children: <Widget>[
             Positioned(

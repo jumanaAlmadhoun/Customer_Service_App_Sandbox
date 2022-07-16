@@ -220,6 +220,8 @@ class TicketInfoCard extends StatelessWidget {
           : () {},
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: content));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            duration: Duration(seconds: 1), content: Text('تم نسخ النص')));
       },
     );
   }
