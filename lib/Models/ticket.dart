@@ -36,6 +36,10 @@ class Ticket with ChangeNotifier {
   static const String VIDEO = 'viedo';
   static const String IMAGE = 'image';
   static const String TIME = 'time';
+  static const String INFO_JSON = 'infoJson';
+  static const String IS_CASH = 'isCash';
+  static const String TOTAL_AMOUNT = 'total_amount';
+
   //---------------
   static const String PROBLEM_DESC = 'problemDesc';
   static const String RECOMMENDATION = 'recomendation';
@@ -91,57 +95,61 @@ class Ticket with ChangeNotifier {
   static const String INVOICE_NAME = 'pdfInvName';
   static const String REPORT_NAME = 'pdfReportName';
 
-  Ticket(
-      {this.assignDate,
-      this.cafeLocation,
-      this.cafeName,
-      this.city,
-      this.createdBy,
-      this.creationDate,
-      this.customerMobile,
-      this.customerName,
-      this.customerNumber,
-      this.didContact,
-      this.extraContactNumber,
-      this.freeParts,
-      this.freeVisit,
-      this.from,
-      this.lastEditBy,
-      this.machineModel,
-      this.machineNumber,
-      this.mainCategory,
-      this.problemDesc,
-      this.recomendation,
-      this.region,
-      this.rowAddress,
-      this.sheetID,
-      this.sheetURL,
-      this.status,
-      this.subCategory,
-      this.techName,
-      this.ticketNumber,
-      this.to,
-      this.visitDate,
-      this.firebaseID,
-      this.fromTable,
-      this.laborCharges,
-      this.deliveryItems,
-      this.deliveryType,
-      this.isUrgent,
-      this.searchText,
-      this.soNumber,
-      this.invoiceLink,
-      this.invoiceName,
-      this.reportLink,
-      this.reportName,
-      this.label,
-      this.routeName,
-      this.isLate,
-      this.closeDate,
-      this.invConf,
-      this.video,
-      this.machineImage,
-      this.time});
+  Ticket({
+    this.assignDate,
+    this.cafeLocation,
+    this.cafeName,
+    this.city,
+    this.createdBy,
+    this.creationDate,
+    this.customerMobile,
+    this.customerName,
+    this.customerNumber,
+    this.didContact,
+    this.extraContactNumber,
+    this.freeParts,
+    this.freeVisit,
+    this.from,
+    this.lastEditBy,
+    this.machineModel,
+    this.machineNumber,
+    this.mainCategory,
+    this.problemDesc,
+    this.recomendation,
+    this.region,
+    this.rowAddress,
+    this.sheetID,
+    this.sheetURL,
+    this.status,
+    this.subCategory,
+    this.techName,
+    this.ticketNumber,
+    this.to,
+    this.visitDate,
+    this.firebaseID,
+    this.fromTable,
+    this.laborCharges,
+    this.deliveryItems,
+    this.deliveryType,
+    this.isUrgent,
+    this.searchText,
+    this.soNumber,
+    this.invoiceLink,
+    this.invoiceName,
+    this.reportLink,
+    this.reportName,
+    this.label,
+    this.routeName,
+    this.isLate,
+    this.closeDate,
+    this.invConf,
+    this.video,
+    this.machineImage,
+    this.time,
+    this.dateTime,
+    this.isCah,
+    this.totalAmount,
+  });
 
   String? machineModel;
   String? assignDate;
@@ -193,4 +201,7 @@ class Ticket with ChangeNotifier {
   bool? isLate;
   bool? invConf;
   String? time;
+  DateTime? dateTime;
+  bool? isCah;
+  double? totalAmount;
 }

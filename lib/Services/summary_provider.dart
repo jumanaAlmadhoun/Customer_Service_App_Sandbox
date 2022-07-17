@@ -26,6 +26,7 @@ int customerCompTickets = -1;
 int customerTickets = -1;
 List<Tech> techs = [];
 List<Ticket> allTickets = [];
+List<Ticket> allCloseTickets = [];
 
 class SummaryProvider with ChangeNotifier {
   Future<void> fetchSummary() async {
@@ -125,6 +126,9 @@ class SummaryProvider with ChangeNotifier {
               break;
             case DB_PENDING_TICKETS:
               pendingTickets = value.length;
+              var innerData = value as Map<String, dynamic>;
+              allCloseTickets = parseTickets(
+                  innerData, DB_PENDING_TICKETS, 'Pending Tickets', null);
               break;
             case DB_READY_TO_ASSIGN_TICKETS:
               readyToAssignTickets = value.length;
@@ -293,7 +297,20 @@ class SummaryProvider with ChangeNotifier {
             soNumber: value[Ticket.SO_NUMBER] ?? '',
             searchText: searchText,
             label: label,
-            routeName: routeName),
+            routeName: routeName,
+            isUrgent: value[Ticket.IS_URGENT] ?? false,
+            isCah: fromTable == DB_PENDING_TICKETS
+                ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
+                    [Ticket.IS_CASH]
+                : false,
+            totalAmount: fromTable == DB_PENDING_TICKETS
+                ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
+                    [Ticket.TOTAL_AMOUNT]
+                : 0.0,
+            closeDate: value[Ticket.CLOSE_DATE] ?? '',
+            dateTime: DateTime.parse(
+              value[Ticket.CREATION_DATE],
+            )),
       );
     });
     return tickets;

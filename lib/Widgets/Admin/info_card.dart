@@ -20,7 +20,8 @@ class InfoCard extends StatelessWidget {
       padding: const EdgeInsets.only(right: 4, left: 4),
       child: Container(
         padding: const EdgeInsets.only(right: 5, left: 5),
-        height: size.height * 0.15,
+        height: size.height * 0.12,
+        width: 150,
         /* constraints: BoxConstraints(
             minWidth: Responsive.isDesktop(context)
                 ? 200
@@ -43,8 +44,9 @@ class InfoCard extends StatelessWidget {
             ),
             PrimaryText(
                 text: label,
-                color: const Color.fromARGB(255, 134, 133, 117),
-                size: 16),
+                color: Color.fromARGB(255, 20, 20, 20),
+                size: 16,
+                fontWeight: FontWeight.bold),
             SizedBox(
               height: SizeConfig.blockSizeVertical! * 2,
             ),
