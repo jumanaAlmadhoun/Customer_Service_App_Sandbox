@@ -557,4 +557,9 @@ class TicketProvider with ChangeNotifier {
       print(ex);
     }
   }
+
+  Future<void> invoiceTicket(Ticket ticket, String text) async {
+    String firebaseUrl =
+        '$DB_URL$DB_SITE_VISITS/$DB_PENDING_TICKETS${ticket.firebaseID}.json';
+  }
 }

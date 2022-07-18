@@ -163,27 +163,26 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
                     const SizedBox(
                       height: 10,
                     ),
-                    customerCompTickets == -1
-                        ? const SpinKitDancingSquare(
-                            color: ICON_TEX_COLOR,
-                          )
-                        // : CategoryItem(
-                        //     title: getTranselted(context, TIC_DELIVERY)!,
-                        //     image: IMG_DELIVERY,
-                        //     number: deliveryTickets,
-                        //     onTap: () {
-                        //       Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
-                        //     },
-                        //   ),
-                        : _cardGroup(
-                            _width / 2.2,
-                            200,
-                            getTranselted(context, TIC_CUSTOMER_COMP_TICKETS)!,
-                            customerCompTickets.toString(),
-                            IMG_CUSTOMER_COMP, () {
-                            Navigator.pushNamed(
-                                context, creatorDeliveryTicketsRoute);
-                          }),
+                    // customerCompTickets == -1
+                    //     ? const SpinKitDancingSquare(
+                    //         color: ICON_TEX_COLOR,
+                    //       )
+                    //     // : CategoryItem(
+                    //     //     title: getTranselted(context, TIC_DELIVERY)!,
+                    //     //     image: IMG_DELIVERY,
+                    //     //     number: deliveryTickets,
+                    //     //     onTap: () {
+                    //     //       Navigator.pushNamed(context, creatorDeliveryTicketsRoute);
+                    //     //     },
+                    //     //   ),
+                    //     : _cardGroup(
+                    //         _width / 2.2,
+                    //         200,
+                    //         getTranselted(context, TIC_CUSTOMER_COMP_TICKETS)!,
+                    //         customerCompTickets.toString(),
+                    //         IMG_CUSTOMER_COMP, () {
+
+                    //       }),
                   ]),
                   const Spacer(),
                   Column(children: [

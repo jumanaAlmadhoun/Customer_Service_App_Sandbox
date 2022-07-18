@@ -10,6 +10,7 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Creator/custom_list_dialgo.dart';
+import 'package:customer_service_app/Widgets/Creator/custome_dialog.dart';
 import 'package:customer_service_app/Widgets/pending_ticket_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
@@ -224,6 +225,17 @@ class _PendingTicketsState extends State<PendingTickets> with RouteAware {
                                 context: context, type: CoolAlertType.error);
                           }
                         }
+                      } else if (value == 'Close') {
+                        TextEditingController controller =
+                            TextEditingController();
+                        await showDialog(
+                            context: context,
+                            builder: (builder) => CustomDialog(
+                                  msg: 'Close Ticket',
+                                  controller: controller,
+                                ));
+                        await Provider.of<TicketProvider>(context)
+                            .invoiceTicket(_tickets[i], controller.text);
                       }
                     },
                     child: PendingTicketWidget(
