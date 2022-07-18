@@ -404,6 +404,7 @@ class _NewMachineDeliveryTicketState extends State<NewMachineDeliveryTicket>
 
   Customer? findCustomer(String customerNumber) {
     try {
+      print(allCustomers!.length);
       return allCustomers!.firstWhere((element) =>
           (element.customerNumber!.toUpperCase().trim() ==
               customerNumber.toUpperCase().trim()));

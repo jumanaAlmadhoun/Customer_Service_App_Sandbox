@@ -660,14 +660,14 @@ class _CustomerTicketInfoState extends State<CustomerTicketInfo>
             ticketHeader!.update(Ticket.ASSIGN_DATE, (value) => date,
                 ifAbsent: () => date);
             return await Provider.of<TicketProvider>(context, listen: false)
-                .editSanremoTicket(
-                    ticketHeader!, ticket, '$DB_ASSIGNED_TICKETS/$_techName');
+                .createCustomerTicket(ticketHeader!, ticket,
+                    '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$_techName');
           } else {
             ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_QUEUE,
                 ifAbsent: () => Ticket.STA_QUEUE);
             return await Provider.of<TicketProvider>(context, listen: false)
-                .editSanremoTicket(
-                    ticketHeader!, ticket, '$DB_QUEUE_TICKETS/$_techName');
+                .createCustomerTicket(ticketHeader!, ticket,
+                    '$DB_URL$DB_SITE_VISITS/$DB_QUEUE_TICKETS/$_techName');
           }
         } else {
           return Future.value('N/A');
@@ -681,22 +681,23 @@ class _CustomerTicketInfoState extends State<CustomerTicketInfo>
             Ticket.STATUS, (value) => Ticket.STA_SOLVED_BY_PHONE,
             ifAbsent: () => Ticket.STA_SOLVED_BY_PHONE);
         return await Provider.of<TicketProvider>(context, listen: false)
-            .editSanremoTicket(
-                ticketHeader!, ticket, DB_SOLVED_BY_PHONE_TICKETS);
+            .createCustomerTicket(ticketHeader!, ticket,
+                '$DB_URL$DB_SITE_VISITS/$DB_SOLVED_BY_PHONE_TICKETS');
       }
       if (_readyToAssign) {
         ticketHeader!.update(
             Ticket.STATUS, (value) => Ticket.STA_READY_TO_ASSIGN,
             ifAbsent: () => Ticket.STA_READY_TO_ASSIGN);
         return await Provider.of<TicketProvider>(context, listen: false)
-            .editSanremoTicket(
-                ticketHeader!, ticket, DB_READY_TO_ASSIGN_TICKETS);
+            .createCustomerTicket(ticketHeader!, ticket,
+                '$DB_URL$DB_SITE_VISITS/$DB_READY_TO_ASSIGN_TICKETS');
       } else {
         if (ticketHeader != null) {
           ticketHeader!.update(Ticket.STATUS, (value) => Ticket.STA_OPEN,
               ifAbsent: () => Ticket.STA_OPEN);
           return await Provider.of<TicketProvider>(context, listen: false)
-              .editSanremoTicket(ticketHeader!, ticket, DB_OPEN_TICKETS);
+              .createCustomerTicket(ticketHeader!, ticket,
+                  '$DB_URL$DB_SITE_VISITS/$DB_OPEN_TICKETS');
         } else {
           return Future.value('N/A');
         }

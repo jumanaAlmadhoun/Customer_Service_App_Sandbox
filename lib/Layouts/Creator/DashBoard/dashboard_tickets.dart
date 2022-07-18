@@ -10,7 +10,6 @@ import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Creator/custom_list_dialgo.dart';
-import 'package:customer_service_app/Widgets/customer_ticket_widget.dart';
 import 'package:customer_service_app/Widgets/open_ticket_widget.dart';
 import 'package:customer_service_app/Widgets/pending_ticket_widget.dart';
 import 'package:customer_service_app/main.dart';
@@ -23,14 +22,15 @@ import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
 import '../../../Widgets/web_layout.dart';
 
-class CustomerTickets extends StatefulWidget {
-  const CustomerTickets({Key? key}) : super(key: key);
+class DashboardTickets extends StatefulWidget {
+  DashboardTickets(this.tickets);
+  List<Ticket> tickets;
 
   @override
-  _CustomerTicketsState createState() => _CustomerTicketsState();
+  _DashboardTicketsState createState() => _DashboardTicketsState();
 }
 
-class _CustomerTicketsState extends State<CustomerTickets> with RouteAware {
+class _DashboardTicketsState extends State<DashboardTickets> with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
   bool _isLoading = false;
@@ -44,20 +44,7 @@ class _CustomerTicketsState extends State<CustomerTickets> with RouteAware {
 
   @override
   void didPush() {
-    super.didPush();
-    setState(() {
-      _isLoading = true;
-    });
-
-    Provider.of<TicketProvider>(context, listen: false)
-        .fetchTickets(DB_CUSTOMER_TICKETS)
-        .then((value) {
-      setState(() {
-        _isLoading = false;
-        _tickets = Provider.of<TicketProvider>(context, listen: false).tickets;
-        _showedTickets = _tickets;
-      });
-    });
+    _tickets = widget.tickets;
   }
 
   @override
@@ -85,7 +72,7 @@ class _CustomerTicketsState extends State<CustomerTickets> with RouteAware {
                         });
                       },
                     )
-                  : Text(getTranselted(context, TIC_CUSTOMER_TICKETS)!),
+                  : Text(getTranselted(context, STA_PENDING)!),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -186,64 +173,19 @@ class _CustomerTicketsState extends State<CustomerTickets> with RouteAware {
                 physics: const ClampingScrollPhysics(),
                 itemCount: _tickets.length,
                 itemBuilder: (context, i) {
-                  return PopupMenuButton(
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        child: Text('Re-Open'),
-                        value: 'Re-Open',
-                      ),
-                      const PopupMenuItem(
-                        child: Text('Close'),
-                        value: 'Close',
-                      ),
-                    ],
-                    onSelected: (String? value) async {
-                      if (value == 'Re-Open') {
-                        dialog = CustomListDialog(
-                          msg: 'Re Open Ticket',
-                          items: reOpenReasons,
-                        );
-                        await showDialog(
-                            context: context, builder: (_) => dialog!);
-                        if (dialog!.value != null) {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          String result = await Provider.of<TicketProvider>(
-                                  context,
-                                  listen: false)
-                              .reOpenTicket(_tickets[i], dialog!.value!);
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          if (result == SC_SUCCESS_RESPONSE) {
-                            await CoolAlert.show(
-                                barrierDismissible: false,
-                                context: context,
-                                type: CoolAlertType.success);
-                          } else {
-                            await CoolAlert.show(
-                                context: context, type: CoolAlertType.error);
-                          }
-                        }
+                  return OpenTicketWidget(
+                    cafeName: _tickets[i].cafeName,
+                    city: _tickets[i].city,
+                    customerMobile: _tickets[i].customerMobile,
+                    customerName: _tickets[i].customerName,
+                    date: _tickets[i].creationDate,
+                    didContact: _tickets[i].didContact,
+                    machineNumber: _tickets[i].machineNumber,
+                    onTap: () {
+                      if (_tickets[i].routeName != null) {
+                        Navigator.pushNamed(context, _tickets[i].routeName!);
                       }
                     },
-                    child: CustomerTicketWidget(
-                      cafeName: _tickets[i].cafeName,
-                      city: _tickets[i].city,
-                      customerMobile: _tickets[i].customerMobile,
-                      customerName: _tickets[i].customerName,
-                      date: _tickets[i].time,
-                      didContact: _tickets[i].didContact,
-                      machineNumber: _tickets[i].machineNumber,
-                      mobile: _tickets[i].customerMobile,
-                      ticket: _tickets[i],
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, creatorCustomerTicketInfoRoute,
-                            arguments: _tickets[i]);
-                      },
-                    ),
                   );
                 },
               ),

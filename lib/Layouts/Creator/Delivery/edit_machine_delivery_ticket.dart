@@ -438,6 +438,8 @@ class _EditMachineDeliveryTicketState extends State<EditMachineDeliveryTicket>
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),
       Ticket.CONTACT_NUMBER: extraNumber!.text.trim(),
+      Ticket.CREATED_BY: ticket!.createdBy!,
+      Ticket.CREATION_DATE: ticket!.creationDate!,
       Ticket.LAST_EDIT_BY: userName,
       Ticket.VISIT_DATE: visitDate!.text,
       Ticket.DID_CONTACT: _didContact,
@@ -458,6 +460,7 @@ class _EditMachineDeliveryTicketState extends State<EditMachineDeliveryTicket>
       Ticket.MACHINE_MODEL: NA,
       Ticket.SERIAL_NUMBER: NA,
       Ticket.CLOSE_DATE: NA,
+      Ticket.FIREBASE_ID: ticket!.firebaseID!
     };
   }
 
@@ -511,7 +514,6 @@ class _EditMachineDeliveryTicketState extends State<EditMachineDeliveryTicket>
       _didContact = ticket!.didContact!;
       so!.text = ticket!.soNumber!;
       _selectedStatus = ticket!.status!;
-
       selectedCustomer = allCustomers!.firstWhere(
           (element) => element.customerNumber == ticket!.customerNumber);
       customerBalance!.text = selectedCustomer!.balance!.abs().toString();

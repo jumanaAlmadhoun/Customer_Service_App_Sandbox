@@ -1,7 +1,9 @@
 // ignore_for_file: constant_identifier_names, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -21,6 +23,8 @@ class LoginHandeler with ChangeNotifier {
   static const String ACCOUNTING = 'accounting';
   static const String LOGISTIC = 'logistics';
   static const String ADMIN = 'admin';
+  FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseMessaging fbm = FirebaseMessaging.instance;
 
   Future<void> loginUser(
       BuildContext context, String phone, String password) async {
@@ -51,15 +55,27 @@ class LoginHandeler with ChangeNotifier {
     switch (role) {
       case CREATOR:
         Navigator.pushReplacementNamed(context, creatorHomeRoute);
+        fbm.subscribeToTopic('userTickets');
         return Future.value('DONE');
       case TECH:
         Navigator.pushReplacementNamed(context, techHomeRoute);
+        fbm.subscribeToTopic(userName!);
         return Future.value('DONE');
       case ADMIN:
         Navigator.pushReplacementNamed(context, adminHomeRoute);
         return Future.value('DONE');
       default:
         return Future.value('ERROR');
+    }
+  }
+
+  Future<void> notification(String name) async {
+    try {
+      print(name);
+      CollectionReference notification = _db.collection('notification');
+      notification.add({'date': DateTime.now(), 'name': name});
+    } catch (ex) {
+      print(ex);
     }
   }
 }

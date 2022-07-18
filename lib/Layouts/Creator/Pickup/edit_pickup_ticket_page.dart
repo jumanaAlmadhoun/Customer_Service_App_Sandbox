@@ -519,7 +519,8 @@ class _EditPickupTicketPageState extends State<EditPickupTicketPage>
       Ticket.ROW_ADDRESS: ticket!.rowAddress,
       Ticket.MACHINE_MODEL: selectedModel!.text,
       Ticket.SERIAL_NUMBER: machineNumber!.text,
-      Ticket.PROBLEM_DESC: problemDesc!.text
+      Ticket.PROBLEM_DESC: problemDesc!.text,
+      Ticket.FIREBASE_ID: ticket!.firebaseID!
     };
   }
 

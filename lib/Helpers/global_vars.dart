@@ -8,24 +8,19 @@ const List<String> pickupStatus = [
   'No response From Customer',
 ];
 const List<String> archiveReasons = [
-  'يوجد مبالغ مستحقة على العميل',
-  'في انتظار تصدير الفاتورة',
-  'مكرر',
-  'لا يوجد رد من العميل',
-  'العميل رفض الزيارة',
-  'العميل طلب تأجيل الزيارة',
-  'لم يتم التشغيل',
-  'العميل من طرف موزع',
-  'تم رفض الزيارة بسبب الرسوم',
-  'لا توجد مشكلة',
-  'تمت زيارة العميل',
-  'تم اسناد التذكرة لفني من قبل',
+  'Customer Has Dept',
+  'Repeated',
+  'No Response From Customer',
+  'Customer Refused The Visit',
+  'Customer Asked For Reschedule',
+  'Customer Did Not Start The Business Yet',
+  'There is No Problem',
+  'Already Scheduled',
 ];
 
 const List<String> reOpenReasons = [
-  'التقرير غير مكتمل',
-  'التقرير يحتوي على أخطاء',
-  'تم صيانة مكينة غير المذكورة في التقرير',
+  'Report is Incomplete',
+  'Report Has Mistakes',
 ];
 List<String> transitCategory = ['N/A', 'Tech', 'Courier'];
 List<String> deliveryStatus = ['In Dispatch Area', 'In Transit', 'Delivered'];

@@ -22,10 +22,9 @@ class CreatorDashBoard extends StatefulWidget {
 }
 
 class _CreatorDashBoardState extends State<CreatorDashBoard> with RouteAware {
-  List<Ticket> allOpenTickets = [];
-  List<Ticket> allDeliveryTickets = [];
-  List<Ticket> allPickupTickets = [];
+  List<Ticket> urgentTickets = [];
   List<Ticket> lateTickets = [];
+
   int noLateTickets = 0;
   int noUrgentTickets = 0;
   int noScheduledTickets = 0;
@@ -45,14 +44,13 @@ class _CreatorDashBoardState extends State<CreatorDashBoard> with RouteAware {
     setState(() {
       _isLoading = true;
     });
-    DateTime lateToday = DateTime.now().subtract(const Duration(days: 4));
+    DateTime lateToday = DateTime.now().subtract(const Duration(days: 5));
     String todayDate = DateTime.now().toString().split(' ')[0];
     DateTime today = DateTime.parse(todayDate);
     print(lateToday.toString());
-    noLateTickets = allTickets
+    lateTickets = allTickets
         .where((element) => element.dateTime!.isBefore(lateToday))
-        .toList()
-        .length;
+        .toList();
 
     noScheduledTickets = allTickets
         .where(
@@ -112,7 +110,11 @@ class _CreatorDashBoardState extends State<CreatorDashBoard> with RouteAware {
                   children: [
                     InfoCard(
                       label: 'Late Tickets',
-                      amount: noLateTickets.toString(),
+                      amount: lateTickets.length.toString(),
+                      onTap: () {
+                        // Navigator.pushNamed(context, creatorDashboardTickets,
+                        //     arguments: lateTickets);
+                      },
                     ),
                     const SizedBox(
                       width: 10,

@@ -43,6 +43,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
   bool _freeVisit = false;
   bool _freeParts = false;
   bool _readyToAssign = false;
+  bool _isUrgent = false;
   TextEditingController? selectedModel = TextEditingController();
   TextEditingController? customerNumber = TextEditingController();
   TextEditingController? customerName = TextEditingController();
@@ -425,6 +426,15 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                 const SizedBox(
                   height: 10,
                 ),
+                CustomCheckBox(
+                  title: LBL_URGENT,
+                  value: _isUrgent,
+                  onChanged: (value) {
+                    setState(() {
+                      _isUrgent = value!;
+                    });
+                  },
+                ),
                 _techName == 'N/A'
                     ? CustomCheckBox(
                         title: LBL_READY_ASSIGN,
@@ -703,7 +713,8 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       Ticket.SHEET_ID: ticket!.sheetID,
       Ticket.ROW_ADDRESS: ticket!.rowAddress,
       Ticket.SHEET_URL: ticket!.sheetURL,
-      Ticket.TICKET_NUMBER: ticket!.ticketNumber
+      Ticket.TICKET_NUMBER: ticket!.ticketNumber,
+      Ticket.IS_URGENT: _isUrgent
     };
   }
 
@@ -767,6 +778,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       _freeParts = ticket!.freeParts!;
       _freeVisit = ticket!.freeVisit!;
       _didContact = ticket!.didContact!;
+      _isUrgent = ticket!.isUrgent!;
       machineNumber!.text = ticket!.machineNumber!;
       problemDesc!.text = ticket!.problemDesc!;
       recommendation!.text = ticket!.recomendation!;
