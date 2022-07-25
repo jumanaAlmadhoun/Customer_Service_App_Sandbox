@@ -28,3 +28,4 @@ const String DB_DISPATCH_LINE = 'WaitingDispatchMachines';
 const String NA = 'N/A';
 const String DB_CUSTOMER_TICKETS = 'ClientTickets';
 const String TEMP_SANREMO = 'SanremoCS';
+const String WAITING_CONFIRMATION = 'WaitingConfirmationTickets';

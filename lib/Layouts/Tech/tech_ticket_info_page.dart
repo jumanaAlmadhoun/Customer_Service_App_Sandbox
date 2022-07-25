@@ -111,7 +111,7 @@ class _TechTicketInfoPageState extends State<TechTicketInfoPage> {
               ButtonWidget(
                 text: 'التالي',
                 onTap: () {
-                  Navigator.pushNamed(context, techFillSiteVisitRoute,
+                  Navigator.pushNamed(context, techConfirmMachineNumberRoute,
                       arguments: widget.ticket);
                 },
               ),

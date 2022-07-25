@@ -18,6 +18,7 @@ import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/workshop_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
+import 'package:customer_service_app/Layouts/Tech/machine_number_confirmation_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_close_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
 import 'package:customer_service_app/Models/tech.dart';
@@ -119,6 +120,10 @@ class CustomRouter {
       case creatorEditPickupTicketRoute:
         return MaterialPageRoute(
             builder: (_) => EditPickupTicketPage(settings.arguments as Ticket));
+      case techConfirmMachineNumberRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                MachineNumberConfirmationPage(settings.arguments as Ticket));
       case creatorEditNewMachineDeliveryRoute:
         return MaterialPageRoute(
             builder: (_) =>

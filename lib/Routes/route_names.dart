@@ -42,3 +42,5 @@ const String techCloseTicketsRoute = 'techCloseTicketsRoute';
 const String adminHomeRoute = 'adminHomeRoute';
 const String adminRentMachineRoute = 'adminRentMachineRoute';
 const String adminTechReportRoute = 'adminTechReportRoute';
+
+const String techConfirmMachineNumberRoute = 'techConfirmMachineNumberRoute';

@@ -42,6 +42,7 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
   @override
   void didPush() {
     // Provider.of<SparePartsProvider>(context, listen: false).fetchSpareParts();
+    print('Pushed');
     super.didPush();
   }
 

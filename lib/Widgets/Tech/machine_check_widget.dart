@@ -3,8 +3,8 @@ import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 
-class MachineChekWidget extends StatefulWidget {
-  MachineChekWidget({this.title, this.keyJson, this.validate, this.comments});
+class MachineCheckWidget extends StatefulWidget {
+  MachineCheckWidget({this.title, this.keyJson, this.validate, this.comments});
   TextEditingController? controller = TextEditingController();
   String? pass = '';
   bool? isPass = null;
@@ -13,10 +13,10 @@ class MachineChekWidget extends StatefulWidget {
   List<CommentWidget>? comments;
   String? Function(String?)? validate;
   @override
-  _MachineChekWidgetState createState() => _MachineChekWidgetState();
+  _MachineCheckWidgetState createState() => _MachineCheckWidgetState();
 }
 
-class _MachineChekWidgetState extends State<MachineChekWidget> {
+class _MachineCheckWidgetState extends State<MachineCheckWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(

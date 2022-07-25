@@ -152,59 +152,59 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
 
   void initMachineCheckDesign() {
     _machineCheckDesign = [
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'قطع مكسورة أو مفقودة',
         keyJson: '1',
         validate: validateNote,
         comments: null,
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'نظافة المكينة العامة',
         keyJson: '2',
         validate: validateNote,
         comments: getCommentsByCategory(Comment.CLEAN_COMMENTS),
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص وجود تهريبات في المكينة',
         keyJson: '3',
         validate: validateNote,
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص عدادات الماء',
         keyJson: '4',
         validate: validateNote,
         comments: getCommentsByCategory(Comment.FLOWMETER_COMMENTS),
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص مصدر الماء',
         keyJson: '5',
         validate: validateNote,
         comments: getCommentsByCategory(Comment.WATER_COMMENTS),
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'نوع مصدر الماء',
         keyJson: '6',
         validate: validateNote,
         comments: getCommentsByCategory(Comment.WATER_SRC_COMMENTS),
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص التوصيلات والسلامة العامة',
         keyJson: '7',
         validate: validateNote,
         comments: getCommentsByCategory(Comment.ELEC_COMMENTS),
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص ضغط المضخة الرئيسية',
         keyJson: '8',
         validate: validateNote,
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص وحدة التحكم بالبخار',
         keyJson: '9',
         validate: validateNote,
         comments: getCommentsByCategory(Comment.STEAM_COMMENTS),
       ),
-      MachineChekWidget(
+      MachineCheckWidget(
         title: 'فحص قوة البخار',
         keyJson: '10',
         validate: validateNote,
@@ -291,7 +291,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
     String title = NA;
     for (int i = 0; i < _machineCheckDesign.length; i++) {
       var entery = _machineCheckDesign[i];
-      if (entery is MachineChekWidget) {
+      if (entery is MachineCheckWidget) {
         if (entery.isPass == null) {
           title = entery.title!;
           break;

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cool_alert/cool_alert.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
@@ -160,92 +161,92 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             const SizedBox(
               height: 15,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  const Text('توقيع العميل'),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: APP_BAR_COLOR),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Signature(
-                      controller: signatureController!,
-                      backgroundColor: Colors.white,
-                      height: 100,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  MaterialButton(
-                      child: const Text('مسح التوقيع'),
-                      onPressed: () {
-                        signatureController!.clear();
-                      })
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Column(
+            //     children: [
+            //       const Text('توقيع العميل'),
+            //       Container(
+            //         decoration: BoxDecoration(
+            //           border: Border.all(color: APP_BAR_COLOR),
+            //           borderRadius: BorderRadius.circular(10),
+            //         ),
+            //         child: Signature(
+            //           controller: signatureController!,
+            //           backgroundColor: Colors.white,
+            //           height: 100,
+            //         ),
+            //       ),
+            //       const SizedBox(
+            //         height: 5,
+            //       ),
+            //       MaterialButton(
+            //           child: const Text('مسح التوقيع'),
+            //           onPressed: () {
+            //             signatureController!.clear();
+            //           })
+            //     ],
+            //   ),
+            // ),
             const SizedBox(
               height: 10,
             ),
             ButtonWidget(
               text: 'إرسال',
               onTap: () async {
-                if (signatureController!.isNotEmpty) {
+                // if (signatureController!.isNotEmpty) {
+                //   setState(() {
+                //     _isLoading = true;
+                //   });
+                // Uint8List? bytes = await signatureController!.toPngBytes();
+                // String encoded = base64Encode(bytes!);
+                Map<String, dynamic> json = getJson();
+                Map<String, dynamic> partJson = getPartJson();
+                bool hasParts = partJson.length == 0 ? false : true;
+                print(partJson.length);
+                print(partJson);
+                // json.update(
+                //   'sig',
+                //   (value) => encoded,
+                //   ifAbsent: () => encoded,
+                // );
+                json.update('isCash', (value) => _isCach,
+                    ifAbsent: () => _isCach);
+                json.update('total_amount', (value) => totalAmount,
+                    ifAbsent: () => totalAmount);
+                json.update('has_parts', (value) => hasParts,
+                    ifAbsent: () => hasParts);
+                Provider.of<TicketProvider>(context, listen: false)
+                    .techSubmitSiteVisit(json, partJson, _ticket!.firebaseID)
+                    .then((value) {
                   setState(() {
-                    _isLoading = true;
+                    _isLoading = false;
                   });
-                  Uint8List? bytes = await signatureController!.toPngBytes();
-                  String encoded = base64Encode(bytes!);
-                  Map<String, dynamic> json = getJson();
-                  Map<String, dynamic> partJson = getPartJson();
-                  bool hasParts = partJson.length == 0 ? false : true;
-                  print(partJson.length);
-                  print(partJson);
-                  json.update(
-                    'sig',
-                    (value) => encoded,
-                    ifAbsent: () => encoded,
-                  );
-                  json.update('isCash', (value) => _isCach,
-                      ifAbsent: () => _isCach);
-                  json.update('total_amount', (value) => totalAmount,
-                      ifAbsent: () => totalAmount);
-                  json.update('has_parts', (value) => hasParts,
-                      ifAbsent: () => hasParts);
-                  Provider.of<TicketProvider>(context, listen: false)
-                      .techSubmitSiteVisit(json, partJson, _ticket!.firebaseID)
-                      .then((value) {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    if (value == SC_SUCCESS_RESPONSE) {
-                      CoolAlert.show(
-                          barrierDismissible: false,
-                          context: context,
-                          type: CoolAlertType.success,
-                          text: 'تم إغلاق التذكرة بنجاح',
-                          title: 'نجاح',
-                          onConfirmBtnTap: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                techDownloadRoute,
-                                ModalRoute.withName(techHomeRoute),
-                                arguments: <String>[
-                                  invoiceName,
-                                  invoiceUrl,
-                                  reportName,
-                                  reportUrl
-                                ]);
-                          });
-                    }
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('لا يمكن ترك التوقيع فارغ')));
-                }
+                  if (value == SC_SUCCESS_RESPONSE) {
+                    CoolAlert.show(
+                        barrierDismissible: false,
+                        context: context,
+                        type: CoolAlertType.success,
+                        text: 'تم إغلاق التذكرة بنجاح',
+                        title: 'نجاح',
+                        onConfirmBtnTap: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              techDownloadRoute,
+                              ModalRoute.withName(techHomeRoute),
+                              arguments: <String>[
+                                invoiceName,
+                                invoiceUrl,
+                                reportName,
+                                reportUrl
+                              ]);
+                        });
+                  }
+                });
+                // } else {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(content: Text('لا يمكن ترك التوقيع فارغ')));
+                // }
               },
             ),
             const SizedBox(
@@ -259,7 +260,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
 
   void initDesign(List<Widget>? report) async {
     report!.forEach((element) {
-      if (element is MachineChekWidget) {
+      if (element is MachineCheckWidget) {
         _summary.add(MachineCheckSummaryWidget(element));
       } else if (element is GroupCheckWidget) {
         _summary.add(GroupCheckSummaryWidget(element));
@@ -285,14 +286,17 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
 
   Map<String, dynamic> getJson() {
     Map<String, dynamic> map = {};
+    Map<String, dynamic> firebaseMap = {};
+    List<String> commentList = [];
     int commentCounter = 0;
     int partCounter = 0;
     _report!.forEach((element) {
-      if (element is MachineChekWidget) {
+      if (element is MachineCheckWidget) {
         if (element.comments != null) {
           String comments = '';
           element.comments!.forEach((commentElement) {
             if (commentElement.isSelected) {
+              commentList.add(commentElement.title!);
               comments += commentElement.title! + '\n';
             }
           });
@@ -302,6 +306,8 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             (value) => comments,
             ifAbsent: () => comments,
           );
+          firebaseMap.update('${element.keyJson}_Comment',
+              (value) => {'commentList': commentList});
         } else {
           map.update(
             '${element.keyJson}_Comment',
@@ -413,7 +419,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
           if (map.containsKey(key)) {
             double qty = double.parse(map[key]);
             qty += double.parse(element.qty.text);
-            map[key] = qty.toString();
+            map[key][QTY_KEY] = qty.toString();
           } else {
             map.update(
               key,
@@ -551,7 +557,7 @@ class GroupCheckSummaryWidget extends StatelessWidget {
 
 class MachineCheckSummaryWidget extends StatelessWidget {
   MachineCheckSummaryWidget(this.element, {Key? key}) : super(key: key);
-  final MachineChekWidget? element;
+  final MachineCheckWidget? element;
   List<Widget> _comments = [];
 
   @override
