@@ -123,6 +123,8 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
                       _machineCheckDesign.add(SparePartWidget(
                         allParts: _allParts,
                         isfree: widget.ticket!.freeParts,
+                        partNo: TextEditingController(),
+                        qty: TextEditingController(),
                       ));
                     });
                   },
@@ -213,16 +215,19 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
         title: 'إصدار برنامج التشغيل',
         jsonKey: 'os',
         validate: validateNote,
+        controller: TextEditingController(),
       ),
       TextWidget(
         title: 'اجمالي عدد الاكواب Total Cup',
         jsonKey: 'total_cups',
         validate: validateNote,
+        controller: TextEditingController(),
       ),
       TextWidget(
         title: 'اجمالي عدد الاكواب Service',
         jsonKey: 'total_cups_ser',
         validate: validateNote,
+        controller: TextEditingController(),
       ),
       GroupCheckWidget(
         title: 'قياس الضغط (بار / psi)',
@@ -297,7 +302,7 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
           break;
         }
       } else if (entery is TextWidget) {
-        if (entery.controller.text.isEmpty) {
+        if (entery.controller!.text.isEmpty) {
           title = entery.title!;
           break;
         }

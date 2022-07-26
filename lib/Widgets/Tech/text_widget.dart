@@ -7,8 +7,9 @@ class TextWidget extends StatefulWidget {
       {this.jsonKey,
       this.title,
       this.direction = TextDirection.rtl,
-      this.validate});
-  TextEditingController controller = TextEditingController();
+      this.validate,
+      this.controller});
+  TextEditingController? controller;
   String? jsonKey;
   String? title;
   TextDirection direction;

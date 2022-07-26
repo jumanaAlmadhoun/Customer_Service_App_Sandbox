@@ -2,9 +2,9 @@ import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:flutter/material.dart';
 
 class CommentWidget extends StatefulWidget {
-  CommentWidget({this.title});
+  CommentWidget({this.title, this.isSelected = false});
   final String? title;
-  bool isSelected = false;
+  bool isSelected;
   bool moveToWorkshop = false;
   @override
   _CommentWidgetState createState() => _CommentWidgetState();

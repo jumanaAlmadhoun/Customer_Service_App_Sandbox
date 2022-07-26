@@ -18,9 +18,11 @@ import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/workshop_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
+import 'package:customer_service_app/Layouts/Tech/edit_submitted_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Tech/machine_number_confirmation_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_close_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
+import 'package:customer_service_app/Layouts/Tech/tech_pending_tickets_page.dart';
 import 'package:customer_service_app/Models/tech.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
@@ -145,6 +147,13 @@ class CustomRouter {
       case creatorTechQueueTicketRoute:
         return MaterialPageRoute(
             builder: (_) => TechQueueTicketPage(settings.arguments as Tech));
+
+      case techPendingTicketsRoute:
+        return MaterialPageRoute(builder: (_) => TechPendingTicketsPage());
+      case techEditRejectedTicketRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                EditSubmittedTicketPage(settings.arguments as Ticket));
     }
   }
 }

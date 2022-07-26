@@ -9,9 +9,11 @@ class SparePartWidget extends StatefulWidget {
       {this.allParts,
       this.validatePartNum,
       this.validatePartQuantity,
-      this.isfree = false});
-  TextEditingController partNo = TextEditingController();
-  TextEditingController qty = TextEditingController();
+      this.isfree = false,
+      this.partNo,
+      this.qty});
+  TextEditingController? partNo;
+  TextEditingController? qty;
   TextEditingController desc = TextEditingController();
   List<SparePart>? allParts;
   String? Function(String?)? validatePartNum;
@@ -72,7 +74,7 @@ class _SparePartWidgetState extends State<SparePartWidget> {
                   onChanged: (value) {
                     SparePart part = widget.allParts!.firstWhere((element) =>
                         element.partNo!.toUpperCase() ==
-                        widget.partNo.text.toUpperCase());
+                        widget.partNo!.text.toUpperCase());
                     if (part != null && value.isNotEmpty) {
                       if (widget.isfree == false) {
                         setState(() {

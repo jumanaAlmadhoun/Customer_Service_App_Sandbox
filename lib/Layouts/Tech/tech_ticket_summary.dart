@@ -268,7 +268,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
         _summary.add(
           SparePartSummaryWidget(element),
         );
-        if (element.partNo.text.isNotEmpty && element.qty.text.isNotEmpty) {
+        if (element.partNo!.text.isNotEmpty && element.qty!.text.isNotEmpty) {
           setState(() {
             partAmount += element.amount;
           });
@@ -286,7 +286,6 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
 
   Map<String, dynamic> getJson() {
     Map<String, dynamic> map = {};
-    Map<String, dynamic> firebaseMap = {};
     List<String> commentList = [];
     int commentCounter = 0;
     int partCounter = 0;
@@ -306,8 +305,6 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             (value) => comments,
             ifAbsent: () => comments,
           );
-          firebaseMap.update('${element.keyJson}_Comment',
-              (value) => {'commentList': commentList});
         } else {
           map.update(
             '${element.keyJson}_Comment',
@@ -383,25 +380,25 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
           commentCounter++;
         }
       } else if (element is SparePartWidget) {
-        if (element.partNo.text.isNotEmpty && element.qty.text.isNotEmpty) {
-          String key = element.partNo.text;
+        if (element.partNo!.text.isNotEmpty && element.qty!.text.isNotEmpty) {
+          String key = element.partNo!.text;
           if (map.containsKey(key)) {
             double qty = double.parse(map[key]);
-            qty += double.parse(element.qty.text);
+            qty += double.parse(element.qty!.text);
             map[key] = qty.toString();
             partCounter++;
           } else {
             map.update(
               key,
-              (value) => element.qty.text,
-              ifAbsent: () => element.qty.text,
+              (value) => element.qty!.text,
+              ifAbsent: () => element.qty!.text,
             );
             partCounter++;
           }
         }
       } else if (element is TextWidget) {
-        map.update('${element.jsonKey}', (value) => element.controller.text,
-            ifAbsent: () => element.controller.text);
+        map.update('${element.jsonKey}', (value) => element.controller!.text,
+            ifAbsent: () => element.controller!.text);
       }
     });
 
@@ -414,17 +411,17 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
 
     _report!.forEach((element) {
       if (element is SparePartWidget) {
-        if (element.partNo.text.isNotEmpty && element.qty.text.isNotEmpty) {
-          String key = element.partNo.text;
+        if (element.partNo!.text.isNotEmpty && element.qty!.text.isNotEmpty) {
+          String key = element.partNo!.text;
           if (map.containsKey(key)) {
             double qty = double.parse(map[key]);
-            qty += double.parse(element.qty.text);
+            qty += double.parse(element.qty!.text);
             map[key][QTY_KEY] = qty.toString();
           } else {
             map.update(
               key,
-              (value) => element.qty.text,
-              ifAbsent: () => element.qty.text,
+              (value) => element.qty!.text,
+              ifAbsent: () => element.qty!.text,
             );
             partCounter++;
           }
@@ -485,8 +482,8 @@ class SparePartSummaryWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(element!.amount.toStringAsFixed(2)),
-              Text(element!.qty.text),
-              Text(element!.partNo.text)
+              Text(element!.qty!.text),
+              Text(element!.partNo!.text)
             ],
           ),
         ),

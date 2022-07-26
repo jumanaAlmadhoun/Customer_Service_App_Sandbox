@@ -4,13 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 
 class MachineCheckWidget extends StatefulWidget {
-  MachineCheckWidget({this.title, this.keyJson, this.validate, this.comments});
-  TextEditingController? controller = TextEditingController();
-  String? pass = '';
-  bool? isPass = null;
+  MachineCheckWidget(
+      {this.title,
+      this.keyJson,
+      this.validate,
+      this.comments,
+      this.isPass,
+      this.comment,
+      this.controller,
+      this.pass = ''});
+  TextEditingController? controller;
+  String? pass;
+  bool? isPass;
   String? title;
   String? keyJson;
   List<CommentWidget>? comments;
+  String? comment;
   String? Function(String?)? validate;
   @override
   _MachineCheckWidgetState createState() => _MachineCheckWidgetState();

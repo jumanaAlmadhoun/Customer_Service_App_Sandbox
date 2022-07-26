@@ -4,19 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 
 class GroupCheckWidget extends StatefulWidget {
-  GroupCheckWidget({this.title, this.keyJson});
-  TextEditingController? controllerG1 = TextEditingController();
-  String? passG1 = '';
-  bool? isPassG1 = false;
-  TextEditingController? controllerG2 = TextEditingController();
-  String? passG2 = '';
-  bool? isPassG2 = false;
-  TextEditingController? controllerG3 = TextEditingController();
-  String? passG3 = '';
-  bool? isPassG3 = false;
-  TextEditingController? controllerG4 = TextEditingController();
-  String? passG4 = '';
-  bool? isPassG4 = false;
+  GroupCheckWidget(
+      {this.title,
+      this.keyJson,
+      this.controllerG1,
+      this.controllerG2,
+      this.controllerG3,
+      this.controllerG4,
+      this.isPassG1 = false,
+      this.isPassG2 = false,
+      this.isPassG3 = false,
+      this.isPassG4 = false,
+      this.passG1 = '',
+      this.passG2 = '',
+      this.passG3 = '',
+      this.passG4 = ''});
+  TextEditingController? controllerG1;
+  TextEditingController? controllerG2;
+  TextEditingController? controllerG3;
+  TextEditingController? controllerG4;
+  bool? isPassG1;
+  bool? isPassG2;
+  bool? isPassG3;
+  bool? isPassG4;
+  String? passG1;
+  String? passG2;
+  String? passG3;
+  String? passG4;
   String? title;
   String? keyJson;
   @override
