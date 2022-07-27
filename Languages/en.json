@@ -79,5 +79,6 @@
   "view_closed_tickets": "View Closed Tickets",
   "logout": "Logout",
   "customer_comp_tickets":"Customer Complaints",
-  "inv_confirmation":"Invoice Need's Confirmation"
+  "inv_confirmation":"Invoice Need's Confirmation",
+  "waiting_confirmation_tickets": "Review Tickets"
 }

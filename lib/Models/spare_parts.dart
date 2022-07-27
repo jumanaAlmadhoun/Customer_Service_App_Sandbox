@@ -11,4 +11,5 @@ class SparePart with ChangeNotifier {
   String? partNo;
   String? desc;
   double? price;
+  bool? isFreePart;
 }

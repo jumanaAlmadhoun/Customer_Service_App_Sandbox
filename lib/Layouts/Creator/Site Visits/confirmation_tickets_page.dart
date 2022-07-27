@@ -1,45 +1,60 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe, unused_field, prefer_final_fields
+// ignore_for_file: import_of_legacy_library_into_null_safe, avoid_print
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Helpers/scripts_constants.dart';
+import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Models/comment.dart';
 import 'package:customer_service_app/Models/spare_parts.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/spare_parts_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
+import 'package:customer_service_app/Widgets/Creator/custom_list_dialgo.dart';
+import 'package:customer_service_app/Widgets/Creator/custome_dialog.dart';
 import 'package:customer_service_app/Widgets/Tech/check_widget.dart';
+import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/machine_check_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/spare_part_widget.dart';
-import 'package:customer_service_app/Widgets/button_widget.dart';
-import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
+import 'package:customer_service_app/Widgets/Tech/text_widget.dart';
+import 'package:customer_service_app/Widgets/pending_ticket_widget.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import '../../../Widgets/logout_widget.dart';
+import '../../../Widgets/navigation_bar_item.dart';
+import '../../../Widgets/web_layout.dart';
 
-import '../../Widgets/Tech/text_widget.dart';
+class ConfirmationTickets extends StatefulWidget {
+  const ConfirmationTickets({Key? key}) : super(key: key);
 
-class EditSubmittedTicketPage extends StatefulWidget {
-  const EditSubmittedTicketPage(this.ticket, {Key? key}) : super(key: key);
-  final Ticket? ticket;
   @override
-  _EditSubmittedTicketPageState createState() =>
-      _EditSubmittedTicketPageState();
+  _ConfirmationTicketsState createState() => _ConfirmationTicketsState();
 }
 
-class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
+class _ConfirmationTicketsState extends State<ConfirmationTickets>
     with RouteAware {
-  double totalPrice = 0;
-  bool _isLoading = false;
-  List<SparePart> _allParts = [];
-  List<SparePart> _selectedParts = [];
-  List<Widget> _machineCheckDesign = [];
-  List<Widget> _spareParts = [];
-  List<Comment> _allComments = [];
-  bool _isCash = false;
   List<Ticket> _tickets = [];
+  List<Ticket> _showedTickets = [];
+  List<SparePart> _allParts = [];
+  bool _isLoading = false;
+  bool _search = false;
+  CustomListDialog? dialog;
+  List<Comment> _allComments = [];
+
+  String? validateNote(value) {
+    if (value.isEmpty) {
+      return 'هذا الحقل الزامي';
+    } else {
+      return null;
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -53,116 +68,205 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
       _isLoading = true;
     });
 
-    Provider.of<SparePartProvider>(context, listen: false)
-        .fetchSpareParts()
+    Provider.of<TicketProvider>(context, listen: false)
+        .fetchPendingTickets('$DB_WAITING_CONFIRMATION/Abdullah')
         .then((value) {
-      _allParts = Provider.of<SparePartProvider>(context, listen: false).parts;
-      Provider.of<TicketProvider>(context, listen: false).fetchComments().then(
-        (value) {
-          _allComments =
-              Provider.of<TicketProvider>(context, listen: false).comments;
-          setState(() {
-            _isLoading = false;
-          });
-          initMachineCheckDesign();
-        },
-      );
+      Provider.of<SparePartProvider>(context, listen: false)
+          .fetchSpareParts()
+          .then((value) {
+        _allParts =
+            Provider.of<SparePartProvider>(context, listen: false).parts;
+        Provider.of<TicketProvider>(context, listen: false)
+            .fetchComments()
+            .then(
+          (value) {
+            _allComments =
+                Provider.of<TicketProvider>(context, listen: false).comments;
+            Provider.of<TicketProvider>(context, listen: false)
+                .fetchComments()
+                .then((value) {
+              setState(() {
+                _isLoading = false;
+                _tickets =
+                    Provider.of<TicketProvider>(context, listen: false).tickets;
+                _showedTickets = _tickets;
+              });
+            });
+          },
+        );
+      });
     });
-  }
-
-  final formKey = GlobalKey<FormState>();
-  String? validateNote(value) {
-    if (value.isEmpty) {
-      return 'هذا الحقل الزامي';
-    } else {
-      return null;
-    }
-  }
-
-  String? validatePartNum(value) {
-    /*var isNull = _allParts.firstWhere(
-        (element) => element.partNo!.toUpperCase() == value!.toUpperCase());*/
-    if (value.isEmpty) {
-      return 'أدخل رقم القطعة الصحيح';
-    } else {
-      return null;
-    }
-  }
-
-  String? validatePartQuantity(value) {
-    if (value.isEmpty || value == 0.toString()) {
-      return 'أدخل الكمية الصحيحة';
-    } else {
-      return null;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('تعبئة معلومات التذكرة'),
-      ),
-      body: _isLoading
-          ? const SpinKitChasingDots(
-              color: APP_BAR_COLOR,
-            )
-          : ListView(
-              shrinkWrap: true,
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: _machineCheckDesign.length,
-                  itemBuilder: (context, i) {
-                    return _machineCheckDesign[i];
-                  },
-                ),
-                ButtonWidget(
-                  text: 'إضافة قطع غيار',
-                  onTap: () {
+      appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+          ? AppBar(
+              title: _search
+                  ? TextFormField(
+                      decoration: InputDecoration(
+                          hintText: getTranselted(context, LBL_SEARCH)!,
+                          hintStyle: const TextStyle(color: Colors.white)),
+                      style: const TextStyle(color: Colors.white),
+                      onChanged: (value) {
+                        setState(() {
+                          try {
+                            _showedTickets = _tickets
+                                .where((element) => element.searchText!
+                                    .contains(value.toUpperCase()))
+                                .toList();
+                          } catch (ex) {
+                            print(ex);
+                          }
+                        });
+                      },
+                    )
+                  : Text(getTranselted(context, STA_WAITING_CONFIRMATION)!),
+              actions: [
+                IconButton(
+                  onPressed: () {
                     setState(() {
-                      _machineCheckDesign.add(SparePartWidget(
-                        allParts: _allParts,
-                        isfree: widget.ticket!.freeParts,
-                        partNo: TextEditingController(),
-                        qty: TextEditingController(),
-                      ));
+                      _search = !_search;
+                      if (!_search) {
+                        _showedTickets = _tickets;
+                      }
+                      print(_search);
                     });
                   },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ButtonWidget(
-                  text: 'التالي',
-                  onTap: () {
-                    String title = validateTechInput();
-                    if (title != NA) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(' الرجاء تعبئة $title'),
-                        backgroundColor: ERROR_COLOR,
-                      ));
-                    } else {
-                      Navigator.pushNamed(context, techVisitSummaryRoute,
-                          arguments: [widget.ticket, _machineCheckDesign]);
-                    }
-                  },
-                ),
+                  icon: const Icon(Icons.search),
+                )
               ],
+            )
+          : null,
+      body: WebLayout(
+          navItem: [
+            NavigationBarItem(
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, creatorHomeRoute, (route) {
+                ModalRoute.withName(creatorHomeRoute);
+                return false;
+              }),
+              text: getTranselted(context, HOME_PAGE_TITLE)!,
             ),
+            NavigationBarItem(
+              onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
+              text: 'Dashboard',
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, TODAY_TICKETS)!,
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, CUSTOMER_MGMT)!,
+            ),
+            NavigationBarItem(
+              onTap: () {},
+              text: getTranselted(context, SETTINGS)!,
+            ),
+            const LogoutWidget(),
+          ],
+          widget: ModalProgressHUD(
+            inAsyncCall: _isLoading,
+            child: ListView(children: [
+              ResponsiveWrapper.of(context).isLargerThan(TABLET)
+                  ? Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: size.height * 0.1,
+                        width: size.width * 0.4,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(90.0),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromARGB(255, 51, 51, 51),
+                              blurRadius: 8.0,
+                              offset: Offset(0.0, 10.0),
+                            ),
+                          ],
+                        ),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.only(top: 50.0, bottom: 50.0),
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              color: ICONS_COLOR,
+                              size: 35,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(90.0),
+                            ),
+                          ),
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              try {
+                                _showedTickets = _tickets
+                                    .where((element) => element.searchText!
+                                        .contains(value.toUpperCase()))
+                                    .toList();
+                              } catch (ex) {
+                                print(ex);
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                  : Container(),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                itemCount: _tickets.length,
+                itemBuilder: (context, i) {
+                  return PendingTicketWidget(
+                    cafeName: _tickets[i].cafeName,
+                    city: _tickets[i].city,
+                    customerMobile: _tickets[i].customerMobile,
+                    customerName: _tickets[i].customerName,
+                    date: _tickets[i].assignDate,
+                    didContact: _tickets[i].didContact,
+                    machineNumber: _tickets[i].machineNumber,
+                    techName: _tickets[i].techName,
+                    onTap: () {
+                      List<Widget> design = initMachineCheckDesign(_tickets[i]);
+                      Navigator.pushNamed(context, creatorConfirmDetailsRoute,
+                          arguments: [_tickets[i], design]);
+                    },
+                  );
+                },
+              ),
+              // Expanded(
+              //   child: GridViewBuilderCreator(
+              //     dialog: dialog,
+              //     list: _showedTickets,
+              //   ),
+              // ),
+            ]),
+          )), /*ListView.builder(
+                itemCount: _showedTickets.length,
+                itemBuilder: (context, i) {
+                  return ;
+                },
+              )*/
     );
   }
 
-  void initMachineCheckDesign() {
-    var techInfo = widget.ticket!.info as Map<String, dynamic>;
-    var partsInfo = widget.ticket!.parts as Map<String, dynamic>;
+  List<Widget> initMachineCheckDesign(Ticket ticket) {
+    var techInfo = ticket.info as Map<String, dynamic>;
+    var partsInfo = ticket.parts as Map<String, dynamic>;
     print(partsInfo);
 
     String generalComments = '';
     techInfo.forEach((key, value) {
       generalComments += key.startsWith('comment') ? value : '';
     });
+    List<Widget> _machineCheckDesign = [];
     _machineCheckDesign = [
       MachineCheckWidget(
         title: 'قطع مكسورة أو مفقودة',
@@ -476,31 +580,14 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
             allParts: _allParts,
             partNo: TextEditingController(text: key),
             qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+            isFreePart: value[PART_IS_FREE_KEY],
           ));
         }
       });
     } catch (ex) {
       print(ex);
     }
-  }
-
-  String validateTechInput() {
-    String title = NA;
-    for (int i = 0; i < _machineCheckDesign.length; i++) {
-      var entery = _machineCheckDesign[i];
-      if (entery is MachineCheckWidget) {
-        if (entery.isPass == null) {
-          title = entery.title!;
-          break;
-        }
-      } else if (entery is TextWidget) {
-        if (entery.controller!.text.isEmpty) {
-          title = entery.title!;
-          break;
-        }
-      }
-    }
-    return title;
+    return _machineCheckDesign;
   }
 
   List<CommentWidget>? getCommentsByCategory(String category, String techInfo) {

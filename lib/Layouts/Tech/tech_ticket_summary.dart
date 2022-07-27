@@ -379,23 +379,23 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
           }
           commentCounter++;
         }
-      } else if (element is SparePartWidget) {
-        if (element.partNo!.text.isNotEmpty && element.qty!.text.isNotEmpty) {
-          String key = element.partNo!.text;
-          if (map.containsKey(key)) {
-            double qty = double.parse(map[key]);
-            qty += double.parse(element.qty!.text);
-            map[key] = qty.toString();
-            partCounter++;
-          } else {
-            map.update(
-              key,
-              (value) => element.qty!.text,
-              ifAbsent: () => element.qty!.text,
-            );
-            partCounter++;
-          }
-        }
+        // } else if (element is SparePartWidget) {
+        //   if (element.partNo!.text.isNotEmpty && element.qty!.text.isNotEmpty) {
+        //     String key = element.partNo!.text;
+        //     if (map.containsKey(key)) {
+        //       double qty = double.parse(map[key]);
+        //       qty += double.parse(element.qty!.text);
+        //       map[key] = qty.toString();
+        //       partCounter++;
+        //     } else {
+        //       map.update(
+        //         key,
+        //         (value) => element.qty!.text,
+        //         ifAbsent: () => element.qty!.text,
+        //       );
+        //       partCounter++;
+        //     }
+        //   }
       } else if (element is TextWidget) {
         map.update('${element.jsonKey}', (value) => element.controller!.text,
             ifAbsent: () => element.controller!.text);
@@ -414,14 +414,27 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
         if (element.partNo!.text.isNotEmpty && element.qty!.text.isNotEmpty) {
           String key = element.partNo!.text;
           if (map.containsKey(key)) {
-            double qty = double.parse(map[key]);
+            double qty = double.parse(map[key][PART_QTY_KEY]);
             qty += double.parse(element.qty!.text);
-            map[key][QTY_KEY] = qty.toString();
+            map[key][PART_QTY_KEY] = qty.toString();
+            map[key][PART_NO_KEY] = key.toString();
+            map[key][PART_DESC_KEY] = element.selectedPart!.desc;
+            map[key][PART_IS_FREE_KEY] = element.isFreePart;
           } else {
             map.update(
               key,
-              (value) => element.qty!.text,
-              ifAbsent: () => element.qty!.text,
+              (value) => {
+                PART_QTY_KEY: element.qty!.text,
+                PART_NO_KEY: key.toString(),
+                PART_DESC_KEY: element.selectedPart!.desc,
+                PART_IS_FREE_KEY: element.isFreePart
+              },
+              ifAbsent: () => {
+                PART_QTY_KEY: element.qty!.text,
+                PART_NO_KEY: key.toString(),
+                PART_DESC_KEY: element.selectedPart!.desc,
+                PART_IS_FREE_KEY: element.isFreePart
+              },
             );
             partCounter++;
           }

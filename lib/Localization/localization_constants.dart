@@ -28,6 +28,7 @@ const String STA_WAITING = 'waiting_tickets';
 const String STA_QUEUE = 'queue_tickets';
 const String STA_ASSIGNED = 'assigned_tickets';
 const String STA_PENDING = 'pending_tickets';
+const String STA_WAITING_CONFIRMATION = 'waiting_confirmation_tickets';
 const String BRAND_SELECTION = 'brand_selection';
 const String PASSWORD_HINT = 'password';
 const String PHONE_HINT = 'phone_number';

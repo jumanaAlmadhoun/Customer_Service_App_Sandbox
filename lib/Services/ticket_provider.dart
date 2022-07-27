@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:customer_service_app/Helpers/database_constants.dart';
+import 'package:customer_service_app/Helpers/global_vars.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Models/comment.dart';
 import 'package:customer_service_app/Models/ticket.dart';
@@ -329,9 +330,11 @@ class TicketProvider with ChangeNotifier {
       );
       await http.patch(
         Uri.parse(
-            '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'),
+            '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/$firebaseID.json'),
         body: jsonEncode(data),
       );
+      await http.delete(Uri.parse(
+          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
       // print(
       //     '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json');
 
@@ -650,5 +653,17 @@ class TicketProvider with ChangeNotifier {
   Future<void> invoiceTicket(Ticket ticket, String text) async {
     String firebaseUrl =
         '$DB_URL$DB_SITE_VISITS/$DB_PENDING_TICKETS${ticket.firebaseID}.json';
+  }
+
+  Future<void> changePartPrice(
+      Ticket? ticket, bool? value, String? partNo) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.techName}/${ticket.firebaseID}/${Ticket.TECH_INFO_FIREBASE}/${Ticket.PARTS_JSON}/$partNo.json';
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({PART_IS_FREE_KEY: value}));
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

@@ -11,13 +11,16 @@ class SparePartWidget extends StatefulWidget {
       this.validatePartQuantity,
       this.isfree = false,
       this.partNo,
-      this.qty});
+      this.qty,
+      this.isFreePart = false});
   TextEditingController? partNo;
   TextEditingController? qty;
   TextEditingController desc = TextEditingController();
   List<SparePart>? allParts;
   String? Function(String?)? validatePartNum;
   String? Function(String?)? validatePartQuantity;
+  SparePart? selectedPart;
+  bool? isFreePart;
   double amount = 0;
   bool? isfree;
   @override
@@ -48,12 +51,13 @@ class _SparePartWidgetState extends State<SparePartWidget> {
                     controller: widget.partNo,
                     validator: widget.validatePartNum,
                     onTap: (value) {
-                      SparePart part = widget.allParts!.firstWhere((element) =>
-                          element.partNo!.toUpperCase() ==
-                          value.searchKey.toUpperCase());
-                      if (part != null) {
+                      widget.selectedPart = widget.allParts!.firstWhere(
+                          (element) =>
+                              element.partNo!.toUpperCase() ==
+                              value.searchKey.toUpperCase());
+                      if (widget.selectedPart != null) {
                         setState(() {
-                          widget.desc.text = part.desc!;
+                          widget.desc.text = widget.selectedPart!.desc!;
                         });
                       }
                     },
@@ -72,14 +76,19 @@ class _SparePartWidgetState extends State<SparePartWidget> {
                   controller: widget.qty,
                   inputFormatters: [OneDigitFormatter()],
                   onChanged: (value) {
-                    SparePart part = widget.allParts!.firstWhere((element) =>
-                        element.partNo!.toUpperCase() ==
-                        widget.partNo!.text.toUpperCase());
-                    if (part != null && value.isNotEmpty) {
+                    widget.selectedPart = widget.allParts!.firstWhere(
+                        (element) =>
+                            element.partNo!.toUpperCase() ==
+                            widget.partNo!.text.toUpperCase());
+                    if (widget.selectedPart != null && value.isNotEmpty) {
                       if (widget.isfree == false) {
+                        widget.isFreePart = false;
                         setState(() {
-                          widget.amount = part.price! * double.parse(value);
+                          widget.amount =
+                              widget.selectedPart!.price! * double.parse(value);
                         });
+                      } else {
+                        widget.isFreePart = true;
                       }
                     }
                   },

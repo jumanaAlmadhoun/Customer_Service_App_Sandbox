@@ -14,6 +14,7 @@ int readyToAssignTickets = -1;
 int queueTickets = -1;
 int assignedTickets = -1;
 int pendingTickets = -1;
+int waitingConfirmationTickets = -1;
 int siteVisitTickets = -1;
 int deliveryTickets = -1;
 int exchangeTickets = -1;
@@ -57,6 +58,7 @@ class SummaryProvider with ChangeNotifier {
         deliveryOpenTickets = 0;
         deliveryAssignedTickets = 0;
         deliveryTickets = 0;
+        waitingConfirmationTickets = 0;
         var data = jsonDecode(value.body) as Map<String, dynamic>;
         data.forEach((key, value) {
           switch (key) {
@@ -149,6 +151,9 @@ class SummaryProvider with ChangeNotifier {
               break;
             case DB_CUSTOMER_TICKETS:
               customerTickets = value.length;
+              break;
+            case DB_WAITING_CONFIRMATION:
+              waitingConfirmationTickets = value.length;
           }
         });
         siteVisitTickets = assignedTickets +
@@ -156,7 +161,8 @@ class SummaryProvider with ChangeNotifier {
             queueTickets +
             pendingTickets +
             readyToAssignTickets +
-            workShopTickets;
+            workShopTickets +
+            waitingConfirmationTickets;
         notifyListeners();
       });
       // get(Uri.parse('$DB_URL$DB_EXCHANGE_TICKETS.json')).then((value) {

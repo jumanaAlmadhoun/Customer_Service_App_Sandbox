@@ -27,6 +27,6 @@ List<String> deliveryStatus = ['In Dispatch Area', 'In Transit', 'Delivered'];
 
 const String PART_NO_KEY = 'partNo';
 const String PART_DESC_KEY = 'desc';
-const String QTY_KEY = 'qty';
+const String PART_QTY_KEY = 'qty';
 const String PRICE_KEY = 'price';
-const String IS_FREE_KEY = 'isFree';
+const String PART_IS_FREE_KEY = 'isFreePart';

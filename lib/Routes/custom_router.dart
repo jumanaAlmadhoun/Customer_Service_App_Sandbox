@@ -12,6 +12,8 @@ import 'package:customer_service_app/Layouts/Creator/Pickup/edit_pickup_ticket_p
 import 'package:customer_service_app/Layouts/Creator/Pickup/new_pickup_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Pickup/pickup_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/assigned_tickets_page.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/confirmation_ticket_detailes.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/confirmation_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/pending_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/queue_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned_tickets.dart';
@@ -154,6 +156,12 @@ class CustomRouter {
         return MaterialPageRoute(
             builder: (_) =>
                 EditSubmittedTicketPage(settings.arguments as Ticket));
+      case creatorConfirmTicketRoute:
+        return MaterialPageRoute(builder: (_) => ConfirmationTickets());
+      case creatorConfirmDetailsRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                ConfirmationTicketDetails(settings.arguments as List<dynamic>));
     }
   }
 }
