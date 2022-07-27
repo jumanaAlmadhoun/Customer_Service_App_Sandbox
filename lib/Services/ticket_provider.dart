@@ -660,8 +660,21 @@ class TicketProvider with ChangeNotifier {
     try {
       String firebaseUrl =
           '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.techName}/${ticket.firebaseID}/${Ticket.TECH_INFO_FIREBASE}/${Ticket.PARTS_JSON}/$partNo.json';
+
       await http.patch(Uri.parse(firebaseUrl),
           body: jsonEncode({PART_IS_FREE_KEY: value}));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<void> changeLabor(Ticket? ticket, bool? value) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.techName}/${ticket.firebaseID}.json';
+
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({Ticket.FREE_VISIT: value}));
     } catch (ex) {
       print(ex);
     }

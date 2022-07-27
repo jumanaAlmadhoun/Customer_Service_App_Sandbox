@@ -20,7 +20,7 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: InkWell(
         onTap: onTap,
         child: Align(
@@ -36,8 +36,8 @@ class ButtonWidget extends StatelessWidget {
               border: Border.all(color: ICONS_COLOR, width: 3.0),
               boxShadow: const [
                 BoxShadow(
-                  color: Color.fromARGB(255, 51, 51, 51),
-                  blurRadius: 8.0,
+                  color: Color.fromARGB(255, 90, 90, 90),
+                  blurRadius: 30.0,
                   offset: Offset(0.0, 10.0),
                 ),
               ],

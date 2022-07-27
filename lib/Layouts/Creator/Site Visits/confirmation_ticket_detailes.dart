@@ -9,6 +9,7 @@ import 'package:customer_service_app/Widgets/Tech/comment_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/machine_check_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/spare_part_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/text_widget.dart';
+import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:customer_service_app/Widgets/custom_check_box.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _ConfirmationTicketDetailsState extends State<ConfirmationTicketDetails>
   double partAmount = 0;
   bool _isCach = false;
   bool _isLoading = false;
+  bool _isFreeVisit = false;
 
   @override
   void didChangeDependencies() {
@@ -69,6 +71,44 @@ class _ConfirmationTicketDetailsState extends State<ConfirmationTicketDetails>
                   itemBuilder: (context, i) {
                     return _summary[i];
                   }),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomCheckBox(
+                      title: LBL_FREE_VISIT,
+                      value: _ticket!.freeVisit,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _ticket!.freeVisit = value;
+                          Provider.of<TicketProvider>(context, listen: false)
+                              .changeLabor(_ticket, value);
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ButtonWidget(
+                  text: 'Approve',
+                  onTap: () {
+                    // Provider.of<TicketProvider>(context).approveTicket(_ticket);
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+              ButtonWidget(text: 'Reject', onTap: () {}),
+              const SizedBox(
+                height: 15,
+              ),
             ]),
       ),
     );

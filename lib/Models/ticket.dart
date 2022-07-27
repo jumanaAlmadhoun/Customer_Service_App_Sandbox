@@ -98,6 +98,9 @@ class Ticket with ChangeNotifier {
   static const String INFO = 'techInfoFirebase';
   static const String PARTS_JSON = 'partsJson';
 
+  static const String REVIEWED_BY = 'reviewedBy';
+  static const String IS_APPROVED = 'isApproved';
+
   Ticket(
       {this.assignDate,
       this.cafeLocation,
@@ -153,7 +156,9 @@ class Ticket with ChangeNotifier {
       this.isCah,
       this.totalAmount,
       this.info,
-      this.parts});
+      this.parts,
+      this.approvedBy,
+      this.isApproved});
 
   String? machineModel;
   String? assignDate;
@@ -210,4 +215,6 @@ class Ticket with ChangeNotifier {
   double? totalAmount;
   Map<String, dynamic>? info;
   Map<String, dynamic>? parts;
+  bool? isApproved;
+  String? approvedBy;
 }
