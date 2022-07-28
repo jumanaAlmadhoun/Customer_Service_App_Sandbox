@@ -308,7 +308,7 @@ class SummaryProvider with ChangeNotifier {
               label: label,
               routeName: routeName,
               isUrgent: value[Ticket.IS_URGENT] ?? false,
-              isCah: fromTable == DB_PENDING_TICKETS
+              isCash: fromTable == DB_PENDING_TICKETS
                   ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
                       [Ticket.IS_CASH]
                   : false,

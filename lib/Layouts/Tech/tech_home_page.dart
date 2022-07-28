@@ -110,7 +110,7 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                 ResponsiveRowColumnItem(
                   rowFlex: 1,
                   child: ButtonWidget(
-                    text: 'عرض التذاكر بانتظار الإعتماد',
+                    text: 'عرض التذاكر المعتمدة',
                     height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
                         ? size.height * 0.13
                         : size.height * 0.20,

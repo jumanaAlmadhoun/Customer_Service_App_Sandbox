@@ -70,7 +70,7 @@ class _CreatorDashBoardState extends State<CreatorDashBoard> with RouteAware {
       DateTime closeDate = DateTime.parse(element.closeDate!.split(' ')[0]);
       print(closeDate);
       if (closeDate == today) {
-        if (element.isCah!) {
+        if (element.isCash!) {
           cashReceiptToday += element.totalAmount!;
         }
       }

@@ -92,7 +92,9 @@ class TicketProvider with ChangeNotifier {
               reportLink: value[Ticket.REPORT_LINK] ?? '',
               video: value[Ticket.VIDEO] ?? '',
               machineImage: value[Ticket.IMAGE] ?? '',
-              time: value[Ticket.TIME] ?? ''),
+              time: value[Ticket.TIME] ?? '',
+              isApproved: value[Ticket.IS_APPROVED] ?? false,
+              isCash: value[Ticket.IS_CASH] ?? false),
         );
       });
       _tickets = tickets;
@@ -181,7 +183,10 @@ class TicketProvider with ChangeNotifier {
               parts:
                   value[Ticket.INFO][Ticket.PARTS_JSON] as Map<String, dynamic>,
               info:
-                  value[Ticket.INFO][Ticket.INFO_JSON] as Map<String, dynamic>),
+                  value[Ticket.INFO][Ticket.INFO_JSON] as Map<String, dynamic>,
+              isApproved: value[Ticket.IS_APPROVED] ?? false,
+              isCash: value[Ticket.INFO][Ticket.INFO_JSON][Ticket.IS_CASH] ??
+                  false),
         );
       });
       _tickets = tickets;
@@ -328,6 +333,17 @@ class TicketProvider with ChangeNotifier {
           'partsJson': partJson,
         },
       );
+      data.update(
+        Ticket.IS_REVIEWING,
+        (value) => false,
+        ifAbsent: () => false,
+      );
+      data.update(
+        Ticket.IS_REVIEWING_BY,
+        (value) => NA,
+        ifAbsent: () => NA,
+      );
+
       await http.patch(
         Uri.parse(
             '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/$firebaseID.json'),
@@ -585,7 +601,8 @@ class TicketProvider with ChangeNotifier {
                 reportLink: value[Ticket.REPORT_LINK] ?? NA,
                 invoiceLink: value[Ticket.INVOICE_LINK] ?? NA,
                 invoiceName: value[Ticket.INVOICE_NAME] ?? NA,
-                reportName: value[Ticket.REPORT_NAME] ?? NA),
+                reportName: value[Ticket.REPORT_NAME] ?? NA,
+                isCash: value[Ticket.IS_CASH] ?? false),
           );
         });
       });
@@ -659,8 +676,7 @@ class TicketProvider with ChangeNotifier {
       Ticket? ticket, bool? value, String? partNo) async {
     try {
       String firebaseUrl =
-          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.techName}/${ticket.firebaseID}/${Ticket.TECH_INFO_FIREBASE}/${Ticket.PARTS_JSON}/$partNo.json';
-
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.firebaseID}/${Ticket.TECH_INFO_FIREBASE}/${Ticket.PARTS_JSON}/$partNo.json';
       await http.patch(Uri.parse(firebaseUrl),
           body: jsonEncode({PART_IS_FREE_KEY: value}));
     } catch (ex) {
@@ -671,10 +687,78 @@ class TicketProvider with ChangeNotifier {
   Future<void> changeLabor(Ticket? ticket, bool? value) async {
     try {
       String firebaseUrl =
-          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.techName}/${ticket.firebaseID}.json';
-
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.firebaseID}.json';
       await http.patch(Uri.parse(firebaseUrl),
           body: jsonEncode({Ticket.FREE_VISIT: value}));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<void> approveTicket(Ticket? ticket) async {
+    try {
+      Map<String, dynamic> parts = ticket!.parts!;
+      bool isFreePart = true;
+      parts.forEach((key, value) {
+        if (key != 'partsCount') {
+          if (!value[PART_IS_FREE_KEY]) {
+            isFreePart = false;
+          }
+        }
+      });
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket.firebaseID}.json';
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({
+            Ticket.FREE_PARTS: isFreePart,
+            Ticket.IS_APPROVED: true,
+            Ticket.IS_APPROVED_BY: userName
+          }));
+      var response = await http.get(Uri.parse(firebaseUrl));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      await http.post(
+          Uri.parse(
+              '$DB_URL$DB_SITE_VISITS/$DB_TECH_APPROVED_TICKETS/${ticket.techName}.json'),
+          body: jsonEncode(data));
+      await http.delete(Uri.parse(firebaseUrl));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<String> startReviewTicket(Ticket ticket) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket.firebaseID}.json';
+      var response = await http.get(Uri.parse(firebaseUrl));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      String reviewerName = NA;
+      if (data != null) {
+        reviewerName = data[Ticket.IS_REVIEWING_BY];
+      }
+      if (reviewerName != NA) {
+        return reviewerName;
+      } else {
+        await http.patch(Uri.parse(firebaseUrl),
+            body: jsonEncode(
+                {Ticket.IS_REVIEWING: true, Ticket.IS_REVIEWING_BY: userName}));
+        return NA;
+      }
+    } catch (ex) {
+      print(ex);
+      return NA;
+    }
+  }
+
+  Future<void> cancelReview(Ticket? ticket) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket!.firebaseID}.json';
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({
+            Ticket.IS_REVIEWING: false,
+            Ticket.IS_REVIEWING_BY: NA,
+          }));
     } catch (ex) {
       print(ex);
     }

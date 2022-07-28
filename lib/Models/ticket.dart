@@ -98,8 +98,10 @@ class Ticket with ChangeNotifier {
   static const String INFO = 'techInfoFirebase';
   static const String PARTS_JSON = 'partsJson';
 
-  static const String REVIEWED_BY = 'reviewedBy';
+  static const String IS_APPROVED_BY = 'isApprovedBy';
   static const String IS_APPROVED = 'isApproved';
+  static const String IS_REVIEWING = 'isReviewing';
+  static const String IS_REVIEWING_BY = 'isReviewingBy';
 
   Ticket(
       {this.assignDate,
@@ -153,7 +155,7 @@ class Ticket with ChangeNotifier {
       this.machineImage,
       this.time,
       this.dateTime,
-      this.isCah,
+      this.isCash,
       this.totalAmount,
       this.info,
       this.parts,
@@ -211,7 +213,7 @@ class Ticket with ChangeNotifier {
   bool? invConf;
   String? time;
   DateTime? dateTime;
-  bool? isCah;
+  bool? isCash;
   double? totalAmount;
   Map<String, dynamic>? info;
   Map<String, dynamic>? parts;

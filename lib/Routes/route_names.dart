@@ -46,6 +46,6 @@ const String adminTechReportRoute = 'adminTechReportRoute';
 const String techConfirmMachineNumberRoute = 'techConfirmMachineNumberRoute';
 const String techPendingTicketsRoute = 'techPendingTicketsRoute';
 const String techEditRejectedTicketRoute = 'techEditRejectedTicketRoute';
-
+const String techApprovedTicketRoute = 'techApprovedTicketRoute';
 const String creatorConfirmTicketRoute = 'creatorConfirmTicketRoute';
 const String creatorConfirmDetailsRoute = 'creatorConfirmDetailsRoute';
