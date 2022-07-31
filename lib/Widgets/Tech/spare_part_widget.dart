@@ -13,7 +13,8 @@ class SparePartWidget extends StatefulWidget {
       this.partNo,
       this.qty,
       this.isFreePart = false,
-      this.amount = 0});
+      this.amount = 0,
+      this.selectedPart});
   TextEditingController? partNo;
   TextEditingController? qty;
   TextEditingController desc = TextEditingController();

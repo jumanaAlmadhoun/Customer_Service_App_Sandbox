@@ -143,7 +143,11 @@ class _TechFillTicketPageState extends State<TechFillTicketPage>
                       ));
                     } else {
                       Navigator.pushNamed(context, techVisitSummaryRoute,
-                          arguments: [widget.ticket, _machineCheckDesign]);
+                          arguments: [
+                            widget.ticket,
+                            _machineCheckDesign,
+                            DB_ASSIGNED_TICKETS
+                          ]);
                     }
                   },
                 ),

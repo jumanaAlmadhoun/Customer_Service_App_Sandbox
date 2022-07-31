@@ -45,6 +45,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
   double partAmount = 0;
   bool _isCach = false;
   bool _isLoading = false;
+  String? _fromTable;
   SignatureController? signatureController;
   @override
   void didChangeDependencies() {
@@ -62,6 +63,7 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
     print('Summary');
     _ticket = widget.args![0] as Ticket;
     _report = widget.args![1] as List<Widget>;
+    _fromTable = widget.args![2] as String;
     if (_ticket!.freeVisit! == false) {
       laborCharges = _ticket!.laborCharges! * 1.15;
     }
@@ -194,6 +196,9 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
             ButtonWidget(
               text: 'إرسال',
               onTap: () async {
+                setState(() {
+                  _isLoading = true;
+                });
                 // if (signatureController!.isNotEmpty) {
                 //   setState(() {
                 //     _isLoading = true;
@@ -217,7 +222,8 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                 json.update('has_parts', (value) => hasParts,
                     ifAbsent: () => hasParts);
                 Provider.of<TicketProvider>(context, listen: false)
-                    .techSubmitSiteVisit(json, partJson, _ticket!.firebaseID)
+                    .techSubmitSiteVisit(
+                        json, partJson, _ticket!.firebaseID, _fromTable)
                     .then((value) {
                   setState(() {
                     _isLoading = false;
@@ -231,15 +237,10 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                         title: 'نجاح',
                         onConfirmBtnTap: () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              techDownloadRoute,
-                              ModalRoute.withName(techHomeRoute),
-                              arguments: <String>[
-                                invoiceName,
-                                invoiceUrl,
-                                reportName,
-                                reportUrl
-                              ]);
+                            context,
+                            techHomeRoute,
+                            ModalRoute.withName(techHomeRoute),
+                          );
                         });
                   }
                 });

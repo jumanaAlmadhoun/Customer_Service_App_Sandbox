@@ -20,8 +20,11 @@ import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_assigned
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/tech_queue_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Creator/Site%20Visits/workshop_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Login_Page/login_page.dart';
+import 'package:customer_service_app/Layouts/Tech/approved_ticket_details.dart';
+import 'package:customer_service_app/Layouts/Tech/approved_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/edit_submitted_ticket_page.dart';
 import 'package:customer_service_app/Layouts/Tech/machine_number_confirmation_page.dart';
+import 'package:customer_service_app/Layouts/Tech/rejected_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_close_tickets_page.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_open_tickets.dart';
 import 'package:customer_service_app/Layouts/Tech/tech_pending_tickets_page.dart';
@@ -156,12 +159,22 @@ class CustomRouter {
         return MaterialPageRoute(
             builder: (_) =>
                 EditSubmittedTicketPage(settings.arguments as Ticket));
+      case techApprovedTicketRoute:
+        return MaterialPageRoute(builder: (_) => ApprovedTicketPage());
+
       case creatorConfirmTicketRoute:
         return MaterialPageRoute(builder: (_) => ConfirmationTickets());
       case creatorConfirmDetailsRoute:
         return MaterialPageRoute(
             builder: (_) =>
                 ConfirmationTicketDetails(settings.arguments as List<dynamic>));
+      case techApprovedTicketDetailsRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                ApprovedTicketDetails(settings.arguments as List<dynamic>));
+
+      case techRejectedTicketRoute:
+        return MaterialPageRoute(builder: (_) => RejectedTicketsPage());
     }
   }
 }

@@ -102,6 +102,8 @@ class Ticket with ChangeNotifier {
   static const String IS_APPROVED = 'isApproved';
   static const String IS_REVIEWING = 'isReviewing';
   static const String IS_REVIEWING_BY = 'isReviewingBy';
+  static const String LABOR_CHARGE = 'laborCharges';
+  static const String CUSTOMER_SIGNATURE = 'sig';
 
   Ticket(
       {this.assignDate,
@@ -160,7 +162,8 @@ class Ticket with ChangeNotifier {
       this.info,
       this.parts,
       this.approvedBy,
-      this.isApproved});
+      this.isApproved,
+      this.laborCharge});
 
   String? machineModel;
   String? assignDate;
@@ -219,4 +222,5 @@ class Ticket with ChangeNotifier {
   Map<String, dynamic>? parts;
   bool? isApproved;
   String? approvedBy;
+  double? laborCharge;
 }

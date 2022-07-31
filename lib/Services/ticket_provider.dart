@@ -61,7 +61,7 @@ class TicketProvider with ChangeNotifier {
               didContact: value[Ticket.DID_CONTACT] ?? false,
               extraContactNumber: value[Ticket.CONTACT_NUMBER] ?? '',
               freeParts: value[Ticket.FREE_PARTS] ?? false,
-              freeVisit: value[Ticket.FREE_PARTS] ?? false,
+              freeVisit: value[Ticket.FREE_VISIT] ?? false,
               from: value[Ticket.VISIT_START_TIME] ?? '',
               to: value[Ticket.VISIT_END_TIME] ?? '',
               lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
@@ -148,7 +148,7 @@ class TicketProvider with ChangeNotifier {
               didContact: value[Ticket.DID_CONTACT] ?? false,
               extraContactNumber: value[Ticket.CONTACT_NUMBER] ?? '',
               freeParts: value[Ticket.FREE_PARTS] ?? false,
-              freeVisit: value[Ticket.FREE_PARTS] ?? false,
+              freeVisit: value[Ticket.FREE_VISIT] ?? false,
               from: value[Ticket.VISIT_START_TIME] ?? '',
               to: value[Ticket.VISIT_END_TIME] ?? '',
               lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
@@ -185,8 +185,9 @@ class TicketProvider with ChangeNotifier {
               info:
                   value[Ticket.INFO][Ticket.INFO_JSON] as Map<String, dynamic>,
               isApproved: value[Ticket.IS_APPROVED] ?? false,
-              isCash: value[Ticket.INFO][Ticket.INFO_JSON][Ticket.IS_CASH] ??
-                  false),
+              isCash:
+                  value[Ticket.INFO][Ticket.INFO_JSON][Ticket.IS_CASH] ?? false,
+              laborCharge: double.parse(value[Ticket.LABOR_CHARGE] ?? '0')),
         );
       });
       _tickets = tickets;
@@ -305,11 +306,14 @@ class TicketProvider with ChangeNotifier {
     return Future.value(SC_FAILED_RESPONSE);
   }
 
-  Future<String> techSubmitSiteVisit(Map<String, dynamic> json,
-      Map<String, dynamic> partJson, String? firebaseID) async {
+  Future<String> techSubmitSiteVisit(
+      Map<String, dynamic> json,
+      Map<String, dynamic> partJson,
+      String? firebaseID,
+      String? fromTable) async {
     try {
       var response = await http.get(Uri.parse(
-          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+          '$DB_URL$DB_SITE_VISITS/$fromTable/$userName/$firebaseID.json'));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       data.update(
         Ticket.TECH_INFO,
@@ -350,7 +354,72 @@ class TicketProvider with ChangeNotifier {
         body: jsonEncode(data),
       );
       await http.delete(Uri.parse(
-          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+          '$DB_URL$DB_SITE_VISITS/$fromTable/$userName/$firebaseID.json'));
+      // print(
+      //     '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json');
+
+      // response = await http.get(Uri.parse(
+      //     '$TECH_FILL_SCRIPT?url=$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json'));
+      // data = jsonDecode(response.body);
+      // if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+      // invoiceName = data['invName'];
+      // invoiceUrl = data['invLink'];
+      // reportName = data['name'];
+      // reportUrl = data['URL'];
+      return Future.value(SC_SUCCESS_RESPONSE);
+      // }
+    } catch (ex) {
+      print(ex);
+    }
+    return Future.value(SC_FAILED_RESPONSE);
+  }
+
+  Future<String> techReSubmitSiteVisit(Map<String, dynamic> json,
+      Map<String, dynamic> partJson, String? firebaseID) async {
+    try {
+      var response = await http.get(Uri.parse(
+          '$DB_URL$DB_SITE_VISITS/$DB_TECH_REJECTED_TICKETS/$userName/$firebaseID.json'));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      data.update(
+        Ticket.TECH_INFO,
+        (value) => {
+          'infoJson': jsonEncode(json),
+          'partsJson': jsonEncode(partJson),
+        },
+        ifAbsent: () => {
+          'infoJson': jsonEncode(json),
+          'partsJson': jsonEncode(partJson),
+        },
+      );
+      data.update(
+        Ticket.TECH_INFO_FIREBASE,
+        (value) => {
+          'infoJson': json,
+          'partsJson': partJson,
+        },
+        ifAbsent: () => {
+          'infoJson': json,
+          'partsJson': partJson,
+        },
+      );
+      data.update(
+        Ticket.IS_REVIEWING,
+        (value) => false,
+        ifAbsent: () => false,
+      );
+      data.update(
+        Ticket.IS_REVIEWING_BY,
+        (value) => NA,
+        ifAbsent: () => NA,
+      );
+
+      await http.patch(
+        Uri.parse(
+            '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/$firebaseID.json'),
+        body: jsonEncode(data),
+      );
+      await http.delete(Uri.parse(
+          '$DB_URL$DB_SITE_VISITS/$DB_TECH_REJECTED_TICKETS/$userName/$firebaseID.json'));
       // print(
       //     '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/$firebaseID.json');
 
@@ -575,7 +644,7 @@ class TicketProvider with ChangeNotifier {
                 didContact: value[Ticket.DID_CONTACT] ?? false,
                 extraContactNumber: value[Ticket.CONTACT_NUMBER],
                 freeParts: value[Ticket.FREE_PARTS] ?? false,
-                freeVisit: value[Ticket.FREE_PARTS] ?? false,
+                freeVisit: value[Ticket.FREE_VISIT] ?? false,
                 from: value[Ticket.VISIT_START_TIME] ?? '',
                 to: value[Ticket.VISIT_END_TIME] ?? '',
                 lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
@@ -602,11 +671,12 @@ class TicketProvider with ChangeNotifier {
                 invoiceLink: value[Ticket.INVOICE_LINK] ?? NA,
                 invoiceName: value[Ticket.INVOICE_NAME] ?? NA,
                 reportName: value[Ticket.REPORT_NAME] ?? NA,
-                isCash: value[Ticket.IS_CASH] ?? false),
+                isCash: value[Ticket.IS_CASH] ?? false,
+                closeDate: value[Ticket.CLOSE_DATE]),
           );
         });
       });
-      tickets.sort((a, b) => b.assignDate!.compareTo(a.assignDate!));
+      tickets.sort((a, b) => b.closeDate!.compareTo(a.closeDate!));
       _tickets = tickets;
       notifyListeners();
       return Future.value('Success');
@@ -759,6 +829,60 @@ class TicketProvider with ChangeNotifier {
             Ticket.IS_REVIEWING: false,
             Ticket.IS_REVIEWING_BY: NA,
           }));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<String> finalizeTechTicket(Ticket? ticket, String signature) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_TECH_APPROVED_TICKETS/$userName/${ticket!.firebaseID}.json';
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({Ticket.CUSTOMER_SIGNATURE: signature}));
+      var response =
+          await http.get(Uri.parse('$TECH_FILL_SCRIPT?url=$firebaseUrl'));
+      print(response.body);
+      var data = jsonDecode(response.body);
+      if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
+        invoiceName = data['invName'];
+        invoiceUrl = data['invLink'];
+        reportName = data['name'];
+        reportUrl = data['URL'];
+      }
+      return Future.value(data[SC_STATUS_KEY]);
+    } catch (ex) {
+      print(ex);
+      return Future.value(SC_FAILED_RESPONSE);
+    }
+  }
+
+  Future<void> disApproveTicket(Ticket? ticket) async {
+    try {
+      Map<String, dynamic> parts = ticket!.parts!;
+      bool isFreePart = true;
+      parts.forEach((key, value) {
+        if (key != 'partsCount') {
+          if (!value[PART_IS_FREE_KEY]) {
+            isFreePart = false;
+          }
+        }
+      });
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_WAITING_CONFIRMATION/${ticket.firebaseID}.json';
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({
+            Ticket.FREE_PARTS: isFreePart,
+            Ticket.IS_APPROVED: true,
+            Ticket.IS_APPROVED_BY: userName
+          }));
+      var response = await http.get(Uri.parse(firebaseUrl));
+      var data = jsonDecode(response.body) as Map<String, dynamic>;
+      await http.post(
+          Uri.parse(
+              '$DB_URL$DB_SITE_VISITS/$DB_TECH_REJECTED_TICKETS/${ticket.techName}.json'),
+          body: jsonEncode(data));
+      await http.delete(Uri.parse(firebaseUrl));
     } catch (ex) {
       print(ex);
     }

@@ -148,7 +148,28 @@ class _ConfirmationTicketDetailsState extends State<ConfirmationTicketDetails>
               const SizedBox(
                 height: 10,
               ),
-              ButtonWidget(text: 'Reject', onTap: () {}),
+              ButtonWidget(
+                  text: 'Reject',
+                  onTap: () {
+                    CoolAlert.show(
+                        barrierDismissible: false,
+                        context: context,
+                        type: CoolAlertType.confirm,
+                        title: 'Reject Ticket',
+                        text: 'Do You Want To Reject Ticket',
+                        onConfirmBtnTap: () {
+                          Navigator.pop(context);
+                          Provider.of<TicketProvider>(context, listen: false)
+                              .disApproveTicket(_ticket)
+                              .then((value) {
+                            Navigator.pushReplacementNamed(
+                                context, creatorConfirmTicketRoute);
+                          });
+                        },
+                        onCancelBtnTap: () {
+                          Navigator.pop(context);
+                        });
+                  }),
               const SizedBox(
                 height: 10,
               ),

@@ -111,7 +111,7 @@ class _TechCloseTicketsPageState extends State<TechCloseTicketsPage>
                     city: _tickets[i].city,
                     customerMobile: _tickets[i].extraContactNumber,
                     customerName: _tickets[i].customerName,
-                    date: _tickets[i].creationDate,
+                    date: _tickets[i].closeDate,
                     didContact: _tickets[i].didContact,
                     onTap: () async {
                       Navigator.pushNamed(context, techDownloadRoute,

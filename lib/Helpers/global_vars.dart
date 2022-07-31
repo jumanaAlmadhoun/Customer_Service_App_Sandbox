@@ -30,3 +30,4 @@ const String PART_DESC_KEY = 'desc';
 const String PART_QTY_KEY = 'qty';
 const String PRICE_KEY = 'price';
 const String PART_IS_FREE_KEY = 'isFreePart';
+const double VAT = 1.15;

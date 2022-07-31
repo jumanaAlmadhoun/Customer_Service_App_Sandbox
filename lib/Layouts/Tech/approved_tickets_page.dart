@@ -31,14 +31,14 @@ import '../../../Widgets/logout_widget.dart';
 import '../../../Widgets/navigation_bar_item.dart';
 import '../../../Widgets/web_layout.dart';
 
-class ConfirmationTickets extends StatefulWidget {
-  const ConfirmationTickets({Key? key}) : super(key: key);
+class ApprovedTicketPage extends StatefulWidget {
+  const ApprovedTicketPage({Key? key}) : super(key: key);
 
   @override
-  _ConfirmationTicketsState createState() => _ConfirmationTicketsState();
+  _ApprovedTicketPageState createState() => _ApprovedTicketPageState();
 }
 
-class _ConfirmationTicketsState extends State<ConfirmationTickets>
+class _ApprovedTicketPageState extends State<ApprovedTicketPage>
     with RouteAware {
   List<Ticket> _tickets = [];
   List<Ticket> _showedTickets = [];
@@ -70,7 +70,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
     });
 
     Provider.of<TicketProvider>(context, listen: false)
-        .fetchPendingTickets(DB_WAITING_CONFIRMATION)
+        .fetchPendingTickets('$DB_TECH_APPROVED_TICKETS/$userName')
         .then((value) {
       Provider.of<SparePartProvider>(context, listen: false)
           .fetchSpareParts()
@@ -103,192 +103,152 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
-          ? AppBar(
-              title: _search
-                  ? TextFormField(
-                      decoration: InputDecoration(
-                          hintText: getTranselted(context, LBL_SEARCH)!,
-                          hintStyle: const TextStyle(color: Colors.white)),
-                      style: const TextStyle(color: Colors.white),
-                      onChanged: (value) {
-                        setState(() {
-                          try {
-                            _showedTickets = _tickets
-                                .where((element) => element.searchText!
-                                    .contains(value.toUpperCase()))
-                                .toList();
-                          } catch (ex) {
-                            print(ex);
-                          }
-                        });
-                      },
-                    )
-                  : Text(getTranselted(context, STA_WAITING_CONFIRMATION)!),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _search = !_search;
-                      if (!_search) {
-                        _showedTickets = _tickets;
-                      }
-                      print(_search);
-                    });
-                  },
-                  icon: const Icon(Icons.search),
-                )
-              ],
-            )
-          : null,
-      body: WebLayout(
-          navItem: [
-            NavigationBarItem(
-              onTap: () => Navigator.pushNamedAndRemoveUntil(
-                  context, creatorHomeRoute, (route) {
-                ModalRoute.withName(creatorHomeRoute);
-                return false;
-              }),
-              text: getTranselted(context, HOME_PAGE_TITLE)!,
-            ),
-            NavigationBarItem(
-              onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
-              text: 'Dashboard',
-            ),
-            NavigationBarItem(
-              onTap: () {},
-              text: getTranselted(context, TODAY_TICKETS)!,
-            ),
-            NavigationBarItem(
-              onTap: () {},
-              text: getTranselted(context, CUSTOMER_MGMT)!,
-            ),
-            NavigationBarItem(
-              onTap: () {},
-              text: getTranselted(context, SETTINGS)!,
-            ),
-            const LogoutWidget(),
-          ],
-          widget: ModalProgressHUD(
-            inAsyncCall: _isLoading,
-            child: ListView(children: [
-              ResponsiveWrapper.of(context).isLargerThan(TABLET)
-                  ? Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: size.height * 0.1,
-                        width: size.width * 0.4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(90.0),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 51, 51, 51),
-                              blurRadius: 8.0,
-                              offset: Offset(0.0, 10.0),
-                            ),
-                          ],
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 50.0, bottom: 50.0),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: ICONS_COLOR,
-                              size: 35,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(90.0),
-                            ),
-                          ),
-                          style: const TextStyle(color: Colors.black),
-                          onChanged: (value) {
-                            setState(() {
-                              try {
-                                _showedTickets = _tickets
-                                    .where((element) => element.searchText!
-                                        .contains(value.toUpperCase()))
-                                    .toList();
-                              } catch (ex) {
-                                print(ex);
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    )
-                  : Container(),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemCount: _tickets.length,
-                itemBuilder: (context, i) {
-                  return PendingTicketWidget(
-                    cafeName: _tickets[i].cafeName,
-                    city: _tickets[i].city,
-                    customerMobile: _tickets[i].customerMobile,
-                    customerName: _tickets[i].customerName,
-                    date: _tickets[i].assignDate,
-                    didContact: _tickets[i].didContact,
-                    machineNumber: _tickets[i].machineNumber,
-                    techName: _tickets[i].techName,
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: const Text(
-                                  'Do You Want To Review This Ticket?'),
-                              title: const Text('Review Ticket'),
-                              actions: [
-                                MaterialButton(
-                                    child: const Text('Yes'),
-                                    onPressed: () async {
-                                      Provider.of<TicketProvider>(context,
-                                              listen: false)
-                                          .startReviewTicket(_tickets[i])
-                                          .then((value) {
-                                        Navigator.of(context).pop();
-                                        if (value == NA || value == userName) {
-                                          List<Widget> design =
-                                              initMachineCheckDesign(
-                                                  _tickets[i]);
-                                          Navigator.pushNamed(context,
-                                              creatorConfirmDetailsRoute,
-                                              arguments: [_tickets[i], design]);
-                                        } else if (value != userName) {
-                                          CoolAlert.show(
-                                              context: context,
-                                              type: CoolAlertType.warning,
-                                              title: 'Ticket Under Review',
-                                              text:
-                                                  'The Ticket is Reviewing By $value');
-                                        }
-                                      });
-                                    }),
-                                MaterialButton(
-                                  child: const Text('No'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-                    },
-                  );
+      appBar: AppBar(
+        title: _search
+            ? TextFormField(
+                decoration: InputDecoration(
+                    hintText: getTranselted(context, LBL_SEARCH)!,
+                    hintStyle: const TextStyle(color: Colors.white)),
+                style: const TextStyle(color: Colors.white),
+                onChanged: (value) {
+                  setState(() {
+                    try {
+                      _showedTickets = _tickets
+                          .where((element) =>
+                              element.searchText!.contains(value.toUpperCase()))
+                          .toList();
+                    } catch (ex) {
+                      print(ex);
+                    }
+                  });
                 },
-              ),
-              // Expanded(
-              //   child: GridViewBuilderCreator(
-              //     dialog: dialog,
-              //     list: _showedTickets,
-              //   ),
-              // ),
-            ]),
-          )), /*ListView.builder(
+              )
+            : Text('التذاكر المعتمدة'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _search = !_search;
+                if (!_search) {
+                  _showedTickets = _tickets;
+                }
+                print(_search);
+              });
+            },
+            icon: const Icon(Icons.search),
+          )
+        ],
+      ),
+      body: WebLayout(
+        navItem: [
+          NavigationBarItem(
+            onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, creatorHomeRoute, (route) {
+              ModalRoute.withName(creatorHomeRoute);
+              return false;
+            }),
+            text: getTranselted(context, HOME_PAGE_TITLE)!,
+          ),
+          NavigationBarItem(
+            onTap: () => Navigator.pushNamed(context, creatorDashBoardRoute),
+            text: 'Dashboard',
+          ),
+          NavigationBarItem(
+            onTap: () {},
+            text: getTranselted(context, TODAY_TICKETS)!,
+          ),
+          NavigationBarItem(
+            onTap: () {},
+            text: getTranselted(context, CUSTOMER_MGMT)!,
+          ),
+          NavigationBarItem(
+            onTap: () {},
+            text: getTranselted(context, SETTINGS)!,
+          ),
+          const LogoutWidget(),
+        ],
+        widget: ModalProgressHUD(
+          inAsyncCall: _isLoading,
+          child: ListView(children: [
+            ResponsiveWrapper.of(context).isLargerThan(TABLET)
+                ? Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: size.height * 0.1,
+                      width: size.width * 0.4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(90.0),
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 51, 51, 51),
+                            blurRadius: 8.0,
+                            offset: Offset(0.0, 10.0),
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.only(top: 50.0, bottom: 50.0),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: ICONS_COLOR,
+                            size: 35,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(90.0),
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.black),
+                        onChanged: (value) {
+                          setState(() {
+                            try {
+                              _showedTickets = _tickets
+                                  .where((element) => element.searchText!
+                                      .contains(value.toUpperCase()))
+                                  .toList();
+                            } catch (ex) {
+                              print(ex);
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  )
+                : Container(),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              itemCount: _tickets.length,
+              itemBuilder: (context, i) {
+                return PendingTicketWidget(
+                  cafeName: _tickets[i].cafeName,
+                  city: _tickets[i].city,
+                  customerMobile: _tickets[i].customerMobile,
+                  customerName: _tickets[i].customerName,
+                  date: _tickets[i].assignDate,
+                  didContact: _tickets[i].didContact,
+                  machineNumber: _tickets[i].machineNumber,
+                  techName: _tickets[i].techName,
+                  onTap: () {
+                    List<Widget> design = initMachineCheckDesign(_tickets[i]);
+                    Navigator.pushNamed(context, techApprovedTicketDetailsRoute,
+                        arguments: [_tickets[i], design, _allParts]);
+                  },
+                );
+              },
+            ),
+            // Expanded(
+            //   child: GridViewBuilderCreator(
+            //     dialog: dialog,
+            //     list: _showedTickets,
+            //   ),
+            // ),
+          ]),
+        ),
+      ), /*ListView.builder(
                 itemCount: _showedTickets.length,
                 itemBuilder: (context, i) {
                   return ;
@@ -621,6 +581,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             partNo: TextEditingController(text: key),
             qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
             isFreePart: value[PART_IS_FREE_KEY],
+            selectedPart:
+                _allParts.firstWhere((element) => element.partNo == key),
           ));
         }
       });

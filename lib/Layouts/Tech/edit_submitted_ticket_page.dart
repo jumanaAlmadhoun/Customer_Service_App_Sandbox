@@ -145,7 +145,11 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
                       ));
                     } else {
                       Navigator.pushNamed(context, techVisitSummaryRoute,
-                          arguments: [widget.ticket, _machineCheckDesign]);
+                          arguments: [
+                            widget.ticket,
+                            _machineCheckDesign,
+                            DB_TECH_REJECTED_TICKETS
+                          ]);
                     }
                   },
                 ),
@@ -160,9 +164,13 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
     print(partsInfo);
 
     String generalComments = '';
-    techInfo.forEach((key, value) {
-      generalComments += key.startsWith('comment') ? value : '';
-    });
+    try {
+      techInfo.forEach((key, value) {
+        generalComments += key.startsWith('comment') ? value : '';
+      });
+    } catch (ex) {
+      print(ex);
+    }
     _machineCheckDesign = [
       MachineCheckWidget(
         title: 'قطع مكسورة أو مفقودة',
@@ -476,6 +484,8 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
             allParts: _allParts,
             partNo: TextEditingController(text: key),
             qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+            selectedPart:
+                _allParts.firstWhere((element) => element.partNo == key),
           ));
         }
       });

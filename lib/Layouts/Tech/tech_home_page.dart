@@ -118,7 +118,22 @@ class _TechHomePageState extends State<TechHomePage> with RouteAware {
                         ? size.width * 0.70
                         : size.width * 0.30,
                     onTap: () {
-                      Navigator.pushNamed(context, techPendingTicketsRoute);
+                      Navigator.pushNamed(context, techApprovedTicketRoute);
+                    },
+                  ),
+                ),
+                ResponsiveRowColumnItem(
+                  rowFlex: 1,
+                  child: ButtonWidget(
+                    text: 'عرض التذاكر المرفوضة',
+                    height: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                        ? size.height * 0.13
+                        : size.height * 0.20,
+                    width: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                        ? size.width * 0.70
+                        : size.width * 0.30,
+                    onTap: () {
+                      Navigator.pushNamed(context, techRejectedTicketRoute);
                     },
                   ),
                 ),

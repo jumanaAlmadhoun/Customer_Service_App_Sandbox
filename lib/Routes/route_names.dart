@@ -49,3 +49,5 @@ const String techEditRejectedTicketRoute = 'techEditRejectedTicketRoute';
 const String techApprovedTicketRoute = 'techApprovedTicketRoute';
 const String creatorConfirmTicketRoute = 'creatorConfirmTicketRoute';
 const String creatorConfirmDetailsRoute = 'creatorConfirmDetailsRoute';
+const String techApprovedTicketDetailsRoute = 'techApprovedTicketDetailsRoute';
+const String techRejectedTicketRoute = 'techRejectedTicketRoute';
