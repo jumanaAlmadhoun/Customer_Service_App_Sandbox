@@ -37,6 +37,7 @@ class TicketProvider with ChangeNotifier {
         searchText += value[Ticket.SERIAL_NUMBER] ?? '';
         searchText += value[Ticket.PROBLEM_DESC] ?? '';
         searchText += value[Ticket.RECOMMENDATION] ?? '';
+        searchText += value[Ticket.REGION] ?? '';
         Map<String, dynamic> items =
             value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>;
         if (items != null) {
@@ -80,7 +81,7 @@ class TicketProvider with ChangeNotifier {
               visitDate: value[Ticket.VISIT_DATE] ?? '',
               firebaseID: key,
               fromTable: from,
-              laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
+              laborCharges: double.parse(value[Ticket.LABOR_CHARGES] ?? '0'),
               deliveryItems:
                   value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
               deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
@@ -167,7 +168,7 @@ class TicketProvider with ChangeNotifier {
               visitDate: value[Ticket.VISIT_DATE] ?? '',
               firebaseID: key,
               fromTable: from,
-              laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
+              laborCharges: double.parse(value[Ticket.LABOR_CHARGES] ?? '0'),
               deliveryItems:
                   value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
               deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
@@ -213,7 +214,7 @@ class TicketProvider with ChangeNotifier {
           charge = chargeData[Ticket.CHARGES_PRICE].toString();
           print(charge);
           ticketHeader.update(
-            Ticket.LABOR_CHRGES,
+            Ticket.LABOR_CHARGES,
             (value) => charge,
             ifAbsent: () => charge,
           );
@@ -252,7 +253,7 @@ class TicketProvider with ChangeNotifier {
       if (chargeData != null) {
         charge = chargeData[Ticket.CHARGES_PRICE].toString();
         ticketHeader.update(
-          Ticket.LABOR_CHRGES,
+          Ticket.LABOR_CHARGES,
           (value) => charge,
           ifAbsent: () => charge,
         );
@@ -284,7 +285,7 @@ class TicketProvider with ChangeNotifier {
       if (chargeData != null) {
         charge = chargeData[Ticket.CHARGES_PRICE].toString();
         ticketHeader.update(
-          Ticket.LABOR_CHRGES,
+          Ticket.LABOR_CHARGES,
           (value) => charge,
           ifAbsent: () => charge,
         );
@@ -662,7 +663,7 @@ class TicketProvider with ChangeNotifier {
                 ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
                 visitDate: value[Ticket.VISIT_DATE] ?? '',
                 firebaseID: key,
-                laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
+                laborCharges: double.parse(value[Ticket.LABOR_CHARGES] ?? '0'),
                 deliveryItems:
                     value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
                 deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
@@ -784,6 +785,8 @@ class TicketProvider with ChangeNotifier {
             Ticket.IS_APPROVED: true,
             Ticket.IS_APPROVED_BY: userName
           }));
+      await http.get(Uri.parse(
+          '$APPROVE_TICKET_SCRIPT?rowAddress=${ticket.rowAddress}&userName=$userName'));
       var response = await http.get(Uri.parse(firebaseUrl));
       var data = jsonDecode(response.body) as Map<String, dynamic>;
       await http.post(
@@ -849,8 +852,10 @@ class TicketProvider with ChangeNotifier {
         invoiceUrl = data['invLink'];
         reportName = data['name'];
         reportUrl = data['URL'];
+        return Future.value(data[SC_STATUS_KEY]);
+      } else {
+        return Future.value(data[SC_STATUS_KEY]);
       }
-      return Future.value(data[SC_STATUS_KEY]);
     } catch (ex) {
       print(ex);
       return Future.value(SC_FAILED_RESPONSE);
@@ -883,6 +888,17 @@ class TicketProvider with ChangeNotifier {
               '$DB_URL$DB_SITE_VISITS/$DB_TECH_REJECTED_TICKETS/${ticket.techName}.json'),
           body: jsonEncode(data));
       await http.delete(Uri.parse(firebaseUrl));
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  Future<void> startFillReport(Ticket? ticket) async {
+    try {
+      String firebaseUrl =
+          '$DB_URL$DB_SITE_VISITS/$DB_ASSIGNED_TICKETS/$userName/${ticket!.firebaseID}.json';
+      await http.patch(Uri.parse(firebaseUrl),
+          body: jsonEncode({Ticket.START_TIME: DateTime.now().toString()}));
     } catch (ex) {
       print(ex);
     }

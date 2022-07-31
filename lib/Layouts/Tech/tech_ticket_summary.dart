@@ -9,6 +9,7 @@ import 'package:customer_service_app/Helpers/layout_constants.dart';
 import 'package:customer_service_app/Helpers/scripts_constants.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:customer_service_app/Services/login_provider.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Widgets/Tech/check_widget.dart';
 import 'package:customer_service_app/Widgets/Tech/machine_check_widget.dart';
@@ -229,6 +230,8 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                     _isLoading = false;
                   });
                   if (value == SC_SUCCESS_RESPONSE) {
+                    Provider.of<LoginHandeler>(context, listen: false)
+                        .notification('coord');
                     CoolAlert.show(
                         barrierDismissible: false,
                         context: context,
@@ -236,11 +239,8 @@ class _TechTicketSummaryState extends State<TechTicketSummary> with RouteAware {
                         text: 'تم إغلاق التذكرة بنجاح',
                         title: 'نجاح',
                         onConfirmBtnTap: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            techHomeRoute,
-                            ModalRoute.withName(techHomeRoute),
-                          );
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              techHomeRoute, (route) => false);
                         });
                   }
                 });

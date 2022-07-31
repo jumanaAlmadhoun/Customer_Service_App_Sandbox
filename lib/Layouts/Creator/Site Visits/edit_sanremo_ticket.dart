@@ -499,15 +499,12 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
                     });
                     if (response == SC_SUCCESS_RESPONSE) {
                       CoolAlert.show(
+                        barrierDismissible: false,
                         context: context,
                         type: CoolAlertType.success,
                         onConfirmBtnTap: () {
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              creatorHomeRoute, (route) => route.isFirst);
-                        },
-                        onCancelBtnTap: () {
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              creatorHomeRoute, (route) => route.isFirst);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              creatorHomeRoute, (route) => false);
                         },
                       );
                     } else if (response == SC_FAILED_RESPONSE) {

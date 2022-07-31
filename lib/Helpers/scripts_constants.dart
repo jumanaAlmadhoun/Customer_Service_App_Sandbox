@@ -36,3 +36,5 @@ const String RE_OPEN_TICKET_SCRIPT =
     'https://script.google.com/macros/s/AKfycbwKyoIYcbXZv2N0AQzSTrd-g1sXqxXZekV5L2eWnBzNJtYhun9SyHur178YxaVJwNFp/exec';
 const String MOVE_TO_PICKUP_SCRIPT =
     'https://script.google.com/macros/s/AKfycbzXpSkbWTCFvA3LK1gKaAelHyuxOV9EC9Gk3tsn6V5zbLHtoxA0VSmESWtx1Efn8Fo/exec';
+const String APPROVE_TICKET_SCRIPT =
+    'https://script.google.com/macros/s/AKfycbzceqiOMV2otMgQdWFunrb0EFf1CPrJshQj_h8qAVDlg8mJ1_0k5ztwCLROkT6IGq47/exec';

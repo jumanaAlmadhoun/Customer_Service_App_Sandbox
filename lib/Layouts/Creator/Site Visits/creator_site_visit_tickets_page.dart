@@ -145,7 +145,7 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
                 },
               ),
               CategoryItem(
-                image: IMG_PENDING_TICKETS,
+                image: IMG_REVIEW_TICKETS,
                 title: getTranselted(context, STA_WAITING_CONFIRMATION)!,
                 number: waitingConfirmationTickets,
                 onTap: () {

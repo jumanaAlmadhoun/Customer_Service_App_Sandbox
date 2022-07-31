@@ -75,7 +75,7 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
               ),
             )
           : null,
-      drawer: const CreatorDrawerWidget(),
+      // drawer: const CreatorDrawerWidget(),
       body: WebLayout(
         navItem: [
           NavigationBarItem(
@@ -275,76 +275,87 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
       String _person, String _image, onTap) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        height: _height,
-        width: _width,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(
-                  _image,
-                ),
-                fit: BoxFit.cover),
-            borderRadius: const BorderRadius.all(Radius.circular(15.0))),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              left: 10.0,
-              bottom: 10.0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    _title,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Sofia",
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18.0,
-                        shadows: [
-                          BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 4.0,
-                              spreadRadius: 10.0)
-                        ]),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.black.withOpacity(0.5),
+      child: Stack(
+        children: [
+          Container(
+              height: _height,
+              width: _width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                      _image,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            _person + " Ticket",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Sofia",
-                                fontWeight: FontWeight.w700,
-                                shadows: [
-                                  BoxShadow(
-                                      color: Colors.black,
-                                      blurRadius: 4.0,
-                                      spreadRadius: 10.0)
-                                ]),
-                          ),
-                          const SizedBox(
-                            width: 3.0,
-                          ),
-                        ],
+                    fit: BoxFit.cover),
+                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              )),
+          Container(
+            height: _height,
+            width: _width,
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                color: Colors.black.withOpacity(0.4)),
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  left: 10.0,
+                  bottom: 10.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        _title,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Sofia",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18.0,
+                            shadows: [
+                              BoxShadow(
+                                  color: Colors.black,
+                                  blurRadius: 4.0,
+                                  spreadRadius: 10.0)
+                            ]),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.black.withOpacity(0.7),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                _person + " Ticket",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Sofia",
+                                    fontWeight: FontWeight.w700,
+                                    shadows: [
+                                      BoxShadow(
+                                          color: Colors.black,
+                                          blurRadius: 4.0,
+                                          spreadRadius: 10.0)
+                                    ]),
+                              ),
+                              const SizedBox(
+                                width: 3.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

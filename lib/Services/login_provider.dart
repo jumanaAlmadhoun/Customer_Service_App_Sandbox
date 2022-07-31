@@ -56,6 +56,7 @@ class LoginHandeler with ChangeNotifier {
       case CREATOR:
         Navigator.pushReplacementNamed(context, creatorHomeRoute);
         fbm.subscribeToTopic('userTickets');
+        fbm.subscribeToTopic('coord');
         return Future.value('DONE');
       case TECH:
         Navigator.pushReplacementNamed(context, techHomeRoute);

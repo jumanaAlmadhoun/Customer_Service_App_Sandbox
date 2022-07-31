@@ -183,8 +183,7 @@ class _ApprovedTicketDetailsState extends State<ApprovedTicketDetails>
                               text: 'تم إغلاق التذكرة بنجاح',
                               title: 'نجاح',
                               onConfirmBtnTap: () {
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context,
+                                Navigator.of(context).pushNamedAndRemoveUntil(
                                     techDownloadRoute,
                                     ModalRoute.withName(techHomeRoute),
                                     arguments: <String>[

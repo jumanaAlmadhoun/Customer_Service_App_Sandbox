@@ -59,6 +59,8 @@ class SummaryProvider with ChangeNotifier {
         deliveryAssignedTickets = 0;
         deliveryTickets = 0;
         waitingConfirmationTickets = 0;
+        pickupTickets = 0;
+        customerTickets = 0;
         var data = jsonDecode(value.body) as Map<String, dynamic>;
         data.forEach((key, value) {
           switch (key) {
@@ -299,7 +301,7 @@ class SummaryProvider with ChangeNotifier {
               visitDate: value[Ticket.VISIT_DATE] ?? '',
               firebaseID: key,
               fromTable: fromTable,
-              laborCharges: double.parse(value[Ticket.LABOR_CHRGES] ?? '0'),
+              laborCharges: double.parse(value[Ticket.LABOR_CHARGES] ?? '0'),
               deliveryItems:
                   value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
               deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',

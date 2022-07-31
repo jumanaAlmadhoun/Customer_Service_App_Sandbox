@@ -1,9 +1,11 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Models/ticket.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
+import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MachineNumberConfirmationPage extends StatefulWidget {
   MachineNumberConfirmationPage(this.ticket);
@@ -49,9 +51,11 @@ class _MachineNumberConfirmationPageState
             ),
             ButtonWidget(
                 text: 'التالي',
-                onTap: () {
+                onTap: () async {
                   if (widget.ticket!.machineNumber!.trim().toUpperCase() ==
                       machineNumberController.text.trim().toUpperCase()) {
+                    await Provider.of<TicketProvider>(context, listen: false)
+                        .startFillReport(widget.ticket);
                     Navigator.pushReplacementNamed(
                         context, techFillSiteVisitRoute,
                         arguments: widget.ticket);

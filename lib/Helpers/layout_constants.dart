@@ -35,6 +35,7 @@ const String IMG_TECH_REPORT = 'Assets/Images/technician.png';
 const String IMG_WORKSHO_REPORT = 'Assets/Images/workshop_tickets.png';
 const String IMG_BEANS = 'Assets/Images/beans.png';
 const String IMG_CLIENT_TICKETS = 'Assets/Images/clients_tickets.jpg';
+const String IMG_REVIEW_TICKETS = 'Assets/Images/review.jpg';
 const String WEB_BACKGROUND = 'Assets/Images/web_backgroun.png';
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);

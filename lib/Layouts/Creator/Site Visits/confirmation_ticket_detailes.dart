@@ -136,8 +136,8 @@ class _ConfirmationTicketDetailsState extends State<ConfirmationTicketDetails>
                                 _isSubmitting = false;
                               });
                               Navigator.pop(context);
-                              Navigator.pushReplacementNamed(
-                                  context, creatorConfirmTicketRoute);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  creatorHomeRoute, (route) => false);
                             });
                           }
                         },
