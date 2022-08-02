@@ -203,7 +203,7 @@ class TicketProvider with ChangeNotifier {
     try {
       var chargeResponse = await http.get(Uri.parse(
           '$DB_URL$DB_CHARGES/${ticketHeader![Ticket.MACHINE_MODEL]}.json'));
-      String charge;
+      String charge = '0';
       if (ticketHeader[Ticket.FREE_VISIT] == true) {
         charge = '0';
       } else {
@@ -246,7 +246,7 @@ class TicketProvider with ChangeNotifier {
     var chargeResponse = await http.get(Uri.parse(
         '$DB_URL$DB_CHARGES/${ticketHeader[Ticket.MACHINE_MODEL]}.json'));
     var chargeData = jsonDecode(chargeResponse.body) as Map<String, dynamic>;
-    String charge;
+    String charge = '0';
     if (ticketHeader[Ticket.FREE_VISIT] == true) {
       charge = '0';
     } else {

@@ -7,6 +7,7 @@ import 'package:customer_service_app/Services/summary_provider.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
 import 'package:customer_service_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import '../../../Widgets/action_button.dart';
@@ -111,23 +112,31 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
           ],
           widget: GridViewCountWidget(
             widgets: [
-              CategoryItem(
-                image: IMG_OPEN_TICKETS,
-                title: getTranselted(context, STA_OPEN)!,
-                number: openTickets,
-                onTap: () {
-                  Navigator.pushNamed(context, creatorOpenTicketsRoute);
-                },
-              ),
-              CategoryItem(
-                image: IMG_WAITING_TICKETS,
-                title: getTranselted(context, STA_WAITING)!,
-                number: readyToAssignTickets,
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, creatorReadyToAssignTicketsRoute);
-                },
-              ),
+              openTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_OPEN_TICKETS,
+                      title: getTranselted(context, STA_OPEN)!,
+                      number: openTickets,
+                      onTap: () {
+                        Navigator.pushNamed(context, creatorOpenTicketsRoute);
+                      },
+                    ),
+              readyToAssignTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_WAITING_TICKETS,
+                      title: getTranselted(context, STA_WAITING)!,
+                      number: readyToAssignTickets,
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, creatorReadyToAssignTicketsRoute);
+                      },
+                    ),
               CategoryItem(
                 image: IMG_QUEUE_TICKETS,
                 title: getTranselted(context, STA_QUEUE)!,

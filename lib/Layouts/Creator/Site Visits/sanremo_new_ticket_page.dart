@@ -617,7 +617,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
                 ifAbsent: () => Ticket.STA_QUEUE);
             return await Provider.of<TicketProvider>(context, listen: false)
                 .createNewSanremoTicket(ticketHeader,
-                    '$DB_URL$DB_SITE_VISITS/$DB_SITE_VISITS/$DB_QUEUE_TICKETS/$_techName.json');
+                    '$DB_URL$DB_SITE_VISITS/$DB_QUEUE_TICKETS/$_techName.json');
           }
         } else {
           return Future.value('N/A');

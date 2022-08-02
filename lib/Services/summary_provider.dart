@@ -32,16 +32,20 @@ List<Ticket> allCloseTickets = [];
 class SummaryProvider with ChangeNotifier {
   Future<void> fetchSummary() async {
     techs.clear();
-    openTickets = 0;
-    readyToAssignTickets = 0;
-    pendingTickets = 0;
-    queueTickets = 0;
-    assignedTickets = 0;
-    customerCompTickets = 0;
+    openTickets = -1;
+    readyToAssignTickets = -1;
+    pendingTickets = -1;
+    queueTickets = -1;
+    assignedTickets = -1;
+    customerCompTickets = -1;
     siteVisitTickets = -1;
     accountingTickets = -1;
     deliveryOpenTickets = -1;
     deliveryAssignedTickets = -1;
+    deliveryTickets = -1;
+    waitingConfirmationTickets = -1;
+    pickupTickets = -1;
+    customerTickets = -1;
     try {
       print('object');
       techs.clear();
@@ -80,6 +84,7 @@ class SummaryProvider with ChangeNotifier {
             case DB_ASSIGNED_TICKETS:
               var assignedTable = value as Map<String, dynamic>;
               assignedTable.forEach((key, value) {
+                bool found = false;
                 var innerData = value as Map<String, dynamic>;
                 assignedTickets += innerData.length;
                 print(assignedTickets);
@@ -92,20 +97,24 @@ class SummaryProvider with ChangeNotifier {
                         null);
                     allTickets.addAll(parseTickets(innerData,
                         DB_ASSIGNED_TICKETS, 'Assigned Tickets', null));
+                    found = true;
                   }
                 }
-                techs.add(Tech(
-                    name: key,
-                    assignedTickets: parseTickets(
-                        innerData,
-                        '$DB_ASSIGNED_TICKETS/$key',
-                        'Assigned Tickets',
-                        null)));
+                if (!found) {
+                  techs.add(Tech(
+                      name: key,
+                      assignedTickets: parseTickets(
+                          innerData,
+                          '$DB_ASSIGNED_TICKETS/$key',
+                          'Assigned Tickets',
+                          null)));
+                }
                 allTickets.addAll(parseTickets(
                     innerData, DB_ASSIGNED_TICKETS, 'Assigned Tickets', null));
               });
               break;
             case DB_QUEUE_TICKETS:
+              bool found = false;
               var queueTable = value as Map<String, dynamic>;
               queueTable.forEach((key, value) {
                 var innerData = value as Map<String, dynamic>;
@@ -119,12 +128,16 @@ class SummaryProvider with ChangeNotifier {
                         null);
                     allTickets.addAll(parseTickets(
                         innerData, DB_QUEUE_TICKETS, 'Queue Tickets', null));
+                    found = true;
+                    break;
                   }
                 }
-                techs.add(Tech(
-                    name: key,
-                    queueTicket: parseTickets(innerData,
-                        '$DB_QUEUE_TICKETS/$key', 'Queue Tickets', null)));
+                if (!found) {
+                  techs.add(Tech(
+                      name: key,
+                      queueTicket: parseTickets(innerData,
+                          '$DB_QUEUE_TICKETS/$key', 'Queue Tickets', null)));
+                }
                 allTickets.addAll(parseTickets(
                     innerData, DB_QUEUE_TICKETS, 'Queue Tickets', null));
               });
