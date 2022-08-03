@@ -22,7 +22,7 @@ int pickupTickets = -1;
 int accountingTickets = -1;
 int deliveryOpenTickets = -1;
 int deliveryAssignedTickets = -1;
-int workShopTickets = 0;
+int workShopTickets = -1;
 int customerCompTickets = -1;
 int customerTickets = -1;
 List<Tech> techs = [];
@@ -46,6 +46,7 @@ class SummaryProvider with ChangeNotifier {
     waitingConfirmationTickets = -1;
     pickupTickets = -1;
     customerTickets = -1;
+    workShopTickets = -1;
     try {
       print('object');
       techs.clear();

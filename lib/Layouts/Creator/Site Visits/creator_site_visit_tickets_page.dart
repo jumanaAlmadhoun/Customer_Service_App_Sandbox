@@ -36,7 +36,16 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
   @override
   void didPopNext() {
     super.didPopNext();
-    Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
+    setState(() {
+      Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
+    });
+  }
+
+  @override
+  void didPush() {
+    // TODO: implement didPush
+    super.didPush();
+    Provider.of<SummaryProvider>(context).fetchSummary();
   }
 
   @override
@@ -137,46 +146,69 @@ class _CreatorSiteVisitPageState extends State<CreatorSiteVisitPage>
                             context, creatorReadyToAssignTicketsRoute);
                       },
                     ),
-              CategoryItem(
-                image: IMG_QUEUE_TICKETS,
-                title: getTranselted(context, STA_QUEUE)!,
-                number: queueTickets,
-                onTap: () {
-                  Navigator.pushNamed(context, creatorQueueTicketsRoute);
-                },
-              ),
-              CategoryItem(
-                image: IMG_ASSIGNED_TICKETS,
-                title: getTranselted(context, STA_ASSIGNED)!,
-                number: assignedTickets,
-                onTap: () {
-                  Navigator.pushNamed(context, creatorAssignedTicketRoute);
-                },
-              ),
-              CategoryItem(
-                image: IMG_REVIEW_TICKETS,
-                title: getTranselted(context, STA_WAITING_CONFIRMATION)!,
-                number: waitingConfirmationTickets,
-                onTap: () {
-                  Navigator.pushNamed(context, creatorConfirmTicketRoute);
-                },
-              ),
-              CategoryItem(
-                image: IMG_PENDING_TICKETS,
-                title: getTranselted(context, STA_PENDING)!,
-                number: pendingTickets,
-                onTap: () {
-                  Navigator.pushNamed(context, creatorPendingTicketsRoute);
-                },
-              ),
-              CategoryItem(
-                image: IMG_WORKSHO_REPORT,
-                title: getTranselted(context, STA_WORKSHOP)!,
-                number: workShopTickets,
-                onTap: () {
-                  Navigator.pushNamed(context, creatorWorkshopTicketRoute);
-                },
-              ),
+              queueTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_QUEUE_TICKETS,
+                      title: getTranselted(context, STA_QUEUE)!,
+                      number: queueTickets,
+                      onTap: () {
+                        Navigator.pushNamed(context, creatorQueueTicketsRoute);
+                      },
+                    ),
+              assignedTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_ASSIGNED_TICKETS,
+                      title: getTranselted(context, STA_ASSIGNED)!,
+                      number: assignedTickets,
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, creatorAssignedTicketRoute);
+                      },
+                    ),
+              waitingConfirmationTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_REVIEW_TICKETS,
+                      title: getTranselted(context, STA_WAITING_CONFIRMATION)!,
+                      number: waitingConfirmationTickets,
+                      onTap: () {
+                        Navigator.pushNamed(context, creatorConfirmTicketRoute);
+                      },
+                    ),
+              pendingTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_PENDING_TICKETS,
+                      title: getTranselted(context, STA_PENDING)!,
+                      number: pendingTickets,
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, creatorPendingTicketsRoute);
+                      },
+                    ),
+              workShopTickets == -1
+                  ? const SpinKitCubeGrid(
+                      color: APP_BAR_TEXT_COLOR,
+                    )
+                  : CategoryItem(
+                      image: IMG_WORKSHO_REPORT,
+                      title: getTranselted(context, STA_WORKSHOP)!,
+                      number: workShopTickets,
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, creatorWorkshopTicketRoute);
+                      },
+                    ),
             ],
           ), /*LayoutBuilder(
           builder: (context, constraints) => GridView.count(

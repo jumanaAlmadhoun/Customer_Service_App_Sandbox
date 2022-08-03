@@ -28,21 +28,7 @@ class _GridViewBuilderCreatorState extends State<GridViewBuilderCreator> {
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: _isLoading,
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                ? 1
-                : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                        ResponsiveWrapper.of(context).isSmallerThan(DESKTOP))
-                    ? 3
-                    : 4,
-            childAspectRatio: ResponsiveWrapper.of(context)
-                    .isSmallerThan(TABLET)
-                ? 2
-                : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                        ResponsiveWrapper.of(context).isSmallerThan(DESKTOP))
-                    ? 1
-                    : 1),
+      child: ListView.builder(
         itemCount: widget.list.length,
         itemBuilder: (context, i) {
           return Dismissible(

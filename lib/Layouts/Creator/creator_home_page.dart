@@ -56,10 +56,12 @@ class _CreatorHomePageState extends State<CreatorHomePage> with RouteAware {
   void didPopNext() {
     print('Poped');
     super.didPopNext();
-    readJson();
-    Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
-    Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
-    Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
+    setState(() {
+      readJson();
+      Provider.of<MachinesProvider>(context, listen: false).fetchMachines();
+      Provider.of<CustomerProvider>(context, listen: false).fetchCustomers();
+      Provider.of<SummaryProvider>(context, listen: false).fetchSummary();
+    });
   }
 
   @override
