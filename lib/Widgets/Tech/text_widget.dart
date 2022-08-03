@@ -37,6 +37,8 @@ class _TextWidgetState extends State<TextWidget> {
               decoration: InputDecoration(label: Text(widget.title!)),
               controller: widget.controller,
               validator: widget.validate,
+              minLines: 1,
+              maxLines: 10,
             ),
           ),
         ),

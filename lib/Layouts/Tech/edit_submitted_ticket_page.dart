@@ -475,7 +475,13 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
         title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
         isSelected: generalComments
             .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
-      )
+      ),
+      TextWidget(
+        title: 'ملاحظات الفني',
+        jsonKey: 'tech_notes',
+        validate: validateNote,
+        controller: TextEditingController(text: techInfo['tech_notes']),
+      ),
     ];
     try {
       partsInfo.forEach((key, value) {
