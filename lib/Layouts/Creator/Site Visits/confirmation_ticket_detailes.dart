@@ -158,13 +158,21 @@ class _ConfirmationTicketDetailsState extends State<ConfirmationTicketDetails>
                         title: 'Reject Ticket',
                         text: 'Do You Want To Reject Ticket',
                         onConfirmBtnTap: () {
-                          Navigator.pop(context);
-                          Provider.of<TicketProvider>(context, listen: false)
-                              .disApproveTicket(_ticket)
-                              .then((value) {
-                            Navigator.pushReplacementNamed(
-                                context, creatorConfirmTicketRoute);
-                          });
+                          if (!_isSubmitting) {
+                            setState(() {
+                              _isSubmitting = true;
+                            });
+                            Navigator.pop(context);
+                            Provider.of<TicketProvider>(context, listen: false)
+                                .disApproveTicket(_ticket)
+                                .then((value) {
+                              setState(() {
+                                _isSubmitting = false;
+                              });
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  creatorHomeRoute, (route) => false);
+                            });
+                          }
                         },
                         onCancelBtnTap: () {
                           Navigator.pop(context);

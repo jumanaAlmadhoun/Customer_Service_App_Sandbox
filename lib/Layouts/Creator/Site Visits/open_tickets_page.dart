@@ -64,8 +64,8 @@ class _OpenTicketsState extends State<OpenTickets> with RouteAware {
                   ? TextFormField(
                       decoration: InputDecoration(
                           hintText: getTranselted(context, LBL_SEARCH)!,
-                          hintStyle: const TextStyle(color: Colors.white)),
-                      style: const TextStyle(color: Colors.white),
+                          hintStyle: const TextStyle(color: Colors.black)),
+                      style: const TextStyle(color: Colors.black),
                       onChanged: (value) {
                         setState(() {
                           try {
