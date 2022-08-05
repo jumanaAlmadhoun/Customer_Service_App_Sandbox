@@ -88,7 +88,6 @@ class SummaryProvider with ChangeNotifier {
                 bool found = false;
                 var innerData = value as Map<String, dynamic>;
                 assignedTickets += innerData.length;
-                print(assignedTickets);
                 for (var i = 0; i < techs.length; i++) {
                   if (techs[i].name == key) {
                     techs[i].assignedTickets = parseTickets(
@@ -281,65 +280,69 @@ class SummaryProvider with ChangeNotifier {
           });
         }
         searchText = searchText.toUpperCase();
-        tickets.add(
-          Ticket(
-              machineModel: value[Ticket.MACHINE_MODEL] ?? '',
-              assignDate: value[Ticket.ASSIGN_DATE] ?? '',
-              cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
-              cafeName: value[Ticket.CAFE_NAME] ?? '',
-              city: value[Ticket.CITY] ?? '',
-              createdBy: value[Ticket.CREATED_BY] ?? '',
-              creationDate: value[Ticket.CREATION_DATE] ?? '',
-              customerMobile: value[Ticket.CUSTOMER_MOBILE] ?? '',
-              customerName: value[Ticket.CUSTOMER_NAME] ?? '',
-              customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
-              didContact: value[Ticket.DID_CONTACT] ?? false,
-              extraContactNumber: value[Ticket.CONTACT_NUMBER] ?? '',
-              freeParts: value[Ticket.FREE_PARTS] ?? false,
-              freeVisit: value[Ticket.FREE_PARTS] ?? false,
-              from: value[Ticket.VISIT_START_TIME] ?? '',
-              to: value[Ticket.VISIT_END_TIME] ?? '',
-              lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
-              mainCategory: value[Ticket.MAIN_CATEGORY] ?? '',
-              problemDesc: value[Ticket.PROBLEM_DESC] ?? '',
-              recomendation: value[Ticket.RECOMMENDATION] ?? '',
-              region: value[Ticket.REGION] ?? '',
-              rowAddress: value[Ticket.ROW_ADDRESS] ?? '',
-              machineNumber: value[Ticket.SERIAL_NUMBER] ?? '',
-              sheetID: value[Ticket.SHEET_ID] ?? '',
-              sheetURL: value[Ticket.SHEET_URL] ?? '',
-              status: value[Ticket.STATUS] ?? '',
-              subCategory: value[Ticket.SUB_CATEGORY] ?? '',
-              techName: value[Ticket.TECH_NAME] ?? '',
-              ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
-              visitDate: value[Ticket.VISIT_DATE] ?? '',
-              firebaseID: key,
-              fromTable: fromTable,
-              laborCharges: double.parse(value[Ticket.LABOR_CHARGES] ?? '0'),
-              deliveryItems:
-                  value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
-              deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
-              soNumber: value[Ticket.SO_NUMBER] ?? '',
-              searchText: searchText,
-              label: label,
-              routeName: routeName,
-              isUrgent: value[Ticket.IS_URGENT] ?? false,
-              isCash: fromTable == DB_PENDING_TICKETS
-                  ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
-                      [Ticket.IS_CASH]
-                  : false,
-              totalAmount: fromTable == DB_PENDING_TICKETS
-                  ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
-                      [Ticket.TOTAL_AMOUNT]
-                  : 0.0,
-              closeDate: value[Ticket.CLOSE_DATE] ?? '',
-              dateTime: DateTime.parse(
-                value[Ticket.CREATION_DATE] ?? '',
-              )),
-        );
+        tickets.add(Ticket(
+          machineModel: value[Ticket.MACHINE_MODEL] ?? '',
+          assignDate: value[Ticket.ASSIGN_DATE] ?? '',
+          cafeLocation: value[Ticket.CAFE_LOCATION] ?? '',
+          cafeName: value[Ticket.CAFE_NAME] ?? '',
+          city: value[Ticket.CITY] ?? '',
+          createdBy: value[Ticket.CREATED_BY] ?? '',
+          creationDate: value[Ticket.CREATION_DATE] ?? '',
+          customerMobile: value[Ticket.CUSTOMER_MOBILE] ?? '',
+          customerName: value[Ticket.CUSTOMER_NAME] ?? '',
+          customerNumber: value[Ticket.CUSTOMER_NUMBER] ?? '',
+          didContact: value[Ticket.DID_CONTACT] ?? false,
+          extraContactNumber: value[Ticket.CONTACT_NUMBER] ?? '',
+          freeParts: value[Ticket.FREE_PARTS] ?? false,
+          freeVisit: value[Ticket.FREE_PARTS] ?? false,
+          from: value[Ticket.VISIT_START_TIME] ?? '',
+          to: value[Ticket.VISIT_END_TIME] ?? '',
+          lastEditBy: value[Ticket.LAST_EDIT_BY] ?? '',
+          mainCategory: value[Ticket.MAIN_CATEGORY] ?? '',
+          problemDesc: value[Ticket.PROBLEM_DESC] ?? '',
+          recomendation: value[Ticket.RECOMMENDATION] ?? '',
+          region: value[Ticket.REGION] ?? '',
+          rowAddress: value[Ticket.ROW_ADDRESS] ?? '',
+          machineNumber: value[Ticket.SERIAL_NUMBER] ?? '',
+          sheetID: value[Ticket.SHEET_ID] ?? '',
+          sheetURL: value[Ticket.SHEET_URL] ?? '',
+          status: value[Ticket.STATUS] ?? '',
+          subCategory: value[Ticket.SUB_CATEGORY] ?? '',
+          techName: value[Ticket.TECH_NAME] ?? '',
+          ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
+          visitDate: value[Ticket.VISIT_DATE] ?? '',
+          firebaseID: key,
+          fromTable: fromTable,
+          laborCharges: double.parse(value[Ticket.LABOR_CHARGES] ?? '0'),
+          deliveryItems: value[Ticket.DELIVERY_ITEMS] as Map<String, dynamic>,
+          deliveryType: value[Ticket.DELIVERY_TYPE] ?? '',
+          soNumber: value[Ticket.SO_NUMBER] ?? '',
+          searchText: searchText,
+          label: label,
+          routeName: routeName,
+          isUrgent: value[Ticket.IS_URGENT] ?? false,
+          isCash: fromTable == DB_PENDING_TICKETS
+              ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
+                  [Ticket.IS_CASH]
+              : false,
+          totalAmount: fromTable == DB_PENDING_TICKETS
+              ? value[Ticket.TECH_INFO_FIREBASE][Ticket.INFO_JSON]
+                          [Ticket.TOTAL_AMOUNT] !=
+                      null
+                  ? double.parse(value[Ticket.TECH_INFO_FIREBASE]
+                          [Ticket.INFO_JSON][Ticket.TOTAL_AMOUNT]
+                      .toString())
+                  : 0.0
+              : 0.0,
+          closeDate: value[Ticket.CLOSE_DATE] ?? '',
+          // dateTime: DateTime.parse(
+          //   value[Ticket.CREATION_DATE] ?? '',
+          // ),
+        ));
       });
       return tickets;
     } catch (ex) {
+      print('$ex ticket fetching');
       return tickets;
     }
   }
