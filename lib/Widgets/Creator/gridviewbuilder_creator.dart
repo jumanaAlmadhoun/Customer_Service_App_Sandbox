@@ -35,6 +35,7 @@ class _GridViewBuilderCreatorState extends State<GridViewBuilderCreator> {
             key: UniqueKey(),
             direction: DismissDirection.horizontal,
             onDismissed: (direction) async {
+              print('Shady');
               if (widget.dialog != null) {
                 setState(() {
                   _isLoading = true;
@@ -52,6 +53,7 @@ class _GridViewBuilderCreatorState extends State<GridViewBuilderCreator> {
               }
             },
             confirmDismiss: (direction) async {
+              print('shadddddi');
               widget.dialog = CustomListDialog(
                 msg: 'Archive Ticket',
                 items: archiveReasons,

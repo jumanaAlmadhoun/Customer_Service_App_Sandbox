@@ -36,9 +36,9 @@ class _CustomListDialogState extends State<CustomListDialog> {
       child: Container(
         height: 250.0,
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
               widget.msg!,
@@ -52,6 +52,7 @@ class _CustomListDialogState extends State<CustomListDialog> {
               height: 20.0,
             ),
             DropdownButton(
+              isExpanded: true,
               hint: Text(getTranselted(context, LBL_CHOOSE_REASON)!),
               items: widget.items!
                   .map((e) => DropdownMenuItem(

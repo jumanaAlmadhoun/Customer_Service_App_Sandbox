@@ -114,9 +114,9 @@ class SummaryProvider with ChangeNotifier {
               });
               break;
             case DB_QUEUE_TICKETS:
-              bool found = false;
               var queueTable = value as Map<String, dynamic>;
               queueTable.forEach((key, value) {
+                bool found = false;
                 var innerData = value as Map<String, dynamic>;
                 queueTickets += innerData.length;
                 for (var i = 0; i < techs.length; i++) {

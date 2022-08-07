@@ -46,6 +46,7 @@ class OpenTicketWidget extends StatelessWidget {
                 getTranselted(context, LBL_CAFE)! + ': ' + cafeName!,
                 textAlign: TextAlign.left,
                 style: TICKET_TEXT_STYLE,
+                maxLines: 2,
               ),
               const SizedBox(
                 height: 5,
