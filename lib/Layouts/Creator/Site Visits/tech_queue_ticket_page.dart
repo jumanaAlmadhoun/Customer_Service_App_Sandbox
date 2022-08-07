@@ -61,24 +61,7 @@ class _TechQueueTicketPageState extends State<TechQueueTicketPage> {
               ),
               const LogoutWidget(),
             ],
-            widget: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: ResponsiveWrapper.of(context)
-                            .isSmallerThan(TABLET)
-                        ? 1
-                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                                ResponsiveWrapper.of(context)
-                                    .isSmallerThan(DESKTOP))
-                            ? 3
-                            : 4,
-                    childAspectRatio: ResponsiveWrapper.of(context)
-                            .isSmallerThan(TABLET)
-                        ? 2
-                        : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                                ResponsiveWrapper.of(context)
-                                    .isSmallerThan(DESKTOP))
-                            ? 1
-                            : 1),
+            widget: ListView.builder(
                 itemCount: widget.tech!.queueTicket!.length,
                 itemBuilder: (context, i) {
                   try {

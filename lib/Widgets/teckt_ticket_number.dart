@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../Helpers/layout_constants.dart';
 import '../Models/tech.dart';
 
-class TeckTicketNumber extends StatelessWidget {
+class TechTicketNumber extends StatelessWidget {
   String? routeName;
   String? techName;
   String? ticketsNumber;
   Tech? argument;
-  TeckTicketNumber(
+  TechTicketNumber(
       {Key? key,
       required this.routeName,
       required this.techName,

@@ -28,7 +28,7 @@ class TeckTicketGridView extends StatelessWidget {
       itemCount: list!.length,
       itemBuilder: (context, i) {
         return list![i].name != null
-            ? TeckTicketNumber(
+            ? TechTicketNumber(
                 techName: list![i].name!,
                 ticketsNumber: list![i].assignedTickets!.length.toString(),
                 routeName: routeName,

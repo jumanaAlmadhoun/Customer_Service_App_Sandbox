@@ -77,28 +77,11 @@ class _QueueTikcketsPageState extends State<QueueTikcketsPage> with RouteAware {
             ),
             const LogoutWidget(),
           ],
-          widget: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: ResponsiveWrapper.of(context)
-                          .isSmallerThan(TABLET)
-                      ? 1
-                      : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                              ResponsiveWrapper.of(context)
-                                  .isSmallerThan(DESKTOP))
-                          ? 3
-                          : 4,
-                  childAspectRatio: ResponsiveWrapper.of(context)
-                          .isSmallerThan(TABLET)
-                      ? 7
-                      : (ResponsiveWrapper.of(context).isLargerThan(MOBILE) &&
-                              ResponsiveWrapper.of(context)
-                                  .isSmallerThan(DESKTOP))
-                          ? 2.5
-                          : 3),
+          widget: ListView.builder(
               itemCount: _techs.length,
               itemBuilder: (context, i) {
                 return _techs[i].queueTicket != null
-                    ? TeckTicketNumber(
+                    ? TechTicketNumber(
                         techName: _techs[i].name!,
                         ticketsNumber: _techs[i].queueTicket!.length.toString(),
                         routeName: creatorTechQueueTicketRoute,
