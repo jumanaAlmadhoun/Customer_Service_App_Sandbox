@@ -8,13 +8,14 @@ class TextWidget extends StatefulWidget {
       this.title,
       this.direction = TextDirection.rtl,
       this.validate,
-      this.controller});
+      this.controller,
+      this.enabled = true});
   TextEditingController? controller;
   String? jsonKey;
   String? title;
   TextDirection direction;
   String? Function(String?)? validate;
-
+  bool? enabled;
   @override
   _TextWidgetState createState() => _TextWidgetState();
 }
@@ -34,6 +35,7 @@ class _TextWidgetState extends State<TextWidget> {
           child: Directionality(
             textDirection: widget.direction,
             child: TextFormField(
+              enabled: widget.enabled,
               decoration: InputDecoration(label: Text(widget.title!)),
               controller: widget.controller,
               validator: widget.validate,

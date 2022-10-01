@@ -232,6 +232,12 @@ class _ConfirmationTicketDetailsState extends State<ConfirmationTicketDetails>
             CommentSummaryWidget(element),
           );
         }
+      } else if (element is TextWidget) {
+        _summary.add(TextWidget(
+          title: element.title,
+          enabled: false,
+          controller: TextEditingController(text: element.controller!.text),
+        ));
       }
     });
     totalAmount = partAmount + laborCharges;

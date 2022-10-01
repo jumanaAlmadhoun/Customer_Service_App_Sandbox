@@ -600,7 +600,7 @@ class _ApprovedTicketPageState extends State<ApprovedTicketPage>
           .toList();
       categoryComments.forEach((element) {
         bool isSelected = false;
-        if (techInfo.contains(element.comment!)) {
+        if (techInfo.contains(element.comment!.trim())) {
           isSelected = true;
         }
         commentWidgets
