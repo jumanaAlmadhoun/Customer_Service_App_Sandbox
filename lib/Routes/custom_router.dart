@@ -46,6 +46,9 @@ import '../Layouts/Creator/Site Visits/sanremo_new_ticket_page.dart';
 import '../Layouts/Creator/creator_home_page.dart';
 import '../Layouts/Tech/download_page.dart';
 import '../Layouts/Tech/tech_fill_sitevisit_page.dart';
+import '../Layouts/Tech/tech_fill_sitevisit_page_Grinde.dart';
+import '../Layouts/Tech/tech_fill_sitevisit_page_PM.dart';
+import '../Layouts/Tech/tech_fill_sitevisit_page_bunn.dart';
 import '../Layouts/Tech/tech_home_page.dart';
 import '../Layouts/Tech/tech_ticket_info_page.dart';
 import '../Layouts/Tech/tech_ticket_summary.dart';
@@ -87,8 +90,6 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const BrandSelectionPage());
       case loginRoute:
         return MaterialPageRoute(builder: (_) => LoginScreen());
-      case sanremoNewTicketRoute:
-        return MaterialPageRoute(builder: (_) => const SanremoNewTicketPage());
       case creatorOpenTicketsRoute:
         return MaterialPageRoute(builder: (_) => const OpenTickets());
       case creatorReadyToAssignTicketsRoute:
@@ -138,6 +139,27 @@ class CustomRouter {
       case techFillSiteVisitRoute:
         return MaterialPageRoute(
             builder: (_) => TechFillTicketPage(settings.arguments as Ticket));
+      //------------------------------------------------------------------
+      case sanremoNewTicketRoute:
+        return MaterialPageRoute(
+            builder: (_) => SanremoNewTicketPage(settings.arguments as String));
+      /*case sanremoNewTicketRoute:
+        return MaterialPageRoute(
+            builder:(_) => SanremoNewTicketPage(settings.arguments as Ticket));*/
+      case techFillTicketPageBunn:
+        return MaterialPageRoute(
+            builder: (_) =>
+                TechFillTicketPageBunn(settings.arguments as Ticket));
+
+      case techFillTicketPageGrinde:
+        return MaterialPageRoute(
+            builder: (_) =>
+                TechFillTicketPageGrinde(settings.arguments as Ticket));
+      case techFillTicketPagePM:
+        return MaterialPageRoute(
+            builder: (_) => TechFillTicketPagePM(settings.arguments as Ticket));
+
+      //------------------------------------------------------------------
       case techVisitSummaryRoute:
         return MaterialPageRoute(
             builder: (_) =>

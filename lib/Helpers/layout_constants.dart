@@ -40,6 +40,14 @@ const String WEB_BACKGROUND = 'Assets/Images/web_backgroun.png';
 const TextStyle TICKET_TEXT_STYLE =
     TextStyle(fontSize: 16, color: SHADOW_COLOR, fontWeight: FontWeight.bold);
 
+//-----------------------------------------------------------
+const String ESPRESSO_MACHINES = 'Assets/Images/Espresso.jpg';
+const String Coffee_grinders = 'Assets/Images/Grinder.jpg';
+const String BatchBrewer = 'Assets/Images/BatchBrewer.PNG';
+const String TAMPERS = 'Assets/Images/Tampers.jpg';
+const String Perfect_Moose = 'Assets/Images/PerfectMoose.jpg';
+//-----------------------------------------------------------
+
 const TextStyle APPBAR_TEXT_STYLE = TextStyle(
   color: ICON_TEX_COLOR,
   fontSize: 20.0,

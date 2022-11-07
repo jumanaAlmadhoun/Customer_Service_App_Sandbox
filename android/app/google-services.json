@@ -1,35 +1,42 @@
 {
   "project_info": {
-    "project_number": "883503481041",
-    "firebase_url": "https://sanremov2-default-rtdb.firebaseio.com",
-    "project_id": "sanremov2",
-    "storage_bucket": "sanremov2.appspot.com"
+    "project_number": "322149189704",
+    "firebase_url": "https://mintinenseappsandbox-default-rtdb.firebaseio.com",
+    "project_id": "mintinenseappsandbox",
+    "storage_bucket": "mintinenseappsandbox.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:883503481041:android:ad0c50479739193c2185f0",
+        "mobilesdk_app_id": "1:322149189704:android:c83b867f8679a198cab07d",
         "android_client_info": {
           "package_name": "com.example.customer_service_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+          "client_id": "322149189704-mcc4qm2s9hi4a2k8u0slhdrpj976g6aa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAW6gv3e_NuK_Z5RASQaT0koTpHQat5Oyc"
+          "current_key": "AIzaSyAgEwnwfH6IkRnLto-yuF-s-02kL4Gjz-Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+              "client_id": "322149189704-mcc4qm2s9hi4a2k8u0slhdrpj976g6aa.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "322149189704-4rc96hej7hc2c95v73d2rhjonhn8tkfm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.customerServiceApp"
+              }
             }
           ]
         }
@@ -37,57 +44,43 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:883503481041:android:7b1722f46d1c2c032185f0",
+        "mobilesdk_app_id": "1:322149189704:android:cf813f82062800c5cab07d",
         "android_client_info": {
           "package_name": "com.example.sanremo_inv"
         }
       },
       "oauth_client": [
         {
-          "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+          "client_id": "322149189704-5mv0ed76t6soh4c5j8j156fo4rg0bgch.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sanremo_inv",
+            "certificate_hash": "8dca65defdea0fc8a8aa5d7304e68d2d9ed63ede"
+          }
+        },
+        {
+          "client_id": "322149189704-mcc4qm2s9hi4a2k8u0slhdrpj976g6aa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAW6gv3e_NuK_Z5RASQaT0koTpHQat5Oyc"
+          "current_key": "AIzaSyAgEwnwfH6IkRnLto-yuF-s-02kL4Gjz-Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
+              "client_id": "322149189704-mcc4qm2s9hi4a2k8u0slhdrpj976g6aa.apps.googleusercontent.com",
               "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:883503481041:android:fb9dae119dd1fbb72185f0",
-        "android_client_info": {
-          "package_name": "com.example.sanremo_v2"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAW6gv3e_NuK_Z5RASQaT0koTpHQat5Oyc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+            },
             {
-              "client_id": "883503481041-m5b6t5to6q5635purn50ce76nv9md9tg.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "322149189704-4rc96hej7hc2c95v73d2rhjonhn8tkfm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.customerServiceApp"
+              }
             }
           ]
         }

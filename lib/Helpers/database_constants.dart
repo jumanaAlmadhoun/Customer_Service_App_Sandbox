@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-const String DB_URL = 'https://sanremov2-default-rtdb.firebaseio.com/';
+const String DB_URL = 'https://mintinenseappsandbox-default-rtdb.firebaseio.com/';
 const String DB_USERS = 'CustomerServiceUsers';
 const String DB_COMMENTS = 'Comments';
 const String DB_SITE_VISITS = 'SiteVisits';

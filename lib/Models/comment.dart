@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class Comment with ChangeNotifier {
   String? comment;
   String? commentCategory;
-
+//------------------------------------------------------
   static const String COMMENT_BODY = 'comment';
   static const String COMMENT_CATEGORY = 'category';
   static const String WATER_COMMENTS = 'WATER';
@@ -14,6 +14,8 @@ class Comment with ChangeNotifier {
   static const String STEAM_COMMENTS = 'STEAM';
   static const String RECOMENDATION_COMMENTS = 'REC';
   static const String GENERAL_COMMENTS = 'GEN';
+ //--------------------PM-----------------------------
+
   Comment({
     this.comment,
     this.commentCategory,

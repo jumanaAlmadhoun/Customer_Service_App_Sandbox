@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cool_alert/cool_alert.dart';
@@ -106,7 +107,7 @@ class _ApprovedTicketDetailsState extends State<ApprovedTicketDetails>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${laborCharges.toStringAsFixed(2)}'),
+                        Text(laborCharges.toStringAsFixed(2)),
                         const Text('أجور الزيارة'),
                       ],
                     ),
@@ -166,6 +167,7 @@ class _ApprovedTicketDetailsState extends State<ApprovedTicketDetails>
                       setState(() {
                         _isLoading = true;
                       });
+                      log('hi1');
                       Uint8List? bytes =
                           await signatureController!.toPngBytes();
                       String encoded = base64Encode(bytes!);
@@ -176,6 +178,7 @@ class _ApprovedTicketDetailsState extends State<ApprovedTicketDetails>
                           _isLoading = false;
                         });
                         if (value == SC_SUCCESS_RESPONSE) {
+                          log('hi2');
                           CoolAlert.show(
                               barrierDismissible: false,
                               context: context,

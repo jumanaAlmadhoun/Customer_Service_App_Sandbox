@@ -232,8 +232,9 @@ class _ApprovedTicketPageState extends State<ApprovedTicketPage>
                   didContact: _tickets[i].didContact,
                   machineNumber: _tickets[i].machineNumber,
                   techName: _tickets[i].techName,
+                  machineType: _tickets[i].machineType,
                   onTap: () {
-                    List<Widget> design = initMachineCheckDesign(_tickets[i]);
+                    List<Widget> design = initMachineCheckDesignPM(_tickets[i]);
                     Navigator.pushNamed(context, techApprovedTicketDetailsRoute,
                         arguments: [_tickets[i], design, _allParts]);
                   },
@@ -592,6 +593,390 @@ class _ApprovedTicketPageState extends State<ApprovedTicketPage>
     return _machineCheckDesign;
   }
 
+  List<Widget> initMachineCheckDesignPM(Ticket ticket) {
+    List<Widget> _machineCheckDesign = [];
+    try {
+      var techInfo = ticket.info as Map<String, dynamic>;
+      var partsInfo = ticket.parts as Map<String, dynamic>;
+      print(partsInfo);
+
+      String generalComments = '';
+      techInfo.forEach((key, value) {
+        generalComments += key.startsWith('comment') ? value : '';
+      });
+      _machineCheckDesign = [
+        MachineCheckWidget(
+          title: 'قطع مكسورة أو مفقودة',
+          keyJson: '1',
+          validate: validateNote,
+          comments: null,
+          pass: techInfo['1_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['1_Pass'],
+          controller:
+              TextEditingController(text: techInfo['1_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'نظافة المكينة العامة',
+          keyJson: '2',
+          validate: validateNote,
+          pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['2_Pass'],
+          comments: getCommentsByCategory(
+              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص وجود تهريبات في المكينة',
+          keyJson: '3',
+          validate: validateNote,
+          pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['3_Pass'],
+          controller:
+              TextEditingController(text: techInfo['3_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص الإعدادات ',
+          keyJson: '4',
+          validate: validateNote,
+          pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['4_Pass'],
+          comments: getCommentsByCategory(
+              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص مصدر التبخير',
+          keyJson: '5',
+          validate: validateNote,
+          pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['5_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'نوع جودة تسخين الحليب ',
+          keyJson: '6',
+          validate: validateNote,
+          pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['6_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص التوصيلات والسلامة العامة',
+          keyJson: '7',
+          validate: validateNote,
+          pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['7_Pass'],
+          comments: getCommentsByCategory(
+              Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص ضغط البخار والحرارة ',
+          keyJson: '8',
+          validate: validateNote,
+          pass: techInfo['8_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['8_Pass'],
+          controller:
+              TextEditingController(text: techInfo['8_Comment'].toString()),
+        ),
+        TextWidget(
+          title: 'نوع مكينة القهوة  ',
+          jsonKey: 'os',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['os']),
+        ),
+        TextWidget(
+          title: 'إصدار برنامج التشغيل',
+          jsonKey: 'coffe_Machine_Type',
+          validate: validateNote,
+          enabled: false,
+          controller:
+              TextEditingController(text: techInfo['coffe_Machine_Type']),
+        ),
+        TextWidget(
+          title: 'اجمالي عدد الاكواب Total Cup',
+          jsonKey: 'total_cups',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['total_cups']),
+        ),
+        CommentWidget(
+          title: 'نوصي بنقل المكينة لمركز الصيانة',
+          isSelected:
+              generalComments.contains('نوصي بنقل المكينة لمركز الصيانة'),
+        ),
+        CommentWidget(
+          title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
+          isSelected: generalComments
+              .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
+        ),
+        TextWidget(
+          title: 'ملاحظات الفني',
+          jsonKey: 'tech_notes',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['tech_notes']),
+        ),
+      ];
+      print(techInfo['tech_notes']);
+      try {
+        partsInfo.forEach((key, value) {
+          if (key != 'partsCount') {
+            _machineCheckDesign.add(SparePartWidget(
+              allParts: _allParts,
+              partNo: TextEditingController(text: key),
+              qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+              isFreePart: value[PART_IS_FREE_KEY],
+            ));
+          }
+        });
+      } catch (ex) {
+        print(ex);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return _machineCheckDesign;
+  }
+
+  //----------------------------------------------------------------
+  List<Widget> initMachineCheckDesignBunn(Ticket ticket) {
+    var techInfo = ticket.info as Map<String, dynamic>;
+    var partsInfo = ticket.parts as Map<String, dynamic>;
+    print(partsInfo);
+
+    String generalComments = '';
+    techInfo.forEach((key, value) {
+      generalComments += key.startsWith('comment') ? value : '';
+    });
+    List<Widget> _machineCheckDesign = [];
+    _machineCheckDesign = [
+      MachineCheckWidget(
+        title: 'فحص القمع',
+        keyJson: '1',
+        validate: validateNote,
+        comments: null,
+        pass: techInfo['1_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['1_Pass'],
+        controller:
+            TextEditingController(text: techInfo['1_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص قفل القمع',
+        keyJson: '2',
+        validate: validateNote,
+        pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['2_Pass'],
+        comments: getCommentsByCategory(
+            Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص صمام الدش',
+        keyJson: '3',
+        validate: validateNote,
+        pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['3_Pass'],
+        controller:
+            TextEditingController(text: techInfo['3_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص صمام التعبئة',
+        keyJson: '4',
+        validate: validateNote,
+        pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['4_Pass'],
+        comments: getCommentsByCategory(
+            Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص صمام الهواء',
+        keyJson: '5',
+        validate: validateNote,
+        pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['5_Pass'],
+        comments: getCommentsByCategory(
+            Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص صمام التجاوز',
+        keyJson: '6',
+        validate: validateNote,
+        pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['6_Pass'],
+        comments: getCommentsByCategory(
+            Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص خزان القهوة',
+        keyJson: '7',
+        validate: validateNote,
+        pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['7_Pass'],
+        comments: getCommentsByCategory(
+            Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
+      ),
+      MachineCheckWidget(
+        title: 'فحص استجابة الشاشة',
+        keyJson: '8',
+        validate: validateNote,
+        pass: techInfo['8_Pass'] ? 'نجاح' : 'فشل',
+        isPass: techInfo['8_Pass'],
+        controller:
+            TextEditingController(text: techInfo['8_Comment'].toString()),
+      ),
+      TextWidget(
+        title: 'إصدار برنامج التشغيل',
+        jsonKey: 'os',
+        validate: validateNote,
+        enabled: false,
+        controller: TextEditingController(text: techInfo['os']),
+      ),
+      CommentWidget(
+        title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
+        isSelected: generalComments
+            .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
+      ),
+      TextWidget(
+        title: 'ملاحظات الفني',
+        jsonKey: 'tech_notes',
+        validate: validateNote,
+        enabled: false,
+        controller: TextEditingController(text: techInfo['tech_notes']),
+      ),
+    ];
+    print(techInfo['tech_notes']);
+    try {
+      partsInfo.forEach((key, value) {
+        if (key != 'partsCount') {
+          _machineCheckDesign.add(SparePartWidget(
+            allParts: _allParts,
+            partNo: TextEditingController(text: key),
+            qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+            isFreePart: value[PART_IS_FREE_KEY],
+          ));
+        }
+      });
+    } catch (ex) {
+      print(ex);
+    }
+    return _machineCheckDesign;
+  }
+
+//---------------------------------------------------------------------------------------
+  List<Widget> initMachineCheckDesignGrinder(Ticket ticket) {
+    List<Widget> _machineCheckDesign = [];
+    try {
+      var techInfo = ticket.info as Map<String, dynamic>;
+      var partsInfo = ticket.parts as Map<String, dynamic>;
+      print(partsInfo);
+
+      String generalComments = '';
+      techInfo.forEach((key, value) {
+        generalComments += key.startsWith('comment') ? value : '';
+      });
+      _machineCheckDesign = [
+        MachineCheckWidget(
+          title: 'فحص البرمجة',
+          keyJson: '1',
+          validate: validateNote,
+          comments: null,
+          pass: techInfo['1_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['1_Pass'],
+          controller:
+              TextEditingController(text: techInfo['1_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص شاشة المطحنة',
+          keyJson: '2',
+          validate: validateNote,
+          pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['2_Pass'],
+          comments: getCommentsByCategory(
+              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص مفكك التكتلات',
+          keyJson: '3',
+          validate: validateNote,
+          pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['3_Pass'],
+          controller:
+              TextEditingController(text: techInfo['3_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص جودة الطحنة',
+          keyJson: '4',
+          validate: validateNote,
+          pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['4_Pass'],
+          comments: getCommentsByCategory(
+              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص حجر الطحن',
+          keyJson: '5',
+          validate: validateNote,
+          pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['5_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص كابل الكهرباء ',
+          keyJson: '6',
+          validate: validateNote,
+          pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['6_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+        ),
+        TextWidget(
+          title: 'اجمالي عدد الاكواب Total Cup',
+          jsonKey: 'total_cups',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['total_cups']),
+        ),
+        CommentWidget(
+          title: 'نوصي بنقل المكينة لمركز الصيانة',
+          isSelected:
+              generalComments.contains('نوصي بنقل المكينة لمركز الصيانة'),
+        ),
+        CommentWidget(
+          title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
+          isSelected: generalComments
+              .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
+        ),
+        TextWidget(
+          title: 'ملاحظات الفني',
+          jsonKey: 'tech_notes',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['tech_notes']),
+        ),
+      ];
+      print(techInfo['tech_notes']);
+      try {
+        partsInfo.forEach((key, value) {
+          if (key != 'partsCount') {
+            _machineCheckDesign.add(SparePartWidget(
+              allParts: _allParts,
+              partNo: TextEditingController(text: key),
+              qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+              isFreePart: value[PART_IS_FREE_KEY],
+            ));
+          }
+        });
+      } catch (ex) {
+        print(ex);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return _machineCheckDesign;
+  }
+
+//-----------------------------------------------------------------------------------------
   List<CommentWidget>? getCommentsByCategory(String category, String techInfo) {
     try {
       List<CommentWidget> commentWidgets = [];

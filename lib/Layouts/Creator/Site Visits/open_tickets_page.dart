@@ -22,7 +22,6 @@ import '../../../Widgets/web_layout.dart';
 
 class OpenTickets extends StatefulWidget {
   const OpenTickets({Key? key}) : super(key: key);
-
   @override
   _OpenTicketsState createState() => _OpenTicketsState();
 }

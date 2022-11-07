@@ -51,3 +51,7 @@ const String creatorConfirmTicketRoute = 'creatorConfirmTicketRoute';
 const String creatorConfirmDetailsRoute = 'creatorConfirmDetailsRoute';
 const String techApprovedTicketDetailsRoute = 'techApprovedTicketDetailsRoute';
 const String techRejectedTicketRoute = 'techRejectedTicketRoute';
+//------------------------------------------------------------------
+const String techFillTicketPageBunn = 'techFillTicketPageBunn';
+const String techFillTicketPageGrinde = 'techFillTicketPageGrinde';
+const String techFillTicketPagePM = 'techFillTicketPagePM';

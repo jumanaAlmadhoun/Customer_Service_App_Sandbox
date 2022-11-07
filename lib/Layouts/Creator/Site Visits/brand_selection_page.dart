@@ -1,5 +1,6 @@
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/layout_constants.dart';
+import 'package:customer_service_app/Layouts/Creator/Site%20Visits/sanremo_new_ticket_page.dart';
 import 'package:customer_service_app/Localization/localization_constants.dart';
 import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Widgets/category_item.dart';
@@ -26,26 +27,40 @@ class BrandSelectionPage extends StatelessWidget {
             mainAxisSpacing: 0,
             children: [
               CategoryItem(
-                image: IMG_LOGO_SANREMO,
-                title: 'Sanremo',
+                image: ESPRESSO_MACHINES,
+                title: 'Espresso Machines',
                 onTap: () {
                   Navigator.pushNamed(context, sanremoNewTicketRoute,
-                      arguments: TEMP_SANREMO);
+                      arguments: 'Espresso Machines');
                 },
               ),
               CategoryItem(
-                image: IMG_LOGO_PM,
+                image: Coffee_grinders,
+                title: 'Coffee Grinders',
+                onTap: () {
+                  Navigator.pushNamed(context, sanremoNewTicketRoute,
+                      arguments: 'Coffee Grinders');
+                },
+              ),
+              CategoryItem(
+                image: BatchBrewer,
+                title: 'Batch Brewer',
+                onTap: () {
+                  Navigator.pushNamed(context, sanremoNewTicketRoute,
+                      arguments: 'Batch Brewer');
+                },
+              ),
+              CategoryItem(
+                image: Perfect_Moose,
                 title: 'Perfect Moose',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, sanremoNewTicketRoute,
+                      arguments: 'Perfect Moose');
+                },
               ),
               CategoryItem(
-                image: IMG_LOGO_CEADO,
-                title: 'Ceado',
-                onTap: () {},
-              ),
-              CategoryItem(
-                image: IMG_LOGO_SIPRESSO,
-                title: 'Sipresso',
+                image: TAMPERS,
+                title: 'Tampers',
                 onTap: () {},
               ),
             ],

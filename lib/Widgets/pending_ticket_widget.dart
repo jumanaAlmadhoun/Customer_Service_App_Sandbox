@@ -14,6 +14,7 @@ class PendingTicketWidget extends StatelessWidget {
       this.onTap,
       this.machineNumber,
       this.techName,
+      this.machineType,
       this.onLongTap})
       : super(key: key);
 
@@ -25,6 +26,7 @@ class PendingTicketWidget extends StatelessWidget {
   final String? machineNumber;
   final bool? didContact;
   final String? techName;
+  final String? machineType;
   final onTap;
   final onLongTap;
 

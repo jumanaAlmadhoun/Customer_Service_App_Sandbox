@@ -1,4 +1,4 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe, unnecessary_new, unused_field, prefer_final_fields, avoid_print
+// ignore_for_file: import_of_legacy_library_into_null_safe, unnecessary_new, unused_field, prefer_final_fields, avoid_print, unused_element
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
@@ -28,7 +28,8 @@ import 'package:searchfield/searchfield.dart';
 import '../creator_home_page.dart';
 
 class SanremoNewTicketPage extends StatefulWidget {
-  const SanremoNewTicketPage({Key? key}) : super(key: key);
+  const SanremoNewTicketPage(this.machineType, {Key? key}) : super(key: key);
+  final String? machineType;
 
   @override
   _SanremoNewTicketPageState createState() => _SanremoNewTicketPageState();
@@ -46,7 +47,6 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   bool _readyToAssign = false;
   bool _isUrgent = false;
   bool _invConfirmation = false;
-
   List<String> techs = [];
   List<String>? machineModels = [];
   List<Customer>? allCustomers = [];
@@ -87,6 +87,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   String? _assignDirection = '';
   String? sheetID;
   String? status;
+  String? machineType;
 
   @override
   void didChangeDependencies() {
@@ -96,7 +97,9 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
 
   @override
   void didPush() async {
+    //-------------------
     super.didPush();
+    machineType = widget.machineType as String;
     setState(() {
       _isLoading = true;
     });
@@ -124,7 +127,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTranselted(context, NEW_SANREMO_TICKET)!),
+        title: Text("New " + machineType! + " Ticket"),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _isLoading,
@@ -594,6 +597,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
   Future<String> validateReport() async {
     String date = DateTime.now().toString().split(' ')[0];
     checkCustomerMachine();
+    machineType = widget.machineType as String;
     ticketHeader = getTicketHeader();
     if (_techName != 'N/A') {
       if (_assignDirection != '') {
@@ -667,6 +671,7 @@ class _SanremoNewTicketPageState extends State<SanremoNewTicketPage>
 
   Map<String, dynamic>? getTicketHeader() {
     return {
+      Ticket.MACHINE_TYPE: machineType!,
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),

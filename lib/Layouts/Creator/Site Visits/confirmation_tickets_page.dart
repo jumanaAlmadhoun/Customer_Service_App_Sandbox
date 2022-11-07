@@ -1,5 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe, avoid_print
 
+import 'dart:developer';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Helpers/database_constants.dart';
 import 'package:customer_service_app/Helpers/global_vars.dart';
@@ -65,10 +67,10 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
   @override
   void didPush() {
     super.didPush();
+    print('Pushed Review');
     setState(() {
       _isLoading = true;
     });
-
     Provider.of<TicketProvider>(context, listen: false)
         .fetchPendingTickets(DB_WAITING_CONFIRMATION)
         .then((value) {
@@ -234,6 +236,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
                     didContact: _tickets[i].didContact,
                     machineNumber: _tickets[i].machineNumber,
                     techName: _tickets[i].techName,
+                    machineType: _tickets[i].machineType,
                     onTap: () {
                       showDialog(
                           context: context,
@@ -252,12 +255,52 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
                                           .then((value) {
                                         Navigator.of(context).pop();
                                         if (value == NA || value == userName) {
-                                          List<Widget> design =
-                                              initMachineCheckDesign(
-                                                  _tickets[i]);
-                                          Navigator.pushNamed(context,
-                                              creatorConfirmDetailsRoute,
-                                              arguments: [_tickets[i], design]);
+                                          String ty =
+                                              _tickets[i].machineType as String;
+                                          debugPrint(ty);
+
+                                          if (ty == 'Perfect Moose') {
+                                            List<Widget> design =
+                                                initMachineCheckDesignPM(
+                                                    _tickets[i]);
+                                            Navigator.pushNamed(context,
+                                                creatorConfirmDetailsRoute,
+                                                arguments: [
+                                                  _tickets[i],
+                                                  design
+                                                ]);
+                                          } else if (ty ==
+                                              'Espresso Machines') {
+                                            List<Widget> design =
+                                                initMachineCheckDesign(
+                                                    _tickets[i]);
+                                            Navigator.pushNamed(context,
+                                                creatorConfirmDetailsRoute,
+                                                arguments: [
+                                                  _tickets[i],
+                                                  design
+                                                ]);
+                                          } else if (ty == 'Coffee Grinders') {
+                                            List<Widget> design =
+                                                initMachineCheckDesignGrinder(
+                                                    _tickets[i]);
+                                            Navigator.pushNamed(context,
+                                                creatorConfirmDetailsRoute,
+                                                arguments: [
+                                                  _tickets[i],
+                                                  design
+                                                ]);
+                                          } else if (ty == 'Batch Brewer') {
+                                            List<Widget> design =
+                                                initMachineCheckDesignBunn(
+                                                    _tickets[i]);
+                                            Navigator.pushNamed(context,
+                                                creatorConfirmDetailsRoute,
+                                                arguments: [
+                                                  _tickets[i],
+                                                  design
+                                                ]);
+                                          }
                                         } else if (value != userName) {
                                           CoolAlert.show(
                                               context: context,
@@ -298,6 +341,523 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
   }
 
   List<Widget> initMachineCheckDesign(Ticket ticket) {
+    List<Widget> _machineCheckDesign = [];
+    try {
+      var techInfo = ticket.info as Map<String, dynamic>;
+      var partsInfo = ticket.parts as Map<String, dynamic>;
+      print(partsInfo);
+
+      String generalComments = '';
+      techInfo.forEach((key, value) {
+        generalComments += key.startsWith('comment') ? value : '';
+      });
+      _machineCheckDesign = [
+        MachineCheckWidget(
+          title: 'قطع مكسورة أو مفقودة',
+          keyJson: '1',
+          validate: validateNote,
+          comments: null,
+          pass: techInfo['1_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['1_Pass'],
+          controller:
+              TextEditingController(text: techInfo['1_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'نظافة المكينة العامة',
+          keyJson: '2',
+          validate: validateNote,
+          pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['2_Pass'],
+          comments: getCommentsByCategory(
+              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص وجود تهريبات في المكينة',
+          keyJson: '3',
+          validate: validateNote,
+          pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['3_Pass'],
+          controller:
+              TextEditingController(text: techInfo['3_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص عدادات الماء',
+          keyJson: '4',
+          validate: validateNote,
+          pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['4_Pass'],
+          comments: getCommentsByCategory(
+              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص مصدر الماء',
+          keyJson: '5',
+          validate: validateNote,
+          pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['5_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'نوع مصدر الماء',
+          keyJson: '6',
+          validate: validateNote,
+          pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['6_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص التوصيلات والسلامة العامة',
+          keyJson: '7',
+          validate: validateNote,
+          pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['7_Pass'],
+          comments: getCommentsByCategory(
+              Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص ضغط المضخة الرئيسية',
+          keyJson: '8',
+          validate: validateNote,
+          pass: techInfo['8_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['8_Pass'],
+          controller:
+              TextEditingController(text: techInfo['8_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص وحدة التحكم بالبخار',
+          keyJson: '9',
+          validate: validateNote,
+          pass: techInfo['9_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['9_Pass'],
+          comments: getCommentsByCategory(
+              Comment.STEAM_COMMENTS, techInfo['9_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص قوة البخار',
+          keyJson: '10',
+          validate: validateNote,
+          pass: techInfo['10_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['10_Pass'],
+          controller:
+              TextEditingController(text: techInfo['10_Comment'].toString()),
+        ),
+        TextWidget(
+          title: 'إصدار برنامج التشغيل',
+          jsonKey: 'os',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['os']),
+        ),
+        TextWidget(
+          title: 'اجمالي عدد الاكواب Total Cup',
+          jsonKey: 'total_cups',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['total_cups']),
+        ),
+        TextWidget(
+          title: 'اجمالي عدد الاكواب Service',
+          jsonKey: 'total_cups_ser',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['total_cups_ser']),
+        ),
+        GroupCheckWidget(
+          title: 'قياس الضغط (بار / psi)',
+          keyJson: 'G1',
+          controllerG1: TextEditingController(text: techInfo['G1_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G1_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G1_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G1_Comment'][3]),
+          isPassG1: techInfo['G1_Pass'][0],
+          isPassG2: techInfo['G1_Pass'][1],
+          isPassG3: techInfo['G1_Pass'][2],
+          isPassG4: techInfo['G1_Pass'][3],
+          passG1: techInfo['G1_PassL'][0],
+          passG2: techInfo['G1_PassL'][1],
+          passG3: techInfo['G1_PassL'][2],
+          passG4: techInfo['G1_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'فحص الاستخلاص الافتراضي',
+          keyJson: 'G2',
+          controllerG1: TextEditingController(text: techInfo['G2_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G2_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G2_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G2_Comment'][3]),
+          isPassG1: techInfo['G2_Pass'][0],
+          isPassG2: techInfo['G2_Pass'][1],
+          isPassG3: techInfo['G2_Pass'][2],
+          isPassG4: techInfo['G2_Pass'][3],
+          passG1: techInfo['G2_PassL'][0],
+          passG2: techInfo['G2_PassL'][1],
+          passG3: techInfo['G2_PassL'][2],
+          passG4: techInfo['G2_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'وزن الماء (جرام/10ثواني)',
+          keyJson: 'G3',
+          controllerG1: TextEditingController(text: techInfo['G3_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G3_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G3_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G3_Comment'][3]),
+          isPassG1: techInfo['G3_Pass'][0],
+          isPassG2: techInfo['G3_Pass'][1],
+          isPassG3: techInfo['G3_Pass'][2],
+          isPassG4: techInfo['G3_Pass'][3],
+          passG1: techInfo['G3_PassL'][0],
+          passG2: techInfo['G3_PassL'][1],
+          passG3: techInfo['G3_PassL'][2],
+          passG4: techInfo['G3_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'فحص الترطيب (جرام/10ثواني)',
+          keyJson: 'G4',
+          controllerG1: TextEditingController(text: techInfo['G4_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G4_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G4_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G4_Comment'][3]),
+          isPassG1: techInfo['G4_Pass'][0],
+          isPassG2: techInfo['G4_Pass'][1],
+          isPassG3: techInfo['G4_Pass'][2],
+          isPassG4: techInfo['G4_Pass'][3],
+          passG1: techInfo['G4_PassL'][0],
+          passG2: techInfo['G4_PassL'][1],
+          passG3: techInfo['G4_PassL'][2],
+          passG4: techInfo['G4_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'فحص البورتفيلتر',
+          keyJson: 'G5',
+          controllerG1: TextEditingController(text: techInfo['G5_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G5_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G5_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G5_Comment'][3]),
+          isPassG1: techInfo['G5_Pass'][0],
+          isPassG2: techInfo['G5_Pass'][1],
+          isPassG3: techInfo['G5_Pass'][2],
+          isPassG4: techInfo['G5_Pass'][3],
+          passG1: techInfo['G5_PassL'][0],
+          passG2: techInfo['G5_PassL'][1],
+          passG3: techInfo['G5_PassL'][2],
+          passG4: techInfo['G5_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'جلود ودش المجموعة',
+          keyJson: 'G6',
+          controllerG1: TextEditingController(text: techInfo['G6_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G6_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G6_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G6_Comment'][3]),
+          isPassG1: techInfo['G6_Pass'][0],
+          isPassG2: techInfo['G6_Pass'][1],
+          isPassG3: techInfo['G6_Pass'][2],
+          isPassG4: techInfo['G6_Pass'][3],
+          passG1: techInfo['G6_PassL'][0],
+          passG2: techInfo['G6_PassL'][1],
+          passG3: techInfo['G6_PassL'][2],
+          passG4: techInfo['G6_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'TDS = (0-120ppm)',
+          keyJson: 'G7',
+          controllerG1: TextEditingController(text: techInfo['G7_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G7_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G7_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G7_Comment'][3]),
+          isPassG1: techInfo['G7_Pass'][0],
+          isPassG2: techInfo['G7_Pass'][1],
+          isPassG3: techInfo['G7_Pass'][2],
+          isPassG4: techInfo['G7_Pass'][3],
+          passG1: techInfo['G7_PassL'][0],
+          passG2: techInfo['G7_PassL'][1],
+          passG3: techInfo['G7_PassL'][2],
+          passG4: techInfo['G7_PassL'][3],
+        ),
+        GroupCheckWidget(
+          title: 'PH = (7.0-7.5)',
+          keyJson: 'G8',
+          controllerG1: TextEditingController(text: techInfo['G8_Comment'][0]),
+          controllerG2: TextEditingController(text: techInfo['G8_Comment'][1]),
+          controllerG3: TextEditingController(text: techInfo['G8_Comment'][2]),
+          controllerG4: TextEditingController(text: techInfo['G8_Comment'][3]),
+          isPassG1: techInfo['G8_Pass'][0],
+          isPassG2: techInfo['G8_Pass'][1],
+          isPassG3: techInfo['G8_Pass'][2],
+          isPassG4: techInfo['G8_Pass'][3],
+          passG1: techInfo['G8_PassL'][0],
+          passG2: techInfo['G8_PassL'][1],
+          passG3: techInfo['G8_PassL'][2],
+          passG4: techInfo['G8_PassL'][3],
+        ),
+        // CommentWidget(
+        //   title: 'القاطع الكهربائي غير مطابق لتوصيات السلامة العامة والمعايير',
+        // ),
+        // CommentWidget(
+        //   title: 'لايوجد قاطع كهربائي',
+        // ),
+        // CommentWidget(title: 'لايوجد ارضي'),
+        // CommentWidget(title: 'الارضي غير فعال'),
+        // CommentWidget(title: 'توصيل ثنائي القطبية 110'),
+        // CommentWidget(title: 'توصيل غير صحيح من قبل المستخدم'),
+        // CommentWidget(title: 'مصدر الماء غير مطابق للمعايير و التوصيات'),
+        // CommentWidget(title: 'تدفق مصدر الماء متغير/ضعيف\n مما يؤثر على المكينة'),
+        // CommentWidget(title: 'نسبة قاعدية الماء غير مطابقة للمعايير'),
+        // CommentWidget(title: 'نسبة المواد الصلبة المذابة غير مطابقة للمعايير'),
+        // CommentWidget(title: 'تكلسات املاح مرئية داخل المكينة'),
+        CommentWidget(
+          title: 'تم تنظيف عداد المياه',
+          isSelected: generalComments.contains('تم تنظيف عداد المياه'),
+        ),
+        CommentWidget(
+          title: 'تم تنظيف مجرى المياه',
+          isSelected: generalComments.contains('تم تنظيف مجرى المياه'),
+        ),
+        CommentWidget(
+          title: 'تم تفريغ الغلاية عدة مرات لوجود املاح',
+          isSelected:
+              generalComments.contains('تم تفريغ الغلاية عدة مرات لوجود املاح'),
+        ),
+        CommentWidget(
+          title: 'تم تنظيف المجموعة/المجموعات',
+          isSelected: generalComments.contains('تم تنظيف المجموعة/المجموعات'),
+        ),
+        CommentWidget(
+          title: 'تم صيانة وحدة التبخير',
+          isSelected: generalComments.contains('تم صيانة وحدة التبخير'),
+        ),
+        CommentWidget(
+          title: 'تم تحديث برنامج التشغيل',
+          isSelected: generalComments.contains('تم تحديث برنامج التشغيل'),
+        ),
+        CommentWidget(
+          title: 'تم فك وتنظيف وحدة الترطيب',
+          isSelected: generalComments.contains('تم فك وتنظيف وحدة الترطيب'),
+        ),
+        CommentWidget(
+          title: 'تم فك المجموعة وتنظيف المقنن',
+          isSelected: generalComments.contains('تم فك المجموعة وتنظيف المقنن'),
+        ),
+        CommentWidget(
+          title: 'يوجد فرق كميات لايمكن حله في الموقع',
+          isSelected:
+              generalComments.contains('يوجد فرق كميات لايمكن حله في الموقع'),
+        ),
+        CommentWidget(
+          title: 'يوجد تكلسات لايمكن تنظيفها في الموقع',
+          isSelected:
+              generalComments.contains('يوجد تكلسات لايمكن تنظيفها في الموقع'),
+        ),
+        CommentWidget(
+          title: 'نوصي بنقل المكينة لمركز الصيانة',
+          isSelected:
+              generalComments.contains('نوصي بنقل المكينة لمركز الصيانة'),
+        ),
+        CommentWidget(
+          title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
+          isSelected: generalComments
+              .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
+        ),
+        TextWidget(
+          title: 'ملاحظات الفني',
+          jsonKey: 'tech_notes',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['tech_notes']),
+        ),
+      ];
+      print(techInfo['tech_notes']);
+      try {
+        partsInfo.forEach((key, value) {
+          if (key != 'partsCount') {
+            _machineCheckDesign.add(SparePartWidget(
+              allParts: _allParts,
+              partNo: TextEditingController(text: key),
+              qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+              isFreePart: value[PART_IS_FREE_KEY],
+            ));
+          }
+        });
+      } catch (ex) {
+        print(ex);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return _machineCheckDesign;
+  }
+
+  List<CommentWidget>? getCommentsByCategory(String category, String techInfo) {
+    try {
+      List<CommentWidget> commentWidgets = [];
+      List<Comment> categoryComments = _allComments
+          .where((element) => element.commentCategory == category)
+          .toList();
+      categoryComments.forEach((element) {
+        bool isSelected = false;
+        if (techInfo.contains(element.comment!.trim())) {
+          print(element.comment);
+          isSelected = true;
+        }
+        commentWidgets
+            .add(CommentWidget(title: element.comment, isSelected: isSelected));
+      });
+      return commentWidgets;
+    } catch (ex) {
+      print('UI Comments ERROR $ex');
+    }
+  }
+
+  List<Widget> initMachineCheckDesignPM(Ticket ticket) {
+    List<Widget> _machineCheckDesign = [];
+    try {
+      var techInfo = ticket.info as Map<String, dynamic>;
+      var partsInfo = ticket.parts as Map<String, dynamic>;
+      print(partsInfo);
+
+      String generalComments = '';
+      techInfo.forEach((key, value) {
+        generalComments += key.startsWith('comment') ? value : '';
+      });
+      _machineCheckDesign = [
+        MachineCheckWidget(
+          title: 'قطع مكسورة أو مفقودة',
+          keyJson: '1',
+          validate: validateNote,
+          comments: null,
+          pass: techInfo['1_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['1_Pass'],
+          controller:
+              TextEditingController(text: techInfo['1_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'نظافة المكينة العامة',
+          keyJson: '2',
+          validate: validateNote,
+          pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['2_Pass'],
+          comments: getCommentsByCategory(
+              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص وجود تهريبات في المكينة',
+          keyJson: '3',
+          validate: validateNote,
+          pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['3_Pass'],
+          controller:
+              TextEditingController(text: techInfo['3_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص الإعدادات ',
+          keyJson: '4',
+          validate: validateNote,
+          pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['4_Pass'],
+          comments: getCommentsByCategory(
+              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص مصدر التبخير',
+          keyJson: '5',
+          validate: validateNote,
+          pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['5_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'نوع جودة تسخين الحليب ',
+          keyJson: '6',
+          validate: validateNote,
+          pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['6_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص التوصيلات والسلامة العامة',
+          keyJson: '7',
+          validate: validateNote,
+          pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['7_Pass'],
+          comments: getCommentsByCategory(
+              Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص ضغط البخار والحرارة ',
+          keyJson: '8',
+          validate: validateNote,
+          pass: techInfo['8_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['8_Pass'],
+          controller:
+              TextEditingController(text: techInfo['8_Comment'].toString()),
+        ),
+        TextWidget(
+          title: 'نوع مكينة القهوة  ',
+          jsonKey: 'os',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['os']),
+        ),
+        TextWidget(
+          title: 'إصدار برنامج التشغيل',
+          jsonKey: 'coffe_Machine_Type',
+          validate: validateNote,
+          enabled: false,
+          controller:
+              TextEditingController(text: techInfo['coffe_Machine_Type']),
+        ),
+        TextWidget(
+          title: 'اجمالي عدد الاكواب Total Cup',
+          jsonKey: 'total_cups',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['total_cups']),
+        ),
+        CommentWidget(
+          title: 'نوصي بنقل المكينة لمركز الصيانة',
+          isSelected:
+              generalComments.contains('نوصي بنقل المكينة لمركز الصيانة'),
+        ),
+        CommentWidget(
+          title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
+          isSelected: generalComments
+              .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
+        ),
+        TextWidget(
+          title: 'ملاحظات الفني',
+          jsonKey: 'tech_notes',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['tech_notes']),
+        ),
+      ];
+      print(techInfo['tech_notes']);
+      try {
+        partsInfo.forEach((key, value) {
+          if (key != 'partsCount') {
+            _machineCheckDesign.add(SparePartWidget(
+              allParts: _allParts,
+              partNo: TextEditingController(text: key),
+              qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+              isFreePart: value[PART_IS_FREE_KEY],
+            ));
+          }
+        });
+      } catch (ex) {
+        print(ex);
+      }
+    } catch (ex) {
+      print(ex);
+    }
+    return _machineCheckDesign;
+  }
+
+  //-----------------------------------------------------------------
+  List<Widget> initMachineCheckDesignBunn(Ticket ticket) {
     var techInfo = ticket.info as Map<String, dynamic>;
     var partsInfo = ticket.parts as Map<String, dynamic>;
     print(partsInfo);
@@ -309,7 +869,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
     List<Widget> _machineCheckDesign = [];
     _machineCheckDesign = [
       MachineCheckWidget(
-        title: 'قطع مكسورة أو مفقودة',
+        title: 'فحص القمع',
         keyJson: '1',
         validate: validateNote,
         comments: null,
@@ -319,7 +879,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             TextEditingController(text: techInfo['1_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'نظافة المكينة العامة',
+        title: 'فحص قفل القمع',
         keyJson: '2',
         validate: validateNote,
         pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
@@ -328,7 +888,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'فحص وجود تهريبات في المكينة',
+        title: 'فحص صمام الدش',
         keyJson: '3',
         validate: validateNote,
         pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
@@ -337,7 +897,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             TextEditingController(text: techInfo['3_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'فحص عدادات الماء',
+        title: 'فحص صمام التعبئة',
         keyJson: '4',
         validate: validateNote,
         pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
@@ -346,7 +906,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'فحص مصدر الماء',
+        title: 'فحص صمام الهواء',
         keyJson: '5',
         validate: validateNote,
         pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
@@ -355,7 +915,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'نوع مصدر الماء',
+        title: 'فحص صمام التجاوز',
         keyJson: '6',
         validate: validateNote,
         pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
@@ -364,7 +924,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'فحص التوصيلات والسلامة العامة',
+        title: 'فحص خزان القهوة',
         keyJson: '7',
         validate: validateNote,
         pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
@@ -373,7 +933,7 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
             Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
       ),
       MachineCheckWidget(
-        title: 'فحص ضغط المضخة الرئيسية',
+        title: 'فحص استجابة الشاشة',
         keyJson: '8',
         validate: validateNote,
         pass: techInfo['8_Pass'] ? 'نجاح' : 'فشل',
@@ -381,234 +941,12 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         controller:
             TextEditingController(text: techInfo['8_Comment'].toString()),
       ),
-      MachineCheckWidget(
-        title: 'فحص وحدة التحكم بالبخار',
-        keyJson: '9',
-        validate: validateNote,
-        pass: techInfo['9_Pass'] ? 'نجاح' : 'فشل',
-        isPass: techInfo['9_Pass'],
-        comments: getCommentsByCategory(
-            Comment.STEAM_COMMENTS, techInfo['9_Comment'].toString()),
-      ),
-      MachineCheckWidget(
-        title: 'فحص قوة البخار',
-        keyJson: '10',
-        validate: validateNote,
-        pass: techInfo['10_Pass'] ? 'نجاح' : 'فشل',
-        isPass: techInfo['10_Pass'],
-        controller:
-            TextEditingController(text: techInfo['10_Comment'].toString()),
-      ),
       TextWidget(
         title: 'إصدار برنامج التشغيل',
         jsonKey: 'os',
         validate: validateNote,
         enabled: false,
         controller: TextEditingController(text: techInfo['os']),
-      ),
-      TextWidget(
-        title: 'اجمالي عدد الاكواب Total Cup',
-        jsonKey: 'total_cups',
-        validate: validateNote,
-        enabled: false,
-        controller: TextEditingController(text: techInfo['total_cups']),
-      ),
-      TextWidget(
-        title: 'اجمالي عدد الاكواب Service',
-        jsonKey: 'total_cups_ser',
-        validate: validateNote,
-        enabled: false,
-        controller: TextEditingController(text: techInfo['total_cups_ser']),
-      ),
-      GroupCheckWidget(
-        title: 'قياس الضغط (بار / psi)',
-        keyJson: 'G1',
-        controllerG1: TextEditingController(text: techInfo['G1_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G1_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G1_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G1_Comment'][3]),
-        isPassG1: techInfo['G1_Pass'][0],
-        isPassG2: techInfo['G1_Pass'][1],
-        isPassG3: techInfo['G1_Pass'][2],
-        isPassG4: techInfo['G1_Pass'][3],
-        passG1: techInfo['G1_PassL'][0],
-        passG2: techInfo['G1_PassL'][1],
-        passG3: techInfo['G1_PassL'][2],
-        passG4: techInfo['G1_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'فحص الاستخلاص الافتراضي',
-        keyJson: 'G2',
-        controllerG1: TextEditingController(text: techInfo['G2_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G2_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G2_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G2_Comment'][3]),
-        isPassG1: techInfo['G2_Pass'][0],
-        isPassG2: techInfo['G2_Pass'][1],
-        isPassG3: techInfo['G2_Pass'][2],
-        isPassG4: techInfo['G2_Pass'][3],
-        passG1: techInfo['G2_PassL'][0],
-        passG2: techInfo['G2_PassL'][1],
-        passG3: techInfo['G2_PassL'][2],
-        passG4: techInfo['G2_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'وزن الماء (جرام/10ثواني)',
-        keyJson: 'G3',
-        controllerG1: TextEditingController(text: techInfo['G3_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G3_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G3_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G3_Comment'][3]),
-        isPassG1: techInfo['G3_Pass'][0],
-        isPassG2: techInfo['G3_Pass'][1],
-        isPassG3: techInfo['G3_Pass'][2],
-        isPassG4: techInfo['G3_Pass'][3],
-        passG1: techInfo['G3_PassL'][0],
-        passG2: techInfo['G3_PassL'][1],
-        passG3: techInfo['G3_PassL'][2],
-        passG4: techInfo['G3_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'فحص الترطيب (جرام/10ثواني)',
-        keyJson: 'G4',
-        controllerG1: TextEditingController(text: techInfo['G4_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G4_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G4_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G4_Comment'][3]),
-        isPassG1: techInfo['G4_Pass'][0],
-        isPassG2: techInfo['G4_Pass'][1],
-        isPassG3: techInfo['G4_Pass'][2],
-        isPassG4: techInfo['G4_Pass'][3],
-        passG1: techInfo['G4_PassL'][0],
-        passG2: techInfo['G4_PassL'][1],
-        passG3: techInfo['G4_PassL'][2],
-        passG4: techInfo['G4_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'فحص البورتفيلتر',
-        keyJson: 'G5',
-        controllerG1: TextEditingController(text: techInfo['G5_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G5_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G5_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G5_Comment'][3]),
-        isPassG1: techInfo['G5_Pass'][0],
-        isPassG2: techInfo['G5_Pass'][1],
-        isPassG3: techInfo['G5_Pass'][2],
-        isPassG4: techInfo['G5_Pass'][3],
-        passG1: techInfo['G5_PassL'][0],
-        passG2: techInfo['G5_PassL'][1],
-        passG3: techInfo['G5_PassL'][2],
-        passG4: techInfo['G5_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'جلود ودش المجموعة',
-        keyJson: 'G6',
-        controllerG1: TextEditingController(text: techInfo['G6_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G6_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G6_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G6_Comment'][3]),
-        isPassG1: techInfo['G6_Pass'][0],
-        isPassG2: techInfo['G6_Pass'][1],
-        isPassG3: techInfo['G6_Pass'][2],
-        isPassG4: techInfo['G6_Pass'][3],
-        passG1: techInfo['G6_PassL'][0],
-        passG2: techInfo['G6_PassL'][1],
-        passG3: techInfo['G6_PassL'][2],
-        passG4: techInfo['G6_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'TDS = (0-120ppm)',
-        keyJson: 'G7',
-        controllerG1: TextEditingController(text: techInfo['G7_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G7_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G7_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G7_Comment'][3]),
-        isPassG1: techInfo['G7_Pass'][0],
-        isPassG2: techInfo['G7_Pass'][1],
-        isPassG3: techInfo['G7_Pass'][2],
-        isPassG4: techInfo['G7_Pass'][3],
-        passG1: techInfo['G7_PassL'][0],
-        passG2: techInfo['G7_PassL'][1],
-        passG3: techInfo['G7_PassL'][2],
-        passG4: techInfo['G7_PassL'][3],
-      ),
-      GroupCheckWidget(
-        title: 'PH = (7.0-7.5)',
-        keyJson: 'G8',
-        controllerG1: TextEditingController(text: techInfo['G8_Comment'][0]),
-        controllerG2: TextEditingController(text: techInfo['G8_Comment'][1]),
-        controllerG3: TextEditingController(text: techInfo['G8_Comment'][2]),
-        controllerG4: TextEditingController(text: techInfo['G8_Comment'][3]),
-        isPassG1: techInfo['G8_Pass'][0],
-        isPassG2: techInfo['G8_Pass'][1],
-        isPassG3: techInfo['G8_Pass'][2],
-        isPassG4: techInfo['G8_Pass'][3],
-        passG1: techInfo['G8_PassL'][0],
-        passG2: techInfo['G8_PassL'][1],
-        passG3: techInfo['G8_PassL'][2],
-        passG4: techInfo['G8_PassL'][3],
-      ),
-      // CommentWidget(
-      //   title: 'القاطع الكهربائي غير مطابق لتوصيات السلامة العامة والمعايير',
-      // ),
-      // CommentWidget(
-      //   title: 'لايوجد قاطع كهربائي',
-      // ),
-      // CommentWidget(title: 'لايوجد ارضي'),
-      // CommentWidget(title: 'الارضي غير فعال'),
-      // CommentWidget(title: 'توصيل ثنائي القطبية 110'),
-      // CommentWidget(title: 'توصيل غير صحيح من قبل المستخدم'),
-      // CommentWidget(title: 'مصدر الماء غير مطابق للمعايير و التوصيات'),
-      // CommentWidget(title: 'تدفق مصدر الماء متغير/ضعيف\n مما يؤثر على المكينة'),
-      // CommentWidget(title: 'نسبة قاعدية الماء غير مطابقة للمعايير'),
-      // CommentWidget(title: 'نسبة المواد الصلبة المذابة غير مطابقة للمعايير'),
-      // CommentWidget(title: 'تكلسات املاح مرئية داخل المكينة'),
-      CommentWidget(
-        title: 'تم تنظيف عداد المياه',
-        isSelected: generalComments.contains('تم تنظيف عداد المياه'),
-      ),
-      CommentWidget(
-        title: 'تم تنظيف مجرى المياه',
-        isSelected: generalComments.contains('تم تنظيف مجرى المياه'),
-      ),
-      CommentWidget(
-        title: 'تم تفريغ الغلاية عدة مرات لوجود املاح',
-        isSelected:
-            generalComments.contains('تم تفريغ الغلاية عدة مرات لوجود املاح'),
-      ),
-      CommentWidget(
-        title: 'تم تنظيف المجموعة/المجموعات',
-        isSelected: generalComments.contains('تم تنظيف المجموعة/المجموعات'),
-      ),
-      CommentWidget(
-        title: 'تم صيانة وحدة التبخير',
-        isSelected: generalComments.contains('تم صيانة وحدة التبخير'),
-      ),
-      CommentWidget(
-        title: 'تم تحديث برنامج التشغيل',
-        isSelected: generalComments.contains('تم تحديث برنامج التشغيل'),
-      ),
-      CommentWidget(
-        title: 'تم فك وتنظيف وحدة الترطيب',
-        isSelected: generalComments.contains('تم فك وتنظيف وحدة الترطيب'),
-      ),
-      CommentWidget(
-        title: 'تم فك المجموعة وتنظيف المقنن',
-        isSelected: generalComments.contains('تم فك المجموعة وتنظيف المقنن'),
-      ),
-      CommentWidget(
-        title: 'يوجد فرق كميات لايمكن حله في الموقع',
-        isSelected:
-            generalComments.contains('يوجد فرق كميات لايمكن حله في الموقع'),
-      ),
-      CommentWidget(
-        title: 'يوجد تكلسات لايمكن تنظيفها في الموقع',
-        isSelected:
-            generalComments.contains('يوجد تكلسات لايمكن تنظيفها في الموقع'),
-      ),
-      CommentWidget(
-        title: 'نوصي بنقل المكينة لمركز الصيانة',
-        isSelected: generalComments.contains('نوصي بنقل المكينة لمركز الصيانة'),
       ),
       CommentWidget(
         title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
@@ -641,24 +979,117 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
     return _machineCheckDesign;
   }
 
-  List<CommentWidget>? getCommentsByCategory(String category, String techInfo) {
+  //----------------------------------------------------------------------------
+  List<Widget> initMachineCheckDesignGrinder(Ticket ticket) {
+    List<Widget> _machineCheckDesign = [];
     try {
-      List<CommentWidget> commentWidgets = [];
-      List<Comment> categoryComments = _allComments
-          .where((element) => element.commentCategory == category)
-          .toList();
-      categoryComments.forEach((element) {
-        bool isSelected = false;
-        if (techInfo.contains(element.comment!.trim())) {
-          print(element.comment);
-          isSelected = true;
-        }
-        commentWidgets
-            .add(CommentWidget(title: element.comment, isSelected: isSelected));
+      var techInfo = ticket.info as Map<String, dynamic>;
+      var partsInfo = ticket.parts as Map<String, dynamic>;
+      print(partsInfo);
+
+      String generalComments = '';
+      techInfo.forEach((key, value) {
+        generalComments += key.startsWith('comment') ? value : '';
       });
-      return commentWidgets;
+      _machineCheckDesign = [
+        MachineCheckWidget(
+          title: 'فحص البرمجة',
+          keyJson: '1',
+          validate: validateNote,
+          comments: null,
+          pass: techInfo['1_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['1_Pass'],
+          controller:
+              TextEditingController(text: techInfo['1_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص شاشة المطحنة',
+          keyJson: '2',
+          validate: validateNote,
+          pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['2_Pass'],
+          comments: getCommentsByCategory(
+              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص مفكك التكتلات',
+          keyJson: '3',
+          validate: validateNote,
+          pass: techInfo['3_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['3_Pass'],
+          controller:
+              TextEditingController(text: techInfo['3_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص جودة الطحنة',
+          keyJson: '4',
+          validate: validateNote,
+          pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['4_Pass'],
+          comments: getCommentsByCategory(
+              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص حجر الطحن',
+          keyJson: '5',
+          validate: validateNote,
+          pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['5_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+        ),
+        MachineCheckWidget(
+          title: 'فحص كابل الكهرباء ',
+          keyJson: '6',
+          validate: validateNote,
+          pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
+          isPass: techInfo['6_Pass'],
+          comments: getCommentsByCategory(
+              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+        ),
+        TextWidget(
+          title: 'اجمالي عدد الاكواب Total Cup',
+          jsonKey: 'total_cups',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['total_cups']),
+        ),
+        CommentWidget(
+          title: 'نوصي بنقل المكينة لمركز الصيانة',
+          isSelected:
+              generalComments.contains('نوصي بنقل المكينة لمركز الصيانة'),
+        ),
+        CommentWidget(
+          title: 'نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة',
+          isSelected: generalComments
+              .contains('نوصي بتعديل التوصيلات \nوالملاحظات حسب توصيات الشركة'),
+        ),
+        TextWidget(
+          title: 'ملاحظات الفني',
+          jsonKey: 'tech_notes',
+          validate: validateNote,
+          enabled: false,
+          controller: TextEditingController(text: techInfo['tech_notes']),
+        ),
+      ];
+      print(techInfo['tech_notes']);
+      try {
+        partsInfo.forEach((key, value) {
+          if (key != 'partsCount') {
+            _machineCheckDesign.add(SparePartWidget(
+              allParts: _allParts,
+              partNo: TextEditingController(text: key),
+              qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
+              isFreePart: value[PART_IS_FREE_KEY],
+            ));
+          }
+        });
+      } catch (ex) {
+        print(ex);
+      }
     } catch (ex) {
-      print('UI Comments ERROR $ex');
+      print(ex);
     }
+    return _machineCheckDesign;
   }
 }

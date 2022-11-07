@@ -732,6 +732,7 @@ class _CustomerTicketInfoState extends State<CustomerTicketInfo>
       Ticket.DID_CONTACT: _didContact,
       Ticket.MAIN_CATEGORY: Ticket.SITE_VISIT_CATEGORY,
       Ticket.MACHINE_MODEL: selectedModel!.text.trim(),
+      //  Ticket.MACHINE_TYPE: machineType!,
       Ticket.SERIAL_NUMBER: machineNumber!.text.trim(),
       Ticket.CUSTOMER_NUMBER: customerNumber!.text.trim(),
       Ticket.CAFE_LOCATION: cafeLocation!.text.trim(),

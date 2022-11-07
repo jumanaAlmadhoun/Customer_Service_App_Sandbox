@@ -25,6 +25,9 @@ class Ticket with ChangeNotifier {
   static const String SEARCH_TEXT = 'searchText';
   static const String CREATION_DATE = 'creationDate';
   static const String MACHINE_MODEL = 'appDescrption';
+  //------------------------------------------------------
+  static const String MACHINE_TYPE = "machineType";
+  //------------------------------------------------------
   static const String CUSTOMER_NUMBER = 'customerNumber';
   static const String SERIAL_NUMBER = 'serialNumber';
   static const String FROM_TABLE = 'fromTable';
@@ -123,6 +126,7 @@ class Ticket with ChangeNotifier {
       this.from,
       this.lastEditBy,
       this.machineModel,
+      this.machineType,
       this.machineNumber,
       this.mainCategory,
       this.problemDesc,
@@ -167,6 +171,7 @@ class Ticket with ChangeNotifier {
       this.laborCharge});
 
   String? machineModel;
+  String? machineType;
   String? assignDate;
   String? cafeLocation;
   String? cafeName;

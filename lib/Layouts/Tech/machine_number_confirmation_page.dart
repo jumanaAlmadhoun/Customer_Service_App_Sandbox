@@ -1,11 +1,12 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:customer_service_app/Models/ticket.dart';
-import 'package:customer_service_app/Routes/route_names.dart';
 import 'package:customer_service_app/Services/ticket_provider.dart';
 import 'package:customer_service_app/Util/formatters.dart';
 import 'package:customer_service_app/Widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../Routes/route_names.dart';
 
 class MachineNumberConfirmationPage extends StatefulWidget {
   MachineNumberConfirmationPage(this.ticket);
@@ -52,12 +53,39 @@ class _MachineNumberConfirmationPageState
             ButtonWidget(
                 text: 'التالي',
                 onTap: () async {
+                  String page = '';
                   if (widget.ticket!.machineNumber!.trim().toUpperCase() ==
                       machineNumberController.text.trim().toUpperCase()) {
                     await Provider.of<TicketProvider>(context, listen: false)
                         .startFillReport(widget.ticket);
-                    Navigator.pushReplacementNamed(
-                        context, techFillSiteVisitRoute,
+
+                    /*if (widget.ticket!.machineModel!.contains("PM")) {
+                      page = 'techFillTicketPagePM';
+                    } else if (widget.ticket!.machineModel!.contains("Ceado") ||
+                        (widget.ticket!.machineModel!.contains("Leon")) ||
+                        (widget.ticket!.machineModel!.contains("Grinder"))) {
+                      page = 'techFillTicketPageGrinde';
+                    } else if (widget.ticket!.machineModel!.contains("Bunn")) {
+                      page = 'techFillTicketPageBunn';
+                    } else {
+                      page = 'techFillSiteVisitRoute';
+                    }*/
+
+                    if (widget.ticket!.machineType!.trim() ==
+                        ("Perfect Moose")) {
+                      page = 'techFillTicketPagePM';
+                    } else if (widget.ticket!.machineType!.trim() ==
+                        "Coffee Grinders") {
+                      page = 'techFillTicketPageGrinde';
+                    } else if (widget.ticket!.machineType!.trim() ==
+                        "Batch Brewer") {
+                      page = 'techFillTicketPageBunn';
+                    } else if (widget.ticket!.machineType!.trim() ==
+                        "Espresso Machines") {
+                      page = 'techFillSiteVisitRoute';
+                    }
+
+                    Navigator.pushReplacementNamed(context, page,
                         arguments: widget.ticket);
                   } else {
                     CoolAlert.show(
