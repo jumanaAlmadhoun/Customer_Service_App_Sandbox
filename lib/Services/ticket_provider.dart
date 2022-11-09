@@ -168,6 +168,7 @@ class TicketProvider with ChangeNotifier {
               subCategory: value[Ticket.SUB_CATEGORY] ?? '',
               techName: value[Ticket.TECH_NAME] ?? '',
               ticketNumber: value[Ticket.TICKET_NUMBER] ?? '',
+              machineType: value[Ticket.MACHINE_TYPE] ?? '',
               visitDate: value[Ticket.VISIT_DATE] ?? '',
               firebaseID: key,
               fromTable: from,
@@ -849,19 +850,15 @@ class TicketProvider with ChangeNotifier {
           body: jsonEncode({Ticket.CUSTOMER_SIGNATURE: signature}));
       var response = await http
           .get(Uri.parse('$GENERAL_TECH_FILL_SCRIPT?url=$firebaseUrl'));
-
       print(response.body);
       var data = jsonDecode(response.body);
-      print(response.body);
       if (data[SC_STATUS_KEY] == SC_SUCCESS_RESPONSE) {
         invoiceName = data['invName'];
         invoiceUrl = data['invLink'];
         reportName = data['name'];
         reportUrl = data['URL'];
-        log("good");
         return Future.value(data[SC_STATUS_KEY]);
       } else {
-        log("else");
         return Future.value(data[SC_STATUS_KEY]);
       }
     } catch (ex) {

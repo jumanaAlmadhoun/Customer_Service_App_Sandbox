@@ -177,8 +177,10 @@ class _ApprovedTicketDetailsState extends State<ApprovedTicketDetails>
                         setState(() {
                           _isLoading = false;
                         });
+
+                        log("this");
                         if (value == SC_SUCCESS_RESPONSE) {
-                          log('hi2');
+                          log("this2");
                           CoolAlert.show(
                               barrierDismissible: false,
                               context: context,

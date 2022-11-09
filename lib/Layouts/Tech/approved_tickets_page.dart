@@ -234,9 +234,30 @@ class _ApprovedTicketPageState extends State<ApprovedTicketPage>
                   techName: _tickets[i].techName,
                   machineType: _tickets[i].machineType,
                   onTap: () {
-                    List<Widget> design = initMachineCheckDesignPM(_tickets[i]);
-                    Navigator.pushNamed(context, techApprovedTicketDetailsRoute,
-                        arguments: [_tickets[i], design, _allParts]);
+                    if (_tickets[i].machineType == 'Perfect Moose') {
+                      List<Widget> design =
+                          initMachineCheckDesignPM(_tickets[i]);
+                      Navigator.pushNamed(
+                          context, techApprovedTicketDetailsRoute,
+                          arguments: [_tickets[i], design, _allParts]);
+                    } else if (_tickets[i].machineType == 'Espresso Machines') {
+                      List<Widget> design = initMachineCheckDesign(_tickets[i]);
+                      Navigator.pushNamed(
+                          context, techApprovedTicketDetailsRoute,
+                          arguments: [_tickets[i], design, _allParts]);
+                    } else if (_tickets[i].machineType == 'Coffee Grinders') {
+                      List<Widget> design =
+                          initMachineCheckDesignGrinder(_tickets[i]);
+                      Navigator.pushNamed(
+                          context, techApprovedTicketDetailsRoute,
+                          arguments: [_tickets[i], design, _allParts]);
+                    } else if (_tickets[i].machineType == 'Batch Brewer') {
+                      List<Widget> design =
+                          initMachineCheckDesignBunn(_tickets[i]);
+                      Navigator.pushNamed(
+                          context, techApprovedTicketDetailsRoute,
+                          arguments: [_tickets[i], design, _allParts]);
+                    }
                   },
                 );
               },
@@ -680,14 +701,14 @@ class _ApprovedTicketPageState extends State<ApprovedTicketPage>
         ),
         TextWidget(
           title: 'نوع مكينة القهوة  ',
-          jsonKey: 'os',
+          jsonKey: 'coffe_Machine_Type',
           validate: validateNote,
           enabled: false,
           controller: TextEditingController(text: techInfo['os']),
         ),
         TextWidget(
           title: 'إصدار برنامج التشغيل',
-          jsonKey: 'coffe_Machine_Type',
+          jsonKey: 'os',
           validate: validateNote,
           enabled: false,
           controller:
@@ -955,7 +976,6 @@ class _ApprovedTicketPageState extends State<ApprovedTicketPage>
           controller: TextEditingController(text: techInfo['tech_notes']),
         ),
       ];
-      print(techInfo['tech_notes']);
       try {
         partsInfo.forEach((key, value) {
           if (key != 'partsCount') {

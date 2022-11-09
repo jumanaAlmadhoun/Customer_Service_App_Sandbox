@@ -66,6 +66,7 @@ class SummaryProvider with ChangeNotifier {
         waitingConfirmationTickets = 0;
         pickupTickets = 0;
         customerTickets = 0;
+        workShopTickets = 0;
         var data = jsonDecode(value.body) as Map<String, dynamic>;
         data.forEach((key, value) {
           switch (key) {

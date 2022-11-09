@@ -797,14 +797,14 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         ),
         TextWidget(
           title: 'نوع مكينة القهوة  ',
-          jsonKey: 'os',
+          jsonKey: 'coffe_Machine_Type',
           validate: validateNote,
           enabled: false,
           controller: TextEditingController(text: techInfo['os']),
         ),
         TextWidget(
           title: 'إصدار برنامج التشغيل',
-          jsonKey: 'coffe_Machine_Type',
+          jsonKey: 'os',
           validate: validateNote,
           enabled: false,
           controller:
