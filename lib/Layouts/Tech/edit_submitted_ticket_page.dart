@@ -642,7 +642,8 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
               allParts: _allParts,
               partNo: TextEditingController(text: key),
               qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
-              isFreePart: value[PART_IS_FREE_KEY],
+              selectedPart:
+                  _allParts.firstWhere((element) => element.partNo == key),
             ));
           }
         });
@@ -766,7 +767,8 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
             allParts: _allParts,
             partNo: TextEditingController(text: key),
             qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
-            isFreePart: value[PART_IS_FREE_KEY],
+            selectedPart:
+                _allParts.firstWhere((element) => element.partNo == key),
           ));
         }
       });
@@ -874,7 +876,8 @@ class _EditSubmittedTicketPageState extends State<EditSubmittedTicketPage>
               allParts: _allParts,
               partNo: TextEditingController(text: key),
               qty: TextEditingController(text: value[PART_QTY_KEY].toString()),
-              isFreePart: value[PART_IS_FREE_KEY],
+              selectedPart:
+                  _allParts.firstWhere((element) => element.partNo == key),
             ));
           }
         });
