@@ -738,8 +738,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['2_Pass'],
-          comments: getCommentsByCategory(
-              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['2_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص وجود تهريبات في المكينة',
@@ -756,8 +756,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['4_Pass'],
-          comments: getCommentsByCategory(
-              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['4_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص مصدر التبخير',
@@ -765,8 +765,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['5_Pass'],
-          comments: getCommentsByCategory(
-              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['5_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'نوع جودة تسخين الحليب ',
@@ -774,8 +774,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['6_Pass'],
-          comments: getCommentsByCategory(
-              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['6_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص التوصيلات والسلامة العامة',
@@ -783,8 +783,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['7_Pass'],
-          comments: getCommentsByCategory(
-              Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['7_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص ضغط البخار والحرارة ',
@@ -884,8 +884,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         validate: validateNote,
         pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
         isPass: techInfo['2_Pass'],
-        comments: getCommentsByCategory(
-            Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+        controller:
+            TextEditingController(text: techInfo['2_Comment'].toString()),
       ),
       MachineCheckWidget(
         title: 'فحص صمام الدش',
@@ -902,8 +902,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         validate: validateNote,
         pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
         isPass: techInfo['4_Pass'],
-        comments: getCommentsByCategory(
-            Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+        controller:
+            TextEditingController(text: techInfo['4_Comment'].toString()),
       ),
       MachineCheckWidget(
         title: 'فحص صمام الهواء',
@@ -911,8 +911,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         validate: validateNote,
         pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
         isPass: techInfo['5_Pass'],
-        comments: getCommentsByCategory(
-            Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+        controller:
+            TextEditingController(text: techInfo['5_Comment'].toString()),
       ),
       MachineCheckWidget(
         title: 'فحص صمام التجاوز',
@@ -920,8 +920,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         validate: validateNote,
         pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
         isPass: techInfo['6_Pass'],
-        comments: getCommentsByCategory(
-            Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+        controller:
+            TextEditingController(text: techInfo['6_Comment'].toString()),
       ),
       MachineCheckWidget(
         title: 'فحص خزان القهوة',
@@ -929,8 +929,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
         validate: validateNote,
         pass: techInfo['7_Pass'] ? 'نجاح' : 'فشل',
         isPass: techInfo['7_Pass'],
-        comments: getCommentsByCategory(
-            Comment.ELEC_COMMENTS, techInfo['7_Comment'].toString()),
+        controller:
+            TextEditingController(text: techInfo['7_Comment'].toString()),
       ),
       MachineCheckWidget(
         title: 'فحص استجابة الشاشة',
@@ -1008,8 +1008,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['2_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['2_Pass'],
-          comments: getCommentsByCategory(
-              Comment.CLEAN_COMMENTS, techInfo['2_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['2_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص مفكك التكتلات',
@@ -1026,8 +1026,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['4_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['4_Pass'],
-          comments: getCommentsByCategory(
-              Comment.FLOWMETER_COMMENTS, techInfo['4_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['4_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص حجر الطحن',
@@ -1035,8 +1035,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['5_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['5_Pass'],
-          comments: getCommentsByCategory(
-              Comment.WATER_COMMENTS, techInfo['5_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['5_Comment'].toString()),
         ),
         MachineCheckWidget(
           title: 'فحص كابل الكهرباء ',
@@ -1044,8 +1044,8 @@ class _ConfirmationTicketsState extends State<ConfirmationTickets>
           validate: validateNote,
           pass: techInfo['6_Pass'] ? 'نجاح' : 'فشل',
           isPass: techInfo['6_Pass'],
-          comments: getCommentsByCategory(
-              Comment.WATER_SRC_COMMENTS, techInfo['6_Comment'].toString()),
+          controller:
+              TextEditingController(text: techInfo['6_Comment'].toString()),
         ),
         TextWidget(
           title: 'اجمالي عدد الاكواب Total Cup',
