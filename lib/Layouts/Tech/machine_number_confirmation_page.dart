@@ -59,18 +59,6 @@ class _MachineNumberConfirmationPageState
                     await Provider.of<TicketProvider>(context, listen: false)
                         .startFillReport(widget.ticket);
 
-                    /*if (widget.ticket!.machineModel!.contains("PM")) {
-                      page = 'techFillTicketPagePM';
-                    } else if (widget.ticket!.machineModel!.contains("Ceado") ||
-                        (widget.ticket!.machineModel!.contains("Leon")) ||
-                        (widget.ticket!.machineModel!.contains("Grinder"))) {
-                      page = 'techFillTicketPageGrinde';
-                    } else if (widget.ticket!.machineModel!.contains("Bunn")) {
-                      page = 'techFillTicketPageBunn';
-                    } else {
-                      page = 'techFillSiteVisitRoute';
-                    }*/
-
                     if (widget.ticket!.machineType!.trim() ==
                         ("Perfect Moose")) {
                       page = 'techFillTicketPagePM';

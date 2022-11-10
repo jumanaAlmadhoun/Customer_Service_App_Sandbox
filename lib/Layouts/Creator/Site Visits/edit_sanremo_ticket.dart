@@ -44,6 +44,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
   bool _freeParts = false;
   bool _readyToAssign = false;
   bool _isUrgent = false;
+  String machineType = '';
   TextEditingController? selectedModel = TextEditingController();
   TextEditingController? customerNumber = TextEditingController();
   TextEditingController? customerName = TextEditingController();
@@ -682,6 +683,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
 
   Map<String, dynamic>? getTicketHeader() {
     return {
+      Ticket.MACHINE_TYPE: ticket!.machineType,
       Ticket.CAFE_NAME: cafeName!.text.trim(),
       Ticket.CUSTOMER_MOBILE: customerMobile!.text.trim(),
       Ticket.CUSTOMER_NAME: customerName!.text.trim(),
@@ -757,7 +759,7 @@ class _EditSanremoNewTicketPageState extends State<EditSanremoNewTicketPage>
       // Ticket.FREE_PARTS: _freeParts,
       // Ticket.FREE_VISIT: _freeVisit,
       // Ticket.SOLVED: _solveByPhone
-
+      machineType = ticket!.machineType!;
       cafeName!.text = ticket!.cafeName!;
       customerMobile!.text = ticket!.customerMobile!;
       customerName!.text = ticket!.customerName!;
